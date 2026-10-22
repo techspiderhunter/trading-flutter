@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ic_launcher_background">#051532</color>
+    <color name="primary_moneyvia">#00B074</color>
+    <color name="primary_blue">#0047E0</color>
+    <color name="notification_icon_color">#0047E0</color>
+</resources>

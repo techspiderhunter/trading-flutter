@@ -1,0 +1,2 @@
+// Default mock
+class LoginMock {}

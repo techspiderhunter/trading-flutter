@@ -1,0 +1,14 @@
+/build
+/.dart_tool
+/windows
+/.idea
+*.class
+/android/caches
+/android/caches
+/android/wrapper
+*.java
+/android/wrapper
+/android/wrapper
+/android/.tmp
+/android/android
+/.gradle-user-home

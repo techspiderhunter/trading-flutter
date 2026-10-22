@@ -1,0 +1,5 @@
+# Keystore Configuration
+keyPassword=syscalls@123
+storePassword=syscalls@123
+keyAlias=upload
+storeFile=F:/My_Project/Flutter/FlutterMain/keystores/upload-keystore.jks

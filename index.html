@@ -1,0 +1,2750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MoneyVia - Static Fintech Web Application</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #00B074;
+      --primary-dark: #059669;
+      --primary-light: #E6F7F0;
+      --primary-glow: rgba(0, 176, 116, 0.18);
+      --bg-scaffold: #F8FAFC;
+      --bg-card: #FFFFFF;
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --text-light: #94A3B8;
+      --border-color: #E2E8F0;
+      --border-light: #F1F5F9;
+      --warning-bg: #FFFBEB;
+      --warning-border: #FDE68A;
+      --warning-text: #92400E;
+      --warning-sub: #B45309;
+      --amber-badge: #FEF3C7;
+      --amber-icon: #D97706;
+      --danger: #EF4444;
+      --danger-bg: #FEE2E2;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+      --shadow-sm: 0 2px 6px rgba(15, 23, 42, 0.04);
+      --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+      --shadow-lg: 0 20px 30px -10px rgba(0, 176, 116, 0.15);
+      --font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background: #0B1120;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Top Demo Control Header */
+    .demo-bar {
+      background: #0F172A;
+      border-bottom: 1px solid #1E293B;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      color: #94A3B8;
+      font-size: 13px;
+      z-index: 1000;
+    }
+
+    .demo-bar .brand-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .demo-bar .brand-badge {
+      background: linear-gradient(135deg, #00B074, #059669);
+      color: white;
+      font-weight: 800;
+      font-size: 13px;
+      padding: 4px 10px;
+      border-radius: 8px;
+      letter-spacing: -0.2px;
+    }
+
+    .demo-bar .controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .demo-btn {
+      background: #1E293B;
+      color: #E2E8F0;
+      border: 1px solid #334155;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .demo-btn:hover {
+      background: #334155;
+      color: #FFFFFF;
+      border-color: #475569;
+    }
+
+    .demo-btn.active {
+      background: #00B074;
+      color: white;
+      border-color: #00B074;
+    }
+
+    /* Main Container Shell */
+    .app-viewport-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      background: radial-gradient(circle at 50% 10%, #1E293B 0%, #0B1120 100%);
+    }
+
+    /* Device Mode: Mobile Frame vs Desktop Responsive */
+    .app-frame {
+      width: 100%;
+      max-width: 420px;
+      height: 870px;
+      background: var(--bg-scaffold);
+      border-radius: 46px;
+      box-shadow: 0 0 0 12px #1E293B, 0 25px 60px rgba(0, 0, 0, 0.6);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .app-frame.view-desktop {
+      max-width: 1024px;
+      height: 90vh;
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Mobile Status Bar & Dynamic Island */
+    .mobile-status-bar {
+      height: 44px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 600;
+      color: #0F172A;
+      background: transparent;
+      z-index: 50;
+      flex-shrink: 0;
+    }
+
+    .dynamic-island {
+      width: 110px;
+      height: 26px;
+      background: #0F172A;
+      border-radius: 20px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 8px;
+    }
+
+    .dynamic-island-cam {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #1E293B;
+      border: 1.5px solid #334155;
+    }
+
+    .view-desktop .mobile-status-bar {
+      display: none;
+    }
+
+    /* Screen Stage */
+    .app-screens-container {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+      flex-direction: column;
+      background: var(--bg-scaffold);
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    /* Top App Navigation Bar */
+    .app-header {
+      background: #FFFFFF;
+      height: 60px;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-light);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      flex-shrink: 0;
+    }
+
+    .app-header .logo-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: #FFFFFF;
+      border: 1.5px solid #E2E8F0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0, 176, 116, 0.15);
+      padding: 4px;
+    }
+
+    .brand-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.4px;
+    }
+
+    .brand-title span {
+      color: var(--primary);
+    }
+
+    .header-action-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: none;
+      background: transparent;
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: background 0.2s ease;
+    }
+
+    .header-action-btn:hover {
+      background: var(--border-light);
+    }
+
+    .badge-dot {
+      width: 9px;
+      height: 9px;
+      background: var(--danger);
+      border: 2px solid #FFFFFF;
+      border-radius: 50%;
+      position: absolute;
+      top: 8px;
+      right: 8px;
+    }
+
+    /* Screen Content Padding */
+    .screen-content {
+      flex: 1;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* =========================================================
+       SCREEN 1: SPLASH SCREEN
+    ========================================================= */
+    #screen-splash {
+      background: radial-gradient(circle at 50% 30%, #FFFFFF 0%, #E6F7F0 100%);
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 30px;
+    }
+
+    .splash-logo-box {
+      width: 92px;
+      height: 92px;
+      border-radius: 26px;
+      background: linear-gradient(135deg, #00B074, #059669);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      box-shadow: 0 20px 40px rgba(0, 176, 116, 0.35);
+      margin-bottom: 24px;
+      animation: floatPulse 3s ease-in-out infinite;
+    }
+
+    @keyframes floatPulse {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-6px) scale(1.03); }
+    }
+
+    .splash-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+    }
+
+    .splash-title span {
+      color: var(--primary);
+    }
+
+    .splash-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-bottom: 28px;
+    }
+
+    .sebi-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-main);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 40px;
+    }
+
+    .splash-spinner {
+      width: 32px;
+      height: 32px;
+      border: 3.5px solid rgba(0, 176, 116, 0.2);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* =========================================================
+       SCREEN 2: REGISTRATION SCREEN (NO LOGIN LINK)
+    ========================================================= */
+    #screen-register {
+      background: #FFFFFF;
+    }
+
+    .auth-container {
+      max-width: 440px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 10px 0;
+    }
+
+    .auth-header {
+      margin-bottom: 24px;
+    }
+
+    .auth-title {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.4px;
+      margin-bottom: 6px;
+    }
+
+    .auth-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* All form groups are strictly COL-12 full width */
+    .form-group {
+      width: 100%;
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 6px;
+    }
+
+    .form-label span.req {
+      color: var(--danger);
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+
+    .input-icon-left {
+      position: absolute;
+      left: 14px;
+      color: #94A3B8;
+      display: flex;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .form-input {
+      width: 100%;
+      height: 48px;
+      background: #F8FAFC;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 0 14px 0 42px;
+      font-size: 14px;
+      color: var(--text-main);
+      font-family: inherit;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .form-input.no-icon {
+      padding-left: 14px;
+    }
+
+    .form-input:focus {
+      outline: none;
+      background: #FFFFFF;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px var(--primary-glow);
+    }
+
+    .input-icon-right {
+      position: absolute;
+      right: 14px;
+      color: #94A3B8;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+
+    .input-icon-right:hover {
+      color: var(--text-main);
+    }
+
+    .form-select {
+      width: 100%;
+      height: 48px;
+      background: #F8FAFC;
+      border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 0 14px;
+      font-size: 14px;
+      color: var(--text-main);
+      font-family: inherit;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .form-select:focus {
+      outline: none;
+      background: #FFFFFF;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px var(--primary-glow);
+    }
+
+    .btn-primary {
+      width: 100%;
+      height: 50px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 18px var(--primary-glow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      margin-top: 20px;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 22px rgba(0, 176, 116, 0.3);
+    }
+
+    .btn-secondary {
+      width: 100%;
+      height: 48px;
+      background: #F1F5F9;
+      color: #334155;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      font-size: 14.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .btn-secondary:hover {
+      background: #E2E8F0;
+    }
+
+    .auth-terms-note {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 14px;
+      line-height: 1.45;
+    }
+
+    /* =========================================================
+       MAIN SHELL & 2 BOTTOM NAVIGATION TABS
+    ========================================================= */
+    .bottom-nav-bar {
+      height: 64px;
+      background: #FFFFFF;
+      border-top: 1px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      position: sticky;
+      bottom: 0;
+      z-index: 50;
+      flex-shrink: 0;
+      padding: 0 10px;
+    }
+
+    .nav-tab-item {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      background: transparent;
+      border: none;
+      color: #94A3B8;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .nav-tab-item svg {
+      transition: transform 0.2s ease, stroke 0.2s ease;
+    }
+
+    .nav-tab-item span {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: -0.1px;
+    }
+
+    .nav-tab-item.active {
+      color: var(--primary);
+    }
+
+    .nav-tab-item.active svg {
+      transform: translateY(-2px);
+      stroke: var(--primary);
+    }
+
+    /* =========================================================
+       SCREEN 3: DASHBOARD TAB
+    ========================================================= */
+    .user-welcome-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 22px;
+    }
+
+    .welcome-text h2 {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.3px;
+    }
+
+    .welcome-text p {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .sebi-small-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    /* State 1: KycInitialLockCard */
+    .initial-lock-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 24px 20px;
+      box-shadow: var(--shadow-sm);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .lock-icon-circle {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      border: 2px solid var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      margin-bottom: 16px;
+    }
+
+    .initial-lock-card h3 {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .initial-lock-card p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 20px;
+      max-width: 320px;
+    }
+
+    .initial-lock-features {
+      background: #F8FAFC;
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      width: 100%;
+      text-align: left;
+      margin-bottom: 22px;
+      border: 1px solid var(--border-light);
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 8px;
+    }
+
+    .feature-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .feature-item svg {
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+
+    /* State 2: Post-Submission (Under Review Card + Remark + Button Below) */
+    .kyc-review-container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    /* Prominent Remark Banner */
+    .compliance-remark-banner {
+      background: var(--warning-bg);
+      border: 1.5px solid var(--warning-border);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .remark-badge-icon {
+      background: var(--amber-badge);
+      color: var(--amber-icon);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .remark-content h4 {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--warning-text);
+      margin-bottom: 3px;
+    }
+
+    .remark-content p {
+      font-size: 12px;
+      color: var(--warning-sub);
+      line-height: 1.4;
+    }
+
+    /* Image 2 Exact Reproduction: KycUnderReviewCard (Strictly NO button inside) */
+    .under-review-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 28px 22px;
+      box-shadow: var(--shadow-sm);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .amber-lock-circle {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: #FEF3C7;
+      border: 2.5px solid #F59E0B;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #D97706;
+      margin-bottom: 18px;
+    }
+
+    .under-review-card h3 {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+
+    .under-review-card p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 20px;
+      max-width: 320px;
+    }
+
+    .status-ref-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #FEF3C7;
+      color: #B45309;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 700;
+      border: 1px solid #FDE68A;
+    }
+
+    /* Start KYC Button BELOW the card */
+    .btn-start-kyc-below {
+      width: 100%;
+      height: 50px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .btn-start-kyc-below:hover {
+      background: var(--primary-dark);
+    }
+
+    .note-below-btn {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-top: 10px;
+    }
+
+    /* =========================================================
+       SCREEN 4: KYC VERIFICATION STEPPER (ALL FIELDS COL-12)
+    ========================================================= */
+    #screen-kyc {
+      background: #F8FAFC;
+    }
+
+    .kyc-form-header {
+      background: #FFFFFF;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border-light);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .btn-back {
+      background: none;
+      border: none;
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: inherit;
+    }
+
+    /* Top Horizontal Stepper Indicator */
+    .stepper-header-box {
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--border-color);
+      padding: 16px 18px 12px;
+      position: sticky;
+      top: 53px;
+      z-index: 39;
+    }
+
+    .stepper-progress-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      margin-bottom: 10px;
+    }
+
+    .stepper-line-bg {
+      position: absolute;
+      top: 16px;
+      left: 20px;
+      right: 20px;
+      height: 3px;
+      background: #E2E8F0;
+      z-index: 1;
+    }
+
+    .stepper-line-fill {
+      position: absolute;
+      top: 16px;
+      left: 20px;
+      height: 3px;
+      background: var(--primary);
+      z-index: 2;
+      transition: width 0.3s ease;
+      width: 0%;
+    }
+
+    .step-node {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+    }
+
+    .step-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      border: 2px solid #CBD5E1;
+      color: #64748B;
+      font-size: 13px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s ease;
+    }
+
+    .step-node.active .step-circle {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #FFFFFF;
+      box-shadow: 0 0 0 4px var(--primary-glow);
+    }
+
+    .step-node.completed .step-circle {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #FFFFFF;
+    }
+
+    .step-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #94A3B8;
+      transition: color 0.2s ease;
+    }
+
+    .step-node.active .step-label {
+      color: var(--primary);
+    }
+
+    .step-node.completed .step-label {
+      color: var(--text-main);
+    }
+
+    .step-status-subtext {
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .step-status-subtext span {
+      color: var(--primary);
+    }
+
+    /* Stepper Content Stage */
+    .kyc-step-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 22px 20px;
+      margin: 18px 0;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .step-title-box {
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .step-title-box h3 {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .step-title-box p {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    /* Stepper Action Buttons Row */
+    .stepper-nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 10px;
+      width: 100%;
+    }
+
+    /* Document Upload Card - STRICTLY COL-12 */
+    .upload-card {
+      width: 100%;
+      border: 1.5px dashed var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      background: #F8FAFC;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .upload-card:hover {
+      border-color: var(--primary);
+      background: #F0FDF4;
+    }
+
+    .upload-card.uploaded {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      border-style: solid;
+    }
+
+    .upload-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .upload-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      box-shadow: var(--shadow-sm);
+      flex-shrink: 0;
+    }
+
+    .upload-texts h5 {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .upload-texts span {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    .upload-action-btn {
+      padding: 6px 14px;
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-main);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .upload-card.uploaded .upload-action-btn {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .declaration-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 14px;
+      font-size: 12.5px;
+      color: #334155;
+      line-height: 1.45;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .declaration-row input[type="checkbox"] {
+      margin-top: 3px;
+      accent-color: var(--primary);
+      width: 17px;
+      height: 17px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    /* =========================================================
+       SCREEN 5: PROFILE SCREEN (Image 1 Exact Match)
+    ========================================================= */
+    #screen-profile {
+      background: var(--bg-scaffold);
+    }
+
+    .profile-header-card {
+      text-align: center;
+      padding: 16px 0 20px;
+    }
+
+    .profile-avatar-circle {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      background: #E6F7F0;
+      border: 2.5px solid #00B074;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      font-weight: 800;
+      color: #00B074;
+      margin-bottom: 12px;
+    }
+
+    .profile-name {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .profile-email {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-top: 2px;
+    }
+
+    .profile-section-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .read-only-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .read-only-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .read-only-icon-box {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: #F8FAFC;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #64748B;
+      flex-shrink: 0;
+    }
+
+    .read-only-details {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .read-only-label-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+
+    .read-only-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #64748B;
+    }
+
+    .read-only-tag {
+      font-size: 10.5px;
+      font-weight: 600;
+      color: #94A3B8;
+    }
+
+    .read-only-val {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .verified-icon {
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+
+    /* Security & Password Section */
+    .security-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .security-header-row h4 {
+      font-size: 15.5px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .avail-badge {
+      background: #E6F7F0;
+      color: #00B074;
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .security-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      line-height: 1.35;
+    }
+
+    .btn-update-pwd {
+      width: 100%;
+      height: 48px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 14.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 14px;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .btn-update-pwd:hover {
+      box-shadow: 0 6px 16px var(--primary-glow);
+    }
+
+    /* =========================================================
+       NOTIFICATION SHEET / DRAWER
+    ========================================================= */
+    .modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      display: none;
+      align-items: flex-end;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+      opacity: 1;
+    }
+
+    .notification-sheet {
+      width: 100%;
+      max-height: 82%;
+      background: #FFFFFF;
+      border-radius: 28px 28px 0 0;
+      padding: 20px 20px 28px;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-overlay.open .notification-sheet {
+      transform: translateY(0);
+    }
+
+    .sheet-handle {
+      width: 44px;
+      height: 5px;
+      background: #E2E8F0;
+      border-radius: 10px;
+      margin: 0 auto 16px;
+    }
+
+    .sheet-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .sheet-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .sheet-count {
+      background: var(--primary-light);
+      color: var(--primary);
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+
+    .notification-list {
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .notif-card {
+      background: #F8FAFC;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .notif-icon-box {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .notif-icon-box.amber { color: #D97706; background: #FEF3C7; }
+    .notif-icon-box.green { color: #00B074; background: #E6F7F0; }
+    .notif-icon-box.blue { color: #2563EB; background: #DBEAFE; }
+
+    .notif-info h5 {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 3px;
+    }
+
+    .notif-info p {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-bottom: 4px;
+    }
+
+    .notif-time {
+      font-size: 11px;
+      color: #94A3B8;
+      font-weight: 600;
+    }
+
+    /* Toast Notification */
+    .toast-msg {
+      position: absolute;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: #0F172A;
+      color: #FFFFFF;
+      padding: 10px 18px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+
+    .toast-msg.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Demo Control Header Bar -->
+  <div class="demo-bar">
+    <div class="brand-info">
+      <span class="brand-badge">MoneyVia</span>
+      <span>Pure Static Web Edition • SEBI Advisory Platform</span>
+    </div>
+    <div class="controls">
+      <button class="demo-btn active" id="btn-mode-mobile" onclick="setDeviceView('mobile')">
+        📱 Mobile Frame
+      </button>
+      <button class="demo-btn" id="btn-mode-desktop" onclick="setDeviceView('desktop')">
+        💻 Full Browser View
+      </button>
+      <div style="width: 1px; height: 18px; background: #334155; margin: 0 4px;"></div>
+      <button class="demo-btn demo-btn-screen active" id="btn-screen-splash" onclick="showScreen('splash')">🚀 Splash</button>
+      <button class="demo-btn demo-btn-screen" id="btn-screen-register" onclick="showScreen('register')">📝 Register</button>
+      <button class="demo-btn demo-btn-screen" id="btn-screen-login" onclick="goToLogin()">🔑 Login</button>
+      <button class="demo-btn demo-btn-screen" id="btn-screen-main" onclick="showScreen('main', 'dashboard')">📊 Dashboard & Profile</button>
+      <button class="demo-btn demo-btn-screen" id="btn-screen-kyc" onclick="goToKycForm()">📋 KYC Stepper</button>
+      <div style="width: 1px; height: 18px; background: #334155; margin: 0 4px;"></div>
+      <button class="demo-btn" id="btn-state-normal" style="color: #34D399;" onclick="setKycState(false)">🔒 Normal Lock (Initial)</button>
+      <button class="demo-btn" id="btn-state-review" style="color: #FBBF24;" onclick="setKycState(true)">⏳ Under Review (Post-Submit)</button>
+      <div style="width: 1px; height: 18px; background: #334155; margin: 0 4px;"></div>
+      <button class="demo-btn" onclick="resetDemo()">⟳ Reset All</button>
+    </div>
+  </div>
+
+  <!-- Main Viewport Shell -->
+  <div class="app-viewport-wrapper">
+    <div class="app-frame" id="appFrame">
+      
+      <!-- Mobile Notch / Dynamic Island & Status Bar -->
+      <div class="mobile-status-bar">
+        <span>9:41</span>
+        <div class="dynamic-island">
+          <div class="dynamic-island-cam"></div>
+        </div>
+        <div style="display:flex; align-items:center; gap: 6px;">
+          <svg width="15" height="11" viewBox="0 0 15 11" fill="none"><path d="M1 9.5H3V1.5H1V9.5ZM5 9.5H7V4.5H5V9.5ZM9 9.5H11V6.5H9V9.5ZM13 9.5H15V8.5H13V9.5Z" fill="#0F172A"/></svg>
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="none"><path d="M8 2.5C10.5 2.5 12.8 3.5 14.5 5.2L16 3.7C13.9 1.4 11.1 0 8 0C4.9 0 2.1 1.4 0 3.7L1.5 5.2C3.2 3.5 5.5 2.5 8 2.5ZM8 6.5C9.7 6.5 11.2 7.2 12.3 8.3L13.8 6.8C12.3 5.3 10.3 4.3 8 4.3C5.7 4.3 3.7 5.3 2.2 6.8L3.7 8.3C4.8 7.2 6.3 6.5 8 6.5ZM8 10C8.8 10 9.5 10.7 9.5 11.5H6.5C6.5 10.7 7.2 10 8 10Z" fill="#0F172A"/></svg>
+          <svg width="22" height="11" viewBox="0 0 22 11" fill="none"><rect x="0.5" y="0.5" width="18" height="10" rx="2.5" stroke="#0F172A"/><rect x="2" y="2" width="13" height="7" rx="1.5" fill="#0F172A"/><path d="M20 3.5V7.5" stroke="#0F172A" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+
+      <!-- Toast Feedback Popup -->
+      <div class="toast-msg" id="toastMsg">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00B074" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        <span id="toastText">Action successful!</span>
+      </div>
+
+      <!-- App Screen Containers -->
+      <div class="app-screens-container">
+
+        <!-- ==========================================
+             SCREEN 1: SPLASH SCREEN
+        =========================================== -->
+        <div class="screen active" id="screen-splash">
+          <div class="splash-logo-box" style="background: white; border: 2px solid #E2E8F0; padding: 12px;">
+            <svg width="68" height="68" viewBox="0 0 100 100" fill="none">
+              <defs>
+                <linearGradient id="splashBlueGrad" x1="0%" y1="100%" x2="50%" y2="0%">
+                  <stop offset="0%" stop-color="#0047E0"/>
+                  <stop offset="100%" stop-color="#2979FF"/>
+                </linearGradient>
+                <linearGradient id="splashGreenGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#009A60"/>
+                  <stop offset="50%" stop-color="#00B074"/>
+                  <stop offset="100%" stop-color="#00E699"/>
+                </linearGradient>
+              </defs>
+              <!-- Left Blue Pillar of M -->
+              <rect x="10" y="20" width="22" height="65" rx="11" fill="url(#splashBlueGrad)"/>
+              <!-- 3 Center Emerald Bar Chart Bars -->
+              <rect x="36" y="60" width="10" height="25" rx="5" fill="#00C48C"/>
+              <rect x="49" y="50" width="10" height="35" rx="5" fill="#00A86B"/>
+              <rect x="62" y="42" width="10" height="43" rx="5" fill="#008F5A"/>
+              <!-- Right Emerald Pillar -->
+              <rect x="74" y="32" width="22" height="53" rx="11" fill="url(#splashGreenGrad)"/>
+              <!-- Growth Arrow Ribbon -->
+              <path d="M20 24 L46 46 L78 18 L86 30 L46 62 L10 34 Z" fill="url(#splashGreenGrad)"/>
+              <!-- Arrow Head -->
+              <polygon points="80 6, 94 24, 72 26" fill="url(#splashGreenGrad)"/>
+            </svg>
+          </div>
+          <h1 class="splash-title">Money<span>Via</span></h1>
+          <p class="splash-subtitle">Wealth Advisory & Research Platform</p>
+          <div class="sebi-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00B074" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            SEBI Reg. Research Analyst • INH000012345
+          </div>
+          <div class="splash-spinner"></div>
+          <button class="btn-primary" style="max-width: 200px; margin-top: 30px;" onclick="goToRegistration()">
+            Get Started ➔
+          </button>
+        </div>
+
+        <!-- ==========================================
+             SCREEN 2: REGISTRATION SCREEN (NO LOGIN LINK)
+             ALL FIELDS COL-12
+        =========================================== -->
+        <div class="screen" id="screen-register">
+          <div class="app-header">
+            <div class="logo-group">
+              <div class="brand-icon">
+                <svg width="26" height="26" viewBox="0 0 100 100" fill="none">
+                  <rect x="10" y="20" width="22" height="65" rx="11" fill="url(#splashBlueGrad)"/>
+                  <rect x="36" y="60" width="10" height="25" rx="5" fill="#00C48C"/>
+                  <rect x="49" y="50" width="10" height="35" rx="5" fill="#00A86B"/>
+                  <rect x="62" y="42" width="10" height="43" rx="5" fill="#008F5A"/>
+                  <rect x="74" y="32" width="22" height="53" rx="11" fill="url(#splashGreenGrad)"/>
+                  <path d="M20 24 L46 46 L78 18 L86 30 L46 62 L10 34 Z" fill="url(#splashGreenGrad)"/>
+                  <polygon points="80 6, 94 24, 72 26" fill="url(#splashGreenGrad)"/>
+                </svg>
+              </div>
+              <div class="brand-title">Money<span>Via</span></div>
+            </div>
+            <div class="sebi-small-badge">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#00B074" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              SEBI Compliant
+            </div>
+          </div>
+          <div class="screen-content">
+            <div class="auth-container">
+              <div class="auth-header">
+                <h2 class="auth-title">Create Account</h2>
+                <p class="auth-desc">Sign up to access verified research and stock advisory.</p>
+              </div>
+
+              <form id="registerForm" onsubmit="handleRegistrationSubmit(event)">
+                <!-- Field 1: Full Name (col-12) -->
+                <div class="form-group">
+                  <label class="form-label">Full Name <span class="req">*</span></label>
+                  <div class="input-wrapper">
+                    <span class="input-icon-left">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </span>
+                    <input type="text" class="form-input" id="reg-name" placeholder="e.g. Rahul Sharma" value="Rahul Sharma" required>
+                  </div>
+                </div>
+
+                <!-- Field 2: Email Address (col-12) -->
+                <div class="form-group">
+                  <label class="form-label">Email Address <span class="req">*</span></label>
+                  <div class="input-wrapper">
+                    <span class="input-icon-left">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    </span>
+                    <input type="email" class="form-input" id="reg-email" placeholder="e.g. rahul@example.com" value="admin@trading.local" required>
+                  </div>
+                </div>
+
+                <!-- Field 3: Phone Number (col-12) -->
+                <div class="form-group">
+                  <label class="form-label">Mobile Number <span class="req">*</span></label>
+                  <div class="input-wrapper">
+                    <span class="input-icon-left">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    </span>
+                    <input type="tel" class="form-input" id="reg-phone" placeholder="10-digit mobile number" value="9876543210" required>
+                  </div>
+                </div>
+
+                <!-- Field 4: Password (col-12) -->
+                <div class="form-group">
+                  <label class="form-label">Password <span class="req">*</span></label>
+                  <div class="input-wrapper">
+                    <span class="input-icon-left">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    </span>
+                    <input type="password" class="form-input" id="reg-pwd" placeholder="Create strong password" value="MoneyVia@2026" required>
+                    <button type="button" class="input-icon-right" onclick="togglePasswordVisibility('reg-pwd')">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Field 5: Confirm Password (col-12) -->
+                <div class="form-group">
+                  <label class="form-label">Confirm Password <span class="req">*</span></label>
+                  <div class="input-wrapper">
+                    <span class="input-icon-left">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    </span>
+                    <input type="password" class="form-input" id="reg-cpwd" placeholder="Re-enter password" value="MoneyVia@2026" required>
+                    <button type="button" class="input-icon-right" onclick="togglePasswordVisibility('reg-cpwd')">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="declaration-row" style="margin-top: 14px;">
+                  <input type="checkbox" id="reg-terms" checked required>
+                  <label for="reg-terms">I agree to MoneyVia's Terms of Service, Privacy Policy & SEBI Advisory Code of Conduct.</label>
+                </div>
+
+                <!-- Register Button -> Submits directly to Dashboard -->
+                <button type="submit" class="btn-primary">
+                  Create Account & Continue ➔
+                </button>
+
+                <!-- Already have an account? Sign In -->
+                <div style="text-align: center; margin-top: 18px;">
+                  <span style="font-size: 13.5px; color: var(--text-muted); font-weight: 500;">Already have an account? </span>
+                  <a href="javascript:void(0)" onclick="goToLogin()" style="font-size: 13.5px; color: var(--primary); font-weight: 700; text-decoration: none;">Sign In</a>
+                </div>
+              </form>
+              <p class="auth-terms-note">SEBI Reg. No. INH000012345 • Compliant with Prevention of Money Laundering Act (PMLA)</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             SCREEN 2B: LOGIN SCREEN (EMAIL + PASSWORD ONLY)
+        =========================================== -->
+        <div class="screen" id="screen-login">
+          <div class="app-header">
+            <div class="logo-group">
+              <div class="brand-icon">
+                <svg width="26" height="26" viewBox="0 0 100 100" fill="none">
+                  <rect x="10" y="20" width="22" height="65" rx="11" fill="url(#splashBlueGrad)"/>
+                  <rect x="36" y="60" width="10" height="25" rx="5" fill="#00C48C"/>
+                  <rect x="49" y="50" width="10" height="35" rx="5" fill="#00A86B"/>
+                  <rect x="62" y="42" width="10" height="43" rx="5" fill="#008F5A"/>
+                  <rect x="74" y="32" width="22" height="53" rx="11" fill="url(#splashGreenGrad)"/>
+                  <path d="M20 24 L46 46 L78 18 L86 30 L46 62 L10 34 Z" fill="url(#splashGreenGrad)"/>
+                  <polygon points="80 6, 94 24, 72 26" fill="url(#splashGreenGrad)"/>
+                </svg>
+              </div>
+              <div class="brand-title">Money<span>Via</span></div>
+            </div>
+            <div class="sebi-small-badge">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#00B074" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              SEBI Compliant
+            </div>
+          </div>
+
+          <div class="screen-content" style="padding: 24px 20px;">
+            <div class="auth-container">
+              <div class="auth-header">
+                <h2 class="auth-title">Welcome Back 👋</h2>
+                <p class="auth-desc">Sign in with your registered email and password</p>
+              </div>
+
+              <form id="loginForm" onsubmit="handleLoginSubmit(event)">
+                <!-- Field 1: Email Address -->
+                <div class="form-group">
+                  <label class="form-label">Registered Email <span class="req">*</span></label>
+                  <div class="input-wrapper">
+                    <span class="input-icon-left">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    </span>
+                    <input type="email" class="form-input" id="login-email" placeholder="name@domain.com" required>
+                  </div>
+                </div>
+
+                <!-- Field 2: Password -->
+                <div class="form-group">
+                  <label class="form-label">Password <span class="req">*</span></label>
+                  <div class="input-wrapper">
+                    <span class="input-icon-left">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    </span>
+                    <input type="password" class="form-input" id="login-pwd" placeholder="Enter password" required>
+                    <button type="button" class="btn-toggle-pwd" onclick="togglePasswordVisibility('login-pwd')">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Sign In Button -->
+                <button type="submit" class="btn-primary" style="margin-top: 24px;">
+                  Sign In & Continue ➔
+                </button>
+
+                <!-- Switch to Register -->
+                <div style="text-align: center; margin-top: 18px;">
+                  <span style="font-size: 13.5px; color: var(--text-muted); font-weight: 500;">Don't have an account? </span>
+                  <a href="javascript:void(0)" onclick="goToRegistration()" style="font-size: 13.5px; color: var(--primary); font-weight: 700; text-decoration: none;">Sign Up</a>
+                </div>
+              </form>
+              <p class="auth-terms-note">SEBI Reg. No. INH000012345 • Compliant with Prevention of Money Laundering Act (PMLA)</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             SCREEN 3: MAIN NAVIGATION SHELL (DASHBOARD + PROFILE)
+        =========================================== -->
+        <div class="screen" id="screen-main">
+          <!-- Top App Header -->
+          <div class="app-header">
+            <div class="logo-group">
+              <div class="brand-icon">
+                <svg width="26" height="26" viewBox="0 0 100 100" fill="none">
+                  <rect x="10" y="20" width="22" height="65" rx="11" fill="url(#splashBlueGrad)"/>
+                  <rect x="36" y="60" width="10" height="25" rx="5" fill="#00C48C"/>
+                  <rect x="49" y="50" width="10" height="35" rx="5" fill="#00A86B"/>
+                  <rect x="62" y="42" width="10" height="43" rx="5" fill="#008F5A"/>
+                  <rect x="74" y="32" width="22" height="53" rx="11" fill="url(#splashGreenGrad)"/>
+                  <path d="M20 24 L46 46 L78 18 L86 30 L46 62 L10 34 Z" fill="url(#splashGreenGrad)"/>
+                  <polygon points="80 6, 94 24, 72 26" fill="url(#splashGreenGrad)"/>
+                </svg>
+              </div>
+              <div class="brand-title">Money<span>Via</span></div>
+            </div>
+            <!-- Notification Bell Icon Button -->
+            <button class="header-action-btn" onclick="openNotificationsModal()" title="View Notifications">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+              <div class="badge-dot"></div>
+            </button>
+          </div>
+
+          <!-- Tab Content Area -->
+          <div class="screen-content" style="padding-bottom: 24px;">
+
+            <!-- ================= SUB-TAB 1: DASHBOARD ================= -->
+            <div id="tab-dashboard" class="tab-pane">
+              <!-- Welcome greeting -->
+              <div class="user-welcome-row">
+                <div class="welcome-text">
+                  <h2>Welcome, Admin 👋</h2>
+                  <p>Account ID: #Qc4v_E749i</p>
+                </div>
+                <div class="sebi-small-badge">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#00B074" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                  SEBI Reg
+                </div>
+              </div>
+
+              <!-- DYNAMIC DASHBOARD CONTENT: STATE 1 VS STATE 2 -->
+              <div id="dashboard-state-initial" style="display: block;">
+                <!-- State 1: KycInitialLockCard (Lock Card with Start KYC button inside) -->
+                <div class="initial-lock-card">
+                  <div class="lock-icon-circle">
+                    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                  </div>
+                  <h3>Trading & Recommendations Locked</h3>
+                  <p>Complete your SEBI-mandated KYC verification to unlock live research calls, portfolio tracking, and expert market advice.</p>
+                  
+                  <div class="initial-lock-features">
+                    <div class="feature-item">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                      Real-time Nifty & BankNifty Advisory
+                    </div>
+                    <div class="feature-item">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                      SEBI Certified Research Desk
+                    </div>
+                    <div class="feature-item">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                      Safe PMLA Compliance & Direct Settlement
+                    </div>
+                  </div>
+
+                  <!-- Button inside lock card -->
+                  <button class="btn-primary" style="margin-top: 0;" onclick="goToKycForm()">
+                    Start KYC Verification ➔
+                  </button>
+                </div>
+              </div>
+
+              <div id="dashboard-state-review" style="display: none;">
+                <!-- State 2: Post-Submission (Under Review Card + Remark + Button Below) -->
+                <div class="kyc-review-container">
+                  <!-- 1. Prominent Compliance Remark Banner -->
+                  <div class="compliance-remark-banner">
+                    <div class="remark-badge-icon">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    </div>
+                    <div class="remark-content">
+                      <h4>Compliance Remark: Verification In Progress</h4>
+                      <p>Identity documents are undergoing compliance review. Feeds remain locked until approval.</p>
+                    </div>
+                  </div>
+
+                  <!-- 2. Image 2 Exact Reproduction: KycUnderReviewCard (Strictly NO button inside) -->
+                  <div class="under-review-card">
+                    <div class="amber-lock-circle">
+                      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    </div>
+                    <h3>KYC Under Review</h3>
+                    <p>Your KYC documents have been received and are currently being reviewed by our compliance team. Verification usually takes 24-48 business hours.</p>
+                    
+                    <div class="status-ref-badge">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                      REF: #KYC-94821 • Status: PENDING REVIEW
+                    </div>
+                  </div>
+
+                  <!-- 3. Start KYC Button BELOW the card -->
+                  <button class="btn-start-kyc-below" onclick="goToKycForm()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
+                    Start KYC
+                  </button>
+                  <p class="note-below-btn">
+                    Note: Your documents are currently under compliance review and not yet approved. You can start KYC again to re-verify details.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- ================= SUB-TAB 2: PROFILE (Image 1 Exact Match) ================= -->
+            <div id="tab-profile" class="tab-pane" style="display: none;">
+              <!-- User Header Section (Image 1) -->
+              <div class="profile-header-card">
+                <div class="profile-avatar-circle">A</div>
+                <h3 class="profile-name">Admin</h3>
+                <p class="profile-email">admin@trading.local</p>
+              </div>
+
+              <!-- 4 Read-Only Review Items (Image 1) -->
+              <div class="profile-section-card">
+                <!-- Field 1: Client Full Name -->
+                <div class="read-only-item">
+                  <div class="read-only-icon-box">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  </div>
+                  <div class="read-only-details">
+                    <div class="read-only-label-row">
+                      <span class="read-only-label">Client Full Name</span>
+                      <span class="read-only-tag">(Read-only during review)</span>
+                    </div>
+                    <div class="read-only-val">Admin User</div>
+                  </div>
+                  <svg class="verified-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+
+                <!-- Field 2: Registered Email -->
+                <div class="read-only-item">
+                  <div class="read-only-icon-box">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                  </div>
+                  <div class="read-only-details">
+                    <div class="read-only-label-row">
+                      <span class="read-only-label">Registered Email</span>
+                      <span class="read-only-tag">(Read-only during review)</span>
+                    </div>
+                    <div class="read-only-val">admin@trading.local</div>
+                  </div>
+                  <svg class="verified-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+
+                <!-- Field 3: Phone Number -->
+                <div class="read-only-item">
+                  <div class="read-only-icon-box">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  </div>
+                  <div class="read-only-details">
+                    <div class="read-only-label-row">
+                      <span class="read-only-label">Phone Number</span>
+                      <span class="read-only-tag">(Read-only during review)</span>
+                    </div>
+                    <div class="read-only-val">+91 98765 43210</div>
+                  </div>
+                  <svg class="verified-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+
+                <!-- Field 4: Account ID -->
+                <div class="read-only-item">
+                  <div class="read-only-icon-box">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>
+                  </div>
+                  <div class="read-only-details">
+                    <div class="read-only-label-row">
+                      <span class="read-only-label">Account ID</span>
+                      <span class="read-only-tag">(Read-only)</span>
+                    </div>
+                    <div class="read-only-val">#Qc4v_E749i</div>
+                  </div>
+                  <svg class="verified-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+              </div>
+
+              <!-- Security & Password Section (Image 1) -->
+              <div class="profile-section-card">
+                <div class="security-header-row">
+                  <h4>Security & Password</h4>
+                  <span class="avail-badge">✓ Available to change</span>
+                </div>
+                <p class="security-sub">Enter a new password below to change your login password while KYC is under review.</p>
+
+                <form onsubmit="handlePasswordUpdate(event)">
+                  <div class="form-group">
+                    <label class="form-label">New Password <span class="req">*</span></label>
+                    <div class="input-wrapper">
+                      <input type="password" class="form-input no-icon" id="prof-new-pwd" placeholder="Enter new password" required>
+                      <button type="button" class="input-icon-right" onclick="togglePasswordVisibility('prof-new-pwd')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label">Confirm New Password <span class="req">*</span></label>
+                    <div class="input-wrapper">
+                      <input type="password" class="form-input no-icon" id="prof-conf-pwd" placeholder="Confirm new password" required>
+                      <button type="button" class="input-icon-right" onclick="togglePasswordVisibility('prof-conf-pwd')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  <button type="submit" class="btn-update-pwd">
+                    Update Password ✓
+                  </button>
+                </form>
+              </div>
+
+              <!-- Sign Out Option -->
+              <div style="text-align: center; margin-top: 10px; margin-bottom: 20px;">
+                <button class="demo-btn" style="background: #FEE2E2; color: #EF4444; border-color: #FECACA; padding: 10px 24px;" onclick="resetDemo()">
+                  Sign Out Account
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- Bottom Navigation Bar (STRICTLY 2 TABS: DASHBOARD & PROFILE) -->
+          <div class="bottom-nav-bar">
+            <!-- Tab 1: Dashboard -->
+            <button class="nav-tab-item active" id="nav-btn-dashboard" onclick="switchNavTab('dashboard')">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+              <span>Dashboard</span>
+            </button>
+            <!-- Tab 2: Profile -->
+            <button class="nav-tab-item" id="nav-btn-profile" onclick="switchNavTab('profile')">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span>Profile</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             SCREEN 4: KYC VERIFICATION STEPPER
+             4 STEPS • STRICTLY COL-12 ALL FIELDS
+        =========================================== -->
+        <div class="screen" id="screen-kyc">
+          <!-- Top KYC Header Bar -->
+          <div class="kyc-form-header">
+            <button class="btn-back" onclick="showScreen('main', 'dashboard')">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+              Back to Dashboard
+            </button>
+            <div class="sebi-small-badge">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#00B074" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              SEBI Compliant
+            </div>
+          </div>
+
+          <!-- Horizontal Stepper Progress Indicator -->
+          <div class="stepper-header-box">
+            <div class="stepper-progress-row">
+              <div class="stepper-line-bg"></div>
+              <div class="stepper-line-fill" id="stepperLineFill"></div>
+
+              <!-- Step 1 Node -->
+              <div class="step-node active" id="stepNode1" onclick="jumpToKycStep(1)">
+                <div class="step-circle" id="stepCircle1">1</div>
+                <div class="step-label">Personal</div>
+              </div>
+
+              <!-- Step 2 Node -->
+              <div class="step-node" id="stepNode2" onclick="jumpToKycStep(2)">
+                <div class="step-circle" id="stepCircle2">2</div>
+                <div class="step-label">Address & ID</div>
+              </div>
+
+              <!-- Step 3 Node -->
+              <div class="step-node" id="stepNode3" onclick="jumpToKycStep(3)">
+                <div class="step-circle" id="stepCircle3">3</div>
+                <div class="step-label">Financial</div>
+              </div>
+
+              <!-- Step 4 Node -->
+              <div class="step-node" id="stepNode4" onclick="jumpToKycStep(4)">
+                <div class="step-circle" id="stepCircle4">4</div>
+                <div class="step-label">Documents</div>
+              </div>
+            </div>
+
+            <div class="step-status-subtext" id="stepStatusSubtext">
+              Step <span id="currentStepNum">1</span> of 4: <span id="currentStepTitle">Personal Details</span>
+            </div>
+          </div>
+
+          <div class="screen-content" style="padding: 16px 20px 24px;">
+
+            <!-- ================= STEP 1: PERSONAL DETAILS (COL-12) ================= -->
+            <div id="kycStepContent1" class="kyc-step-card">
+              <div class="step-title-box">
+                <h3>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  1. Personal Details
+                </h3>
+                <p>Provide legal information matching your official government records.</p>
+              </div>
+
+              <!-- Field: Full Legal Name (col-12) -->
+              <div class="form-group">
+                <label class="form-label">Full Name (as per PAN Card) <span class="req">*</span></label>
+                <input type="text" class="form-input no-icon" id="kyc-fullname" placeholder="Enter full legal name" required>
+              </div>
+
+              <!-- Field: Father's Name (col-12) -->
+              <div class="form-group">
+                <label class="form-label">Father's / Spouse's Full Name <span class="req">*</span></label>
+                <input type="text" class="form-input no-icon" id="kyc-fathername" placeholder="Enter father's or spouse's name" required>
+              </div>
+
+              <!-- Field: Date of Birth (col-12) -->
+              <div class="form-group">
+                <label class="form-label">Date of Birth <span class="req">*</span></label>
+                <input type="date" class="form-input no-icon" id="kyc-dob" required>
+              </div>
+
+              <!-- Field: Gender (col-12) -->
+              <div class="form-group">
+                <label class="form-label">Gender <span class="req">*</span></label>
+                <select class="form-select" id="kyc-gender" required>
+                  <option value="" selected disabled>Select Gender</option>
+                  <option>Male</option>
+                  <option>Female</option>
+                  <option>Other</option>
+                </select>
+              </div>
+
+              <!-- Field: Marital Status (col-12) -->
+              <div class="form-group">
+                <label class="form-label">Marital Status <span class="req">*</span></label>
+                <select class="form-select" id="kyc-marital" required>
+                  <option value="" selected disabled>Select Marital Status</option>
+                  <option>Single</option>
+                  <option>Married</option>
+                  <option>Other</option>
+                </select>
+              </div>
+
+              <div class="stepper-nav-actions">
+                <button type="button" class="btn-primary" onclick="goToKycStep(2)">
+                  Next: Address & IDs ➔
+                </button>
+              </div>
+            </div>
+
+            <!-- ================= STEP 2: ADDRESS & REGULATORY IDS (COL-12) ================= -->
+            <div id="kycStepContent2" class="kyc-step-card" style="display: none;">
+              <div class="step-title-box">
+                <h3>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                  2. Permanent Address & Identification
+                </h3>
+                <p>Tax identification numbers and permanent address as per Aadhaar.</p>
+              </div>
+
+              <!-- Field: PAN Number (col-12) -->
+              <div class="form-group">
+                <label class="form-label">PAN Card Number (10 Alphanumeric) <span class="req">*</span></label>
+                <input type="text" class="form-input no-icon" id="kyc-pan" placeholder="e.g. ABCDE1234F" maxlength="10" style="text-transform: uppercase;" required>
+              </div>
+
+              <!-- Field: Aadhaar Number (col-12) -->
+              <div class="form-group">
+                <label class="form-label">Aadhaar Card Number (12 Digits) <span class="req">*</span></label>
+                <input type="text" class="form-input no-icon" id="kyc-aadhaar" placeholder="12-digit Aadhaar Number" maxlength="12" required>
+              </div>
+
+              <!-- Field: Address Line (col-12) -->
+              <div class="form-group">
+                <label class="form-label">Flat / House / Street Address <span class="req">*</span></label>
+                <input type="text" class="form-input no-icon" id="kyc-address" placeholder="House/Flat number, building, street" required>
+              </div>
+
+              <!-- Field: City (col-12) -->
+              <div class="form-group">
+                <label class="form-label">City / Town <span class="req">*</span></label>
+                <input type="text" class="form-input no-icon" id="kyc-city" placeholder="City" required>
+              </div>
+
+              <!-- Field: State (col-12) -->
+              <div class="form-group">
+                <label class="form-label">State / Union Territory <span class="req">*</span></label>
+                <input type="text" class="form-input no-icon" id="kyc-state" placeholder="State" required>
+              </div>
+
+              <!-- Field: PIN Code (col-12) -->
+              <div class="form-group">
+                <label class="form-label">PIN / Postal Code <span class="req">*</span></label>
+                <input type="text" class="form-input no-icon" id="kyc-pincode" placeholder="6-digit PIN code" maxlength="6" required>
+              </div>
+
+              <!-- Field: Country (col-12) -->
+              <div class="form-group">
+                <label class="form-label">Country</label>
+                <input type="text" class="form-input no-icon" placeholder="India" readonly>
+              </div>
+
+              <div class="stepper-nav-actions">
+                <button type="button" class="btn-secondary" style="flex: 1;" onclick="goToKycStep(1)">
+                  ← Back
+                </button>
+                <button type="button" class="btn-primary" style="flex: 2; margin-top: 0;" onclick="goToKycStep(3)">
+                  Next: Risk Profile ➔
+                </button>
+              </div>
+            </div>
+
+            <!-- ================= STEP 3: FINANCIAL & RISK PROFILING (COL-12) ================= -->
+            <div id="kycStepContent3" class="kyc-step-card" style="display: none;">
+              <div class="step-title-box">
+                <h3>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                  3. Financial & Risk Profile
+                </h3>
+                <p>SEBI-mandated suitability profiling for equity and advisory services.</p>
+              </div>
+
+              <!-- Field: Annual Income (col-12) -->
+              <div class="form-group">
+                <label class="form-label">Gross Annual Income Range <span class="req">*</span></label>
+                <select class="form-select" id="kyc-income" required>
+                  <option value="" selected disabled>Select Gross Annual Income</option>
+                  <option>Below ₹1 Lakh</option>
+                  <option>₹1 Lakh - ₹5 Lakh</option>
+                  <option>₹5 Lakh - ₹10 Lakh</option>
+                  <option>₹10 Lakh - ₹25 Lakh</option>
+                  <option>Above ₹25 Lakh</option>
+                </select>
+              </div>
+
+              <!-- Field: Occupation (col-12) -->
+              <div class="form-group">
+                <label class="form-label">Primary Occupation <span class="req">*</span></label>
+                <select class="form-select" id="kyc-occupation" required>
+                  <option value="" selected disabled>Select Primary Occupation</option>
+                  <option>Salaried / Corporate</option>
+                  <option>Self-Employed / Business</option>
+                  <option>Professional</option>
+                  <option>Student</option>
+                  <option>Retired</option>
+                  <option>Homemaker</option>
+                </select>
+              </div>
+
+              <!-- Field: Trading Experience (col-12) -->
+              <div class="form-group">
+                <label class="form-label">Market & Trading Experience <span class="req">*</span></label>
+                <select class="form-select" id="kyc-experience" required>
+                  <option value="" selected disabled>Select Market Experience</option>
+                  <option>Beginner (0 - 1 Year)</option>
+                  <option>Intermediate (1 - 3 Years)</option>
+                  <option>Experienced (3+ Years)</option>
+                </select>
+              </div>
+
+              <!-- Field: Investment Objective (col-12) -->
+              <div class="form-group">
+                <label class="form-label">Investment Objective <span class="req">*</span></label>
+                <select class="form-select" id="kyc-objective" required>
+                  <option value="" selected disabled>Select Investment Objective</option>
+                  <option>Capital Appreciation / Growth</option>
+                  <option>Regular Income</option>
+                  <option>Speculation / Momentum Trading</option>
+                </select>
+              </div>
+
+              <!-- Field: Risk Tolerance (col-12) -->
+              <div class="form-group">
+                <label class="form-label">Risk Tolerance / Appetite <span class="req">*</span></label>
+                <select class="form-select" id="kyc-risk" required>
+                  <option value="" selected disabled>Select Risk Tolerance</option>
+                  <option>Low (Capital Preservation)</option>
+                  <option>Moderate (Balanced Risk & Return)</option>
+                  <option>High (Aggressive Growth)</option>
+                </select>
+              </div>
+
+              <div class="stepper-nav-actions">
+                <button type="button" class="btn-secondary" style="flex: 1;" onclick="goToKycStep(2)">
+                  ← Back
+                </button>
+                <button type="button" class="btn-primary" style="flex: 2; margin-top: 0;" onclick="goToKycStep(4)">
+                  Next: Documents ➔
+                </button>
+              </div>
+            </div>
+
+            <!-- ================= STEP 4: DOCUMENT UPLOADS & DECLARATIONS (COL-12) ================= -->
+            <div id="kycStepContent4" class="kyc-step-card" style="display: none;">
+              <div class="step-title-box">
+                <h3>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                  4. Regulatory Proofs & Declarations
+                </h3>
+                <p>Upload clear document proofs and authorize SEBI verification.</p>
+              </div>
+
+              <!-- Upload 1: PAN Card (col-12) -->
+              <div class="upload-card" id="doc-pan" onclick="toggleMockUpload('doc-pan')">
+                <div class="upload-info">
+                  <div class="upload-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="7" y1="8" x2="17" y2="8"/><line x1="7" y1="12" x2="13" y2="12"/></svg>
+                  </div>
+                  <div class="upload-texts">
+                    <h5>PAN Card (Front Image) *</h5>
+                    <span id="doc-pan-text">Upload clear front image (JPG/PNG up to 5MB)</span>
+                  </div>
+                </div>
+                <button type="button" class="upload-action-btn">Upload</button>
+              </div>
+
+              <!-- Upload 2: Aadhaar Card (col-12) -->
+              <div class="upload-card" id="doc-aadhaar" onclick="toggleMockUpload('doc-aadhaar')">
+                <div class="upload-info">
+                  <div class="upload-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><line x1="15" y1="8" x2="17" y2="8"/><line x1="15" y1="12" x2="17" y2="12"/></svg>
+                  </div>
+                  <div class="upload-texts">
+                    <h5>Aadhaar Card (Front & Back) *</h5>
+                    <span id="doc-aadhaar-text">Upload PDF or JPG document (Max 5MB)</span>
+                  </div>
+                </div>
+                <button type="button" class="upload-action-btn">Upload</button>
+              </div>
+
+              <!-- Upload 3: Bank Proof (col-12) -->
+              <div class="upload-card" id="doc-bank" onclick="toggleMockUpload('doc-bank')">
+                <div class="upload-info">
+                  <div class="upload-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 10h18M5 10v11M19 10v11M9 10v11M15 10v11M12 2 2 7h20L12 2z"/></svg>
+                  </div>
+                  <div class="upload-texts">
+                    <h5>Bank Proof (Cancelled Cheque / Passbook) *</h5>
+                    <span id="doc-bank-text">Upload recent bank proof / cancelled cheque</span>
+                  </div>
+                </div>
+                <button type="button" class="upload-action-btn">Upload</button>
+              </div>
+
+              <!-- Statutory Declarations (col-12 - Initially Unchecked) -->
+              <div class="declaration-row" style="margin-top: 10px;">
+                <input type="checkbox" id="decl-1" required>
+                <label for="decl-1">I confirm that I am an Indian tax resident and not a Politically Exposed Person (PEP).</label>
+              </div>
+              <div class="declaration-row">
+                <input type="checkbox" id="decl-2" required>
+                <label for="decl-2">I authorize MoneyVia to verify my documents with UIDAI & NSDL/KRA registries.</label>
+              </div>
+
+              <div class="stepper-nav-actions" style="margin-top: 14px;">
+                <button type="button" class="btn-secondary" style="flex: 1;" onclick="goToKycStep(3)">
+                  ← Back
+                </button>
+                <!-- SUBMIT BUTTON: DIRECTLY REDIRECTS TO DASHBOARD WITH NO INTERMEDIATE MODAL -->
+                <button type="button" class="btn-primary" style="flex: 2; margin-top: 0;" onclick="submitKycApplication()">
+                  Submit KYC Application ➔
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ==========================================
+           NOTIFICATIONS BOTTOM SHEET / MODAL
+      =========================================== -->
+      <div class="modal-overlay" id="notifModal" onclick="closeNotificationsModal(event)">
+        <div class="notification-sheet" onclick="event.stopPropagation()">
+          <div class="sheet-handle"></div>
+          <div class="sheet-header">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <h3 class="sheet-title">Notifications</h3>
+              <span class="sheet-count">5 New</span>
+            </div>
+            <button class="demo-btn" style="padding: 4px 8px; font-size: 11px;" onclick="closeNotificationsModal()">Close ✕</button>
+          </div>
+
+          <div class="notification-list">
+            <!-- 1. KYC Notification -->
+            <div class="notif-card">
+              <div class="notif-icon-box amber">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              </div>
+              <div class="notif-info">
+                <h5>KYC Verification Pending</h5>
+                <p>Submit PAN, Aadhaar & Bank Proof to activate trading recommendations.</p>
+                <span class="notif-time">Just now • High Priority</span>
+              </div>
+            </div>
+
+            <!-- 2. Welcome -->
+            <div class="notif-card">
+              <div class="notif-icon-box green">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </div>
+              <div class="notif-info">
+                <h5>Welcome to MoneyVia</h5>
+                <p>Account created successfully. Complete SEBI verification to begin.</p>
+                <span class="notif-time">10 mins ago</span>
+              </div>
+            </div>
+
+            <!-- 3. Compliance Notice -->
+            <div class="notif-card">
+              <div class="notif-icon-box blue">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <div class="notif-info">
+                <h5>Compliance Notice</h5>
+                <p>SEBI advisory guidelines mandate verified identity before trade allotment.</p>
+                <span class="notif-time">1 hour ago</span>
+              </div>
+            </div>
+
+            <!-- 4. Bank Proof Alert -->
+            <div class="notif-card">
+              <div class="notif-icon-box amber">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+              </div>
+              <div class="notif-info">
+                <h5>Bank Proof Guidelines</h5>
+                <p>Ensure uploaded cheque clearly displays your name and IFSC code.</p>
+                <span class="notif-time">2 hours ago</span>
+              </div>
+            </div>
+
+            <!-- 5. Market Timing -->
+            <div class="notif-card">
+              <div class="notif-icon-box blue">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <div class="notif-info">
+                <h5>Market Desk Timings</h5>
+                <p>Live trading desk runs Mon-Fri from 09:15 AM to 03:30 PM IST.</p>
+                <span class="notif-time">Today, 09:00 AM</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- JavaScript Application Controller -->
+  <script>
+    // State Management
+    let state = {
+      isKycSubmitted: false,
+      currentScreen: 'splash',
+      activeTab: 'dashboard',
+      deviceMode: 'mobile',
+      kycStep: 1
+    };
+
+    const kycStepTitles = {
+      1: 'Personal Details',
+      2: 'Permanent Address & IDs',
+      3: 'Financial & Risk Profile',
+      4: 'Document Proofs & Declarations'
+    };
+
+    // Initialize application: Splash first -> then Registration -> then Dashboard & Profile
+    window.addEventListener('DOMContentLoaded', () => {
+      // Always start fresh with KYC NOT submitted: Normal Lock Card with "Start KYC" button inside!
+      state.isKycSubmitted = false;
+      localStorage.removeItem('moneyvia_kyc_submitted');
+      updateDashboardState();
+      
+      // Start on Splash screen
+      showScreen('splash');
+
+      // Auto-transition to Registration screen after 2.2 seconds
+      setTimeout(() => {
+        if (state.currentScreen === 'splash') {
+          showScreen('register');
+        }
+      }, 2200);
+    });
+
+    // Explicit State Switcher for Testing Both States Instantly
+    function setKycState(submitted) {
+      state.isKycSubmitted = submitted;
+      if (submitted) {
+        localStorage.setItem('moneyvia_kyc_submitted', 'true');
+        showToast('State switched to: KYC Under Review (Post-Submit)');
+      } else {
+        localStorage.removeItem('moneyvia_kyc_submitted');
+        showToast('State switched to: Normal Lock Card (Initial - Start KYC)');
+      }
+      showScreen('main', 'dashboard');
+    }
+
+    // Screen Switcher
+    function showScreen(screenId, tab = null) {
+      state.currentScreen = screenId;
+      document.querySelectorAll('.screen').forEach(sc => sc.classList.remove('active'));
+      
+      const target = document.getElementById(`screen-${screenId}`);
+      if (target) {
+        target.classList.add('active');
+      }
+
+      // Sync active button in top demo control bar
+      document.querySelectorAll('.demo-btn-screen').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById(`btn-screen-${screenId}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      if (screenId === 'main') {
+        if (tab) {
+          switchNavTab(tab);
+        } else {
+          switchNavTab(state.activeTab);
+        }
+        updateDashboardState();
+      }
+    }
+
+    // Go to Registration directly
+    function goToRegistration() {
+      showScreen('register');
+    }
+
+    // Handle Registration Submission -> Direct to Dashboard
+    function handleRegistrationSubmit(event) {
+      event.preventDefault();
+      const pwd = document.getElementById('reg-pwd').value;
+      const cpwd = document.getElementById('reg-cpwd').value;
+
+      if (pwd !== cpwd) {
+        showToast('Passwords do not match! Please verify.');
+        return;
+      }
+
+      showToast('Account created! Welcome to MoneyVia 👋');
+      // Direct redirect to main application (Dashboard)
+      showScreen('main', 'dashboard');
+    }
+
+    // Go to Login directly
+    function goToLogin() {
+      showScreen('login');
+    }
+
+    // Handle Login Submission -> Direct to Dashboard
+    function handleLoginSubmit(event) {
+      event.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const pwd = document.getElementById('login-pwd').value;
+
+      if (!email || !pwd) {
+        showToast('Please enter both email and password.');
+        return;
+      }
+
+      showToast('Signed in successfully! Welcome back 👋');
+      // Direct redirect to main application (Dashboard)
+      showScreen('main', 'dashboard');
+    }
+
+    // Switch between the 2 bottom navigation tabs (Dashboard and Profile)
+    function switchNavTab(tabName) {
+      state.activeTab = tabName;
+      
+      const tabDash = document.getElementById('tab-dashboard');
+      const tabProf = document.getElementById('tab-profile');
+      const btnDash = document.getElementById('nav-btn-dashboard');
+      const btnProf = document.getElementById('nav-btn-profile');
+
+      if (tabName === 'dashboard') {
+        tabDash.style.display = 'block';
+        tabProf.style.display = 'none';
+        btnDash.classList.add('active');
+        btnProf.classList.remove('active');
+      } else {
+        tabDash.style.display = 'none';
+        tabProf.style.display = 'block';
+        btnDash.classList.remove('active');
+        btnProf.classList.add('active');
+      }
+    }
+
+    // Update Dashboard Lock Cards based on isKycSubmitted
+    function updateDashboardState() {
+      const initialCard = document.getElementById('dashboard-state-initial');
+      const reviewContainer = document.getElementById('dashboard-state-review');
+
+      if (!state.isKycSubmitted) {
+        // State 1: Lock Card with "Start KYC" button inside
+        initialCard.style.display = 'block';
+        reviewContainer.style.display = 'none';
+      } else {
+        // State 2: Remark Banner + Under Review Card (Image 2) + "Start KYC" button below
+        initialCard.style.display = 'none';
+        reviewContainer.style.display = 'block';
+      }
+    }
+
+    // Go to KYC Form Stepper
+    function goToKycForm() {
+      goToKycStep(1);
+      showScreen('kyc');
+    }
+
+    // Stepper Navigation
+    function goToKycStep(stepNum) {
+      state.kycStep = stepNum;
+
+      // Ensure KYC screen is active
+      if (state.currentScreen !== 'kyc') {
+        showScreen('kyc');
+      }
+
+      // Update Cards visibility
+      for (let i = 1; i <= 4; i++) {
+        const card = document.getElementById(`kycStepContent${i}`);
+        if (card) {
+          card.style.display = (i === stepNum) ? 'flex' : 'none';
+        }
+
+        const node = document.getElementById(`stepNode${i}`);
+        const circle = document.getElementById(`stepCircle${i}`);
+        if (node && circle) {
+          node.classList.remove('active', 'completed');
+          if (i < stepNum) {
+            node.classList.add('completed');
+            circle.innerHTML = '✓';
+          } else if (i === stepNum) {
+            node.classList.add('active');
+            circle.textContent = i;
+          } else {
+            circle.textContent = i;
+          }
+        }
+      }
+
+      // Update Progress Line Fill
+      const fillPercentage = ((stepNum - 1) / 3) * 100;
+      const lineFill = document.getElementById('stepperLineFill');
+      if (lineFill) {
+        lineFill.style.width = `${fillPercentage}%`;
+      }
+
+      // Update Subtext
+      document.getElementById('currentStepNum').textContent = stepNum;
+      document.getElementById('currentStepTitle').textContent = kycStepTitles[stepNum];
+
+      // Scroll to top of kyc screen
+      const kycScreen = document.getElementById('screen-kyc');
+      if (kycScreen) kycScreen.scrollTop = 0;
+    }
+
+    function jumpToKycStep(stepNum) {
+      goToKycStep(stepNum);
+    }
+
+    // Handle KYC Final Submission (On Step 4) -> Direct to Dashboard
+    function submitKycApplication() {
+      const decl1 = document.getElementById('decl-1');
+      const decl2 = document.getElementById('decl-2');
+
+      if (!decl1.checked || !decl2.checked) {
+        showToast('Please accept both regulatory declarations to proceed.');
+        return;
+      }
+
+      // Update persistent state
+      state.isKycSubmitted = true;
+      localStorage.setItem('moneyvia_kyc_submitted', 'true');
+      
+      // Direct redirect to Dashboard (no intermediate popups)
+      showToast('KYC Application Submitted Directly! Under Review.');
+      showScreen('main', 'dashboard');
+    }
+
+    // Handle Password Update on Profile Screen
+    function handlePasswordUpdate(event) {
+      event.preventDefault();
+      const p1 = document.getElementById('prof-new-pwd').value;
+      const p2 = document.getElementById('prof-conf-pwd').value;
+
+      if (p1.length < 6) {
+        showToast('Password must be at least 6 characters.');
+        return;
+      }
+      if (p1 !== p2) {
+        showToast('Passwords do not match!');
+        return;
+      }
+
+      showToast('Password updated successfully! ✓');
+      document.getElementById('prof-new-pwd').value = '';
+      document.getElementById('prof-conf-pwd').value = '';
+    }
+
+    // Notifications Modal
+    function openNotificationsModal() {
+      document.getElementById('notifModal').classList.add('open');
+    }
+
+    function closeNotificationsModal(e) {
+      if (!e || e.target.id === 'notifModal' || !e.target.closest('.notification-sheet')) {
+        document.getElementById('notifModal').classList.remove('open');
+      }
+    }
+
+    // Reset All Demo State
+    function resetDemo() {
+      state.isKycSubmitted = false;
+      localStorage.removeItem('moneyvia_kyc_submitted');
+      updateDashboardState();
+
+      // Reset form values to completely empty
+      const kycInputs = ['kyc-fullname', 'kyc-fathername', 'kyc-dob', 'kyc-pan', 'kyc-aadhaar', 'kyc-address', 'kyc-city', 'kyc-state', 'kyc-pincode'];
+      kycInputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      const kycSelects = ['kyc-gender', 'kyc-marital', 'kyc-income', 'kyc-occupation', 'kyc-experience', 'kyc-objective', 'kyc-risk'];
+      kycSelects.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.selectedIndex = 0;
+      });
+      ['doc-pan', 'doc-aadhaar', 'doc-bank'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.classList.remove('uploaded');
+          const btn = el.querySelector('.upload-action-btn');
+          if (btn) btn.textContent = 'Upload';
+        }
+      });
+      const d1 = document.getElementById('decl-1');
+      if (d1) d1.checked = false;
+      const d2 = document.getElementById('decl-2');
+      if (d2) d2.checked = false;
+
+      goToKycStep(1);
+      showToast('Resetting all demo state to fresh install...');
+      showScreen('splash');
+    }
+
+    // Device View Mode Switcher
+    function setDeviceView(mode) {
+      state.deviceMode = mode;
+      const frame = document.getElementById('appFrame');
+      const btnMob = document.getElementById('btn-mode-mobile');
+      const btnDesk = document.getElementById('btn-mode-desktop');
+
+      if (mode === 'desktop') {
+        frame.classList.add('view-desktop');
+        btnDesk.classList.add('active');
+        btnMob.classList.remove('active');
+      } else {
+        frame.classList.remove('view-desktop');
+        btnMob.classList.add('active');
+        btnDesk.classList.remove('active');
+      }
+    }
+
+    // Toggle Password Visibility
+    function togglePasswordVisibility(inputId) {
+      const input = document.getElementById(inputId);
+      if (input.type === 'password') {
+        input.type = 'text';
+      } else {
+        input.type = 'password';
+      }
+    }
+
+    // Toggle Uploaded File Simulation
+    function toggleMockUpload(id) {
+      const el = document.getElementById(id);
+      if (el.classList.contains('uploaded')) {
+        el.classList.remove('uploaded');
+        el.querySelector('.upload-action-btn').textContent = 'Upload';
+      } else {
+        el.classList.add('uploaded');
+        el.querySelector('.upload-action-btn').textContent = 'Uploaded ✓';
+        showToast('File selected and validated successfully.');
+      }
+    }
+
+    // Toast Feedback
+    let toastTimeout = null;
+    function showToast(text) {
+      const toast = document.getElementById('toastMsg');
+      document.getElementById('toastText').textContent = text;
+      toast.classList.add('show');
+
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

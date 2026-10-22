@@ -1,0 +1,398 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="100%" height="100%">
+  <defs>
+    <!-- 1. Metallic Gold Gradients for Rings and Outer 'M' -->
+    <linearGradient id="goldOuterRing" x1="15%" y1="10%" x2="85%" y2="90%">
+      <stop offset="0%" stop-color="#FFEFA8"/>
+      <stop offset="18%" stop-color="#FFF8D6"/>
+      <stop offset="35%" stop-color="#DAA520"/>
+      <stop offset="50%" stop-color="#804E00"/>
+      <stop offset="68%" stop-color="#D49E24"/>
+      <stop offset="85%" stop-color="#FFF2B8"/>
+      <stop offset="100%" stop-color="#6E3E02"/>
+    </linearGradient>
+
+    <linearGradient id="goldBevelLight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFDE8"/>
+      <stop offset="30%" stop-color="#F2C84A"/>
+      <stop offset="60%" stop-color="#AA7412"/>
+      <stop offset="100%" stop-color="#5E3804"/>
+    </linearGradient>
+
+    <linearGradient id="goldEmblemFront" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#FFF5C2"/>
+      <stop offset="22%" stop-color="#F7D059"/>
+      <stop offset="48%" stop-color="#C98F1E"/>
+      <stop offset="70%" stop-color="#804E02"/>
+      <stop offset="88%" stop-color="#EAB93A"/>
+      <stop offset="100%" stop-color="#FFF1AB"/>
+    </linearGradient>
+
+    <linearGradient id="goldArrowGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#A56E0D"/>
+      <stop offset="25%" stop-color="#EAB83A"/>
+      <stop offset="55%" stop-color="#FFF4B8"/>
+      <stop offset="80%" stop-color="#E2A622"/>
+      <stop offset="100%" stop-color="#FFFDE0"/>
+    </linearGradient>
+
+    <!-- 2. Metallic Chrome & Silver Gradients -->
+    <linearGradient id="silverFacetLight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="35%" stop-color="#E2E8F0"/>
+      <stop offset="70%" stop-color="#94A3B8"/>
+      <stop offset="100%" stop-color="#64748B"/>
+    </linearGradient>
+
+    <linearGradient id="silverFacetDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#94A3B8"/>
+      <stop offset="45%" stop-color="#64748B"/>
+      <stop offset="80%" stop-color="#334155"/>
+      <stop offset="100%" stop-color="#1E293B"/>
+    </linearGradient>
+
+    <linearGradient id="silverBarLight" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#94A3B8"/>
+      <stop offset="35%" stop-color="#FFFFFF"/>
+      <stop offset="70%" stop-color="#CBD5E1"/>
+      <stop offset="100%" stop-color="#64748B"/>
+    </linearGradient>
+
+    <!-- 3. Candlestick Financial Gradients -->
+    <linearGradient id="candleGreen" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00FFA2"/>
+      <stop offset="50%" stop-color="#00D06C"/>
+      <stop offset="100%" stop-color="#008A44"/>
+    </linearGradient>
+
+    <linearGradient id="candleRed" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FF5252"/>
+      <stop offset="50%" stop-color="#E51C23"/>
+      <stop offset="100%" stop-color="#8B0000"/>
+    </linearGradient>
+
+    <!-- 4. Deep Radial Navy Background -->
+    <radialGradient id="navyRadialBg" cx="50%" cy="40%" r="58%">
+      <stop offset="0%" stop-color="#093078"/>
+      <stop offset="35%" stop-color="#06225B"/>
+      <stop offset="70%" stop-color="#021136"/>
+      <stop offset="100%" stop-color="#01071B"/>
+    </radialGradient>
+
+    <!-- 5. Electric Cyan / Sky Blue Neon Glowing Rings & Swooshes -->
+    <linearGradient id="cyanNeonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00E5FF"/>
+      <stop offset="40%" stop-color="#0088FF"/>
+      <stop offset="70%" stop-color="#00D4FF"/>
+      <stop offset="100%" stop-color="#0055FF"/>
+    </linearGradient>
+
+    <linearGradient id="cyanFlareGrad" x1="0%" y1="0%" x2="100%" y2="80%">
+      <stop offset="0%" stop-color="#00F0FF" stop-opacity="0.85"/>
+      <stop offset="50%" stop-color="#0077FF" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#002288" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Filters for Photorealistic 3D Depth & Glow -->
+    <filter id="badgeShadow" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#00081C" flood-opacity="0.6"/>
+    </filter>
+
+    <filter id="cyanGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="7" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="10"/>
+    </filter>
+
+    <filter id="candleGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#00FF88" flood-opacity="0.35"/>
+    </filter>
+
+    <filter id="emblemShadow" x="-10%" y="-10%" width="125%" height="125%">
+      <feDropShadow dx="0" dy="6" stdDeviation="7" flood-color="#000511" flood-opacity="0.65"/>
+    </filter>
+
+    <filter id="textDropShadow" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#000000" flood-opacity="0.75"/>
+    </filter>
+
+    <!-- Clip Path for Inside the Badge -->
+    <clipPath id="innerDiscClip">
+      <circle cx="300" cy="300" r="253"/>
+    </clipPath>
+  </defs>
+
+  <!-- ==================== 1. OUTER 3D METALLIC GOLD RIMS ==================== -->
+  <g id="outer-rims" filter="url(#badgeShadow)">
+    <!-- Base Outer Gold Ring -->
+    <circle cx="300" cy="300" r="290" fill="url(#goldOuterRing)"/>
+
+    <!-- Outer Rim Edge Highlights & Grooves -->
+    <circle cx="300" cy="300" r="289" fill="none" stroke="#FFF7D6" stroke-width="1.8" opacity="0.8"/>
+    <circle cx="300" cy="300" r="283" fill="none" stroke="#663A00" stroke-width="2.2" opacity="0.7"/>
+    <circle cx="300" cy="300" r="270" fill="none" stroke="url(#goldBevelLight)" stroke-width="18"/>
+    <circle cx="300" cy="300" r="260" fill="none" stroke="#422500" stroke-width="2.5"/>
+    <circle cx="300" cy="300" r="258" fill="none" stroke="#FFEBA3" stroke-width="1.8"/>
+
+    <!-- Inner Neon Electric Blue Ring -->
+    <circle cx="300" cy="300" r="255" fill="none" stroke="#00E5FF" stroke-width="5" filter="url(#cyanGlow)" opacity="0.95"/>
+    <circle cx="300" cy="300" r="255" fill="none" stroke="#FFFFFF" stroke-width="1.5" opacity="0.8"/>
+  </g>
+
+  <!-- ==================== 2. DEEP NAVY INNER DISC & LIGHT FLARES ==================== -->
+  <g id="disc-background" clip-path="url(#innerDiscClip)">
+    <!-- Radial Navy Backdrop -->
+    <circle cx="300" cy="300" r="253" fill="url(#navyRadialBg)"/>
+
+    <!-- Dynamic Cyan Neon Light Swirls -->
+    <!-- Left Sweeping Flare -->
+    <path d="M 85,220 C 65,310 115,405 195,455 C 245,485 305,495 365,485 C 275,480 205,445 155,390 C 105,335 90,265 105,190 Z"
+        fill="url(#cyanFlareGrad)" filter="url(#softGlow)" opacity="0.7"/>
+    <!-- Left Thin Neon Filament -->
+    <path d="M 95,240 C 90,340 170,430 280,465"
+        fill="none" stroke="#00E5FF" stroke-width="3" filter="url(#cyanGlow)" opacity="0.6"/>
+
+    <!-- Right Sweeping Flare -->
+    <path d="M 515,220 C 535,310 485,405 405,455 C 355,485 295,495 235,485 C 325,480 395,445 445,390 C 495,335 510,265 495,190 Z"
+        fill="url(#cyanFlareGrad)" filter="url(#softGlow)" opacity="0.55"/>
+    <!-- Right Thin Neon Filament -->
+    <path d="M 505,240 C 510,340 430,430 320,465"
+        fill="none" stroke="#00C8FF" stroke-width="2.5" filter="url(#cyanGlow)" opacity="0.5"/>
+
+    <!-- Specular Flare at Top Left Inner Edge -->
+    <ellipse cx="205" cy="95" rx="85" ry="32" fill="#00B8FF" opacity="0.3" filter="url(#softGlow)" transform="rotate(-30 205 95)"/>
+  </g>
+
+  <!-- ==================== 3. CENTRAL 3D 'M' EMBLEM & GROWTH CHART ==================== -->
+  <g id="central-emblem" filter="url(#emblemShadow)">
+
+    <!-- ========== PART A: VERTICAL BARS UNDER ARROW (CHART & M LEGS) ========== -->
+    <!-- Bar 1: Center-Left Silver Pillar -->
+    <g id="bar-1">
+      <rect x="334" y="324" width="22" height="52" rx="3" fill="url(#silverFacetDark)"/>
+      <rect x="334" y="324" width="20" height="50" rx="3" fill="url(#silverBarLight)"/>
+      <line x1="337" y1="326" x2="337" y2="372" stroke="#FFFFFF" stroke-width="1.5" opacity="0.75"/>
+    </g>
+
+    <!-- Bar 2: Center-Right Silver Pillar -->
+    <g id="bar-2">
+      <rect x="372" y="278" width="22" height="98" rx="3" fill="url(#silverFacetDark)"/>
+      <rect x="372" y="278" width="20" height="96" rx="3" fill="url(#silverBarLight)"/>
+      <line x1="375" y1="280" x2="375" y2="372" stroke="#FFFFFF" stroke-width="1.5" opacity="0.75"/>
+    </g>
+
+    <!-- Bar 3: Right-Center Silver Pillar -->
+    <g id="bar-3">
+      <rect x="410" y="228" width="22" height="148" rx="3" fill="url(#silverFacetDark)"/>
+      <rect x="410" y="228" width="20" height="146" rx="3" fill="url(#silverBarLight)"/>
+      <line x1="413" y1="230" x2="413" y2="372" stroke="#FFFFFF" stroke-width="1.5" opacity="0.75"/>
+    </g>
+
+    <!-- Bar 4: Rightmost Gold Pillar (Right Leg of 'M') -->
+    <g id="bar-4-gold-pillar">
+      <!-- Shadow base -->
+      <rect x="448" y="104" width="25" height="272" rx="4" fill="#5E3804"/>
+      <!-- Main Gold Body -->
+      <rect x="448" y="104" width="23" height="270" rx="4" fill="url(#goldEmblemFront)"/>
+      <!-- Specular Highlight Stripe -->
+      <line x1="452" y1="106" x2="452" y2="370" stroke="#FFFDE8" stroke-width="2" opacity="0.85"/>
+      <line x1="467" y1="108" x2="467" y2="370" stroke="#804E00" stroke-width="2" opacity="0.7"/>
+    </g>
+
+    <!-- ========== PART B: LEFT PILLAR & 3D SILVER FACETED CHEVRON ========== -->
+    <!-- Left Gold Pillar (Left Leg of 'M') -->
+    <g id="left-gold-pillar">
+      <!-- Base Shadow -->
+      <rect x="176" y="104" width="25" height="258" rx="4" fill="#5E3804"/>
+      <!-- Main Polished Gold Stem -->
+      <rect x="176" y="104" width="23" height="256" rx="4" fill="url(#goldEmblemFront)"/>
+      <!-- Left Edge Specular Stripe -->
+      <line x1="180" y1="106" x2="180" y2="356" stroke="#FFFDE8" stroke-width="2" opacity="0.85"/>
+      <line x1="195" y1="108" x2="195" y2="356" stroke="#804E00" stroke-width="2" opacity="0.7"/>
+    </g>
+
+    <!-- 3D Silver / Chrome Faceted Chevron Inside Left 'M' -->
+    <g id="silver-chevron">
+      <!-- Left / Light-facing Facet -->
+      <polygon points="199,142 305,258 305,296 199,182" fill="url(#silverFacetLight)"/>
+      <!-- Lower / Shadowed Facet -->
+      <polygon points="199,182 305,296 295,350 199,235" fill="url(#silverFacetDark)"/>
+      <!-- Central Ridge Highlight Line -->
+      <line x1="199" y1="182" x2="305" y2="296" stroke="#FFFFFF" stroke-width="2" opacity="0.95"/>
+      <!-- Lower Base Shadow -->
+      <polygon points="199,235 295,350 265,360 199,285" fill="#1E293B" opacity="0.8"/>
+    </g>
+
+    <!-- Gold Beveled Top Ridge of 'M' (Connecting Pillars to Center Peak) -->
+    <g id="gold-m-ridges">
+      <!-- Left Gold Diagonal Ridge -->
+      <polygon points="176,104 201,104 305,224 286,238" fill="url(#goldBevelLight)"/>
+      <polygon points="286,238 305,224 305,258 290,266" fill="#804E00"/>
+      <!-- Left Ridge Top Highlight -->
+      <line x1="176" y1="104" x2="305" y2="224" stroke="#FFFDE8" stroke-width="2.5" opacity="0.9"/>
+
+      <!-- Right Gold Diagonal Ridge -->
+      <polygon points="473,104 448,104 305,224 322,238" fill="url(#goldBevelLight)"/>
+      <!-- Right Ridge Top Highlight -->
+      <line x1="473" y1="104" x2="305" y2="224" stroke="#FFFDE8" stroke-width="2.5" opacity="0.9"/>
+    </g>
+
+    <!-- ========== PART C: FINANCIAL CANDLESTICK BULL CHART ========== -->
+    <g id="candlestick-chart">
+      <!-- Candle 1: Bullish Green -->
+      <g class="candle" filter="url(#candleGlow)">
+        <line x1="235" y1="316" x2="235" y2="348" stroke="#00FFA2" stroke-width="2" stroke-linecap="round"/>
+        <rect x="229" y="324" width="12" height="16" rx="2.5" fill="url(#candleGreen)"/>
+        <line x1="231" y1="326" x2="231" y2="338" stroke="#E6FFFA" stroke-width="1.2" opacity="0.8"/>
+      </g>
+
+      <!-- Candle 2: Bearish Crimson Red -->
+      <g class="candle">
+        <line x1="256" y1="298" x2="256" y2="332" stroke="#FF5252" stroke-width="2" stroke-linecap="round"/>
+        <rect x="250" y="306" width="12" height="18" rx="2.5" fill="url(#candleRed)"/>
+        <line x1="252" y1="308" x2="252" y2="322" stroke="#FFE6E6" stroke-width="1.2" opacity="0.8"/>
+      </g>
+
+      <!-- Candle 3: Bullish Green -->
+      <g class="candle" filter="url(#candleGlow)">
+        <line x1="278" y1="278" x2="278" y2="318" stroke="#00FFA2" stroke-width="2" stroke-linecap="round"/>
+        <rect x="272" y="286" width="12" height="22" rx="2.5" fill="url(#candleGreen)"/>
+        <line x1="274" y1="288" x2="274" y2="306" stroke="#E6FFFA" stroke-width="1.2" opacity="0.8"/>
+      </g>
+
+      <!-- Candle 4: Bearish Crimson Red -->
+      <g class="candle">
+        <line x1="301" y1="262" x2="301" y2="300" stroke="#FF5252" stroke-width="2" stroke-linecap="round"/>
+        <rect x="295" y="270" width="12" height="20" rx="2.5" fill="url(#candleRed)"/>
+        <line x1="297" y1="272" x2="297" y2="288" stroke="#FFE6E6" stroke-width="1.2" opacity="0.8"/>
+      </g>
+
+      <!-- Candle 5: Bullish Green -->
+      <g class="candle" filter="url(#candleGlow)">
+        <line x1="325" y1="240" x2="325" y2="282" stroke="#00FFA2" stroke-width="2" stroke-linecap="round"/>
+        <rect x="319" y="248" width="12" height="24" rx="2.5" fill="url(#candleGreen)"/>
+        <line x1="321" y1="250" x2="321" y2="270" stroke="#E6FFFA" stroke-width="1.2" opacity="0.8"/>
+      </g>
+
+      <!-- Candle 6: Bearish Crimson Red -->
+      <g class="candle">
+        <line x1="350" y1="222" x2="350" y2="264" stroke="#FF5252" stroke-width="2" stroke-linecap="round"/>
+        <rect x="344" y="230" width="12" height="22" rx="2.5" fill="url(#candleRed)"/>
+        <line x1="346" y1="232" x2="346" y2="250" stroke="#FFE6E6" stroke-width="1.2" opacity="0.8"/>
+      </g>
+
+      <!-- Candle 7: Bullish Green -->
+      <g class="candle" filter="url(#candleGlow)">
+        <line x1="375" y1="198" x2="375" y2="244" stroke="#00FFA2" stroke-width="2" stroke-linecap="round"/>
+        <rect x="369" y="206" width="12" height="28" rx="2.5" fill="url(#candleGreen)"/>
+        <line x1="371" y1="208" x2="371" y2="232" stroke="#E6FFFA" stroke-width="1.2" opacity="0.8"/>
+      </g>
+
+      <!-- Candle 8: Bullish Green Strong -->
+      <g class="candle" filter="url(#candleGlow)">
+        <line x1="401" y1="168" x2="401" y2="218" stroke="#00FFA2" stroke-width="2.2" stroke-linecap="round"/>
+        <rect x="395" y="176" width="12" height="32" rx="2.5" fill="url(#candleGreen)"/>
+        <line x1="397" y1="178" x2="397" y2="206" stroke="#E6FFFA" stroke-width="1.2" opacity="0.8"/>
+      </g>
+
+      <!-- Candle 9: Apex Bullish Green -->
+      <g class="candle" filter="url(#candleGlow)">
+        <line x1="428" y1="145" x2="428" y2="194" stroke="#00FFA2" stroke-width="2.2" stroke-linecap="round"/>
+        <rect x="422" y="152" width="12" height="30" rx="2.5" fill="url(#candleGreen)"/>
+        <line x1="424" y1="154" x2="424" y2="180" stroke="#E6FFFA" stroke-width="1.2" opacity="0.8"/>
+      </g>
+    </g>
+
+    <!-- ========== PART D: 3D DYNAMIC UPWARD GOLDEN ARROW ========== -->
+    <g id="upward-gold-arrow">
+      <!-- Arrow Under-Bevel / 3D Extrusion Shadow -->
+      <path d="M 194,364 C 260,364 340,320 414,244 C 445,212 472,174 496,128 L 504,136 C 478,184 450,224 418,256 C 342,334 260,378 194,378 Z"
+          fill="#5A3500"/>
+
+      <!-- Arrow Main Body Arc -->
+      <path d="M 195,362 C 262,358 342,314 416,238 C 448,206 474,166 498,120 L 488,112 C 464,160 438,198 406,230 C 334,304 258,348 195,352 Z"
+          fill="url(#goldArrowGrad)"/>
+
+      <!-- Top Brilliant Specular Stripe along the Arc -->
+      <path d="M 196,354 C 260,350 338,308 410,234 C 440,202 466,162 490,116"
+          fill="none" stroke="#FFFDE8" stroke-width="2.2" opacity="0.95"/>
+
+      <!-- 3D Arrowhead -->
+      <!-- Shadow Underneath Arrowhead -->
+      <polygon points="442,156 504,124 480,188 464,168 450,178" fill="#472A00"/>
+      <!-- Main Facet 1 (Light Gold) -->
+      <polygon points="444,152 506,120 472,162" fill="url(#goldBevelLight)"/>
+      <!-- Main Facet 2 (Rich Gold) -->
+      <polygon points="472,162 506,120 484,184 466,166" fill="url(#goldArrowGrad)"/>
+      <!-- Arrowhead Ridge Highlight -->
+      <line x1="444" y1="152" x2="506" y2="120" stroke="#FFFFFF" stroke-width="2" opacity="0.95"/>
+
+      <!-- Specular Lens Flare / Star Sparkle at Arrow Tip -->
+      <g id="arrow-glint" transform="translate(506, 120)">
+        <!-- Radial Soft Glow -->
+        <circle cx="0" cy="0" r="16" fill="#FFFBE6" opacity="0.45" filter="url(#softGlow)"/>
+        <!-- 4-point Diamond Star -->
+        <polygon points="0,-26 5,-6 26,0 5,6 0,26 -5,6 -26,0 -5,-6" fill="#FFFFFF"/>
+        <!-- Diagonal Star Beams -->
+        <polygon points="0,-14 3,-3 14,0 3,3 0,14 -3,3 -14,0 -3,-3" fill="#FFF2B8" transform="rotate(45)"/>
+        <!-- Bright Star Center -->
+        <circle cx="0" cy="0" r="4.5" fill="#FFFFFF"/>
+      </g>
+    </g>
+
+  </g>
+
+  <!-- ==================== 4. 3D BRAND TYPOGRAPHY: Moneyara Research ==================== -->
+  <g id="brand-typography">
+
+    <!-- "Moneyara" Main 3D Wordmark -->
+    <g id="wordmark-moneyara" filter="url(#textDropShadow)">
+      <!-- 3D Bevel Extrusion (Bottom Offset) -->
+      <text x="300" y="439" text-anchor="middle"
+          font-family="'Montserrat', 'Plus Jakarta Sans', 'Arial Black', sans-serif"
+          font-weight="900" font-size="58" letter-spacing="-0.5"
+          fill="#472A00">Moneyara</text>
+
+      <!-- Mid Bevel Edge -->
+      <text x="300" y="437" text-anchor="middle"
+          font-family="'Montserrat', 'Plus Jakarta Sans', 'Arial Black', sans-serif"
+          font-weight="900" font-size="58" letter-spacing="-0.5"
+          fill="#804E00">Moneyara</text>
+
+      <!-- Front Metallic Gold Face -->
+      <text x="300" y="435" text-anchor="middle"
+          font-family="'Montserrat', 'Plus Jakarta Sans', 'Arial Black', sans-serif"
+          font-weight="900" font-size="58" letter-spacing="-0.5"
+          fill="url(#goldOuterRing)"
+          stroke="#FFFEEA" stroke-width="0.8">Moneyara</text>
+    </g>
+
+    <!-- Subtitle: — Research — -->
+    <g id="wordmark-research" transform="translate(0, 468)">
+      <!-- Left Silver Wing Line -->
+      <line x1="112" y1="-7" x2="175" y2="-7" stroke="url(#silverFacetLight)" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="114" y1="-8" x2="173" y2="-8" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="round" opacity="0.85"/>
+
+      <!-- "Research" Metallic Silver Wordmark -->
+      <text x="300" y="0" text-anchor="middle"
+          font-family="'Montserrat', 'Plus Jakarta Sans', sans-serif"
+          font-weight="700" font-size="22" letter-spacing="7"
+          fill="url(#silverFacetLight)">Research</text>
+      <!-- Top Specular Highlight on Text -->
+      <text x="300" y="-0.5" text-anchor="middle"
+          font-family="'Montserrat', 'Plus Jakarta Sans', sans-serif"
+          font-weight="700" font-size="22" letter-spacing="7"
+          fill="none" stroke="#FFFFFF" stroke-width="0.4" opacity="0.85">Research</text>
+
+      <!-- Right Silver Wing Line -->
+      <line x1="425" y1="-7" x2="488" y2="-7" stroke="url(#silverFacetLight)" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="427" y1="-8" x2="486" y2="-8" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="round" opacity="0.85"/>
+    </g>
+
+  </g>
+</svg>

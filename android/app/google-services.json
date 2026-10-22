@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "451282373660",
+    "project_id": "moneyararesearch",
+    "storage_bucket": "moneyararesearch.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:451282373660:android:1baf2c075c4dd63aca63d9",
+        "android_client_info": {
+          "package_name": "com.moneyararesearch.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTcXXyY4BZ-c6V6sKB0nEHmcKCh58iu8A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
