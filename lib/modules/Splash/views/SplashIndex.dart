@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../themes/AppColors.dart';
-import '../../../widgets/MoneyViaLogo.dart';
+import '../../../themes/colors.dart';
+import '../../../widgets/DeskUi.dart';
 import '../controllers/SplashControllers.dart';
 
 class SplashIndex extends StatefulWidget {
@@ -26,7 +26,7 @@ class _SplashIndexState extends State<SplashIndex>
     );
 
     _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
+      CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
     );
 
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -48,111 +48,70 @@ class _SplashIndexState extends State<SplashIndex>
       init: SplashController(),
       builder: (controller) {
         return Scaffold(
-          backgroundColor: Colors.white,
-          body: Stack(
-            children: [
-              // Subtle background gradient elements
-              Positioned(
-                top: -100,
-                right: -80,
-                child: Container(
-                  width: 260,
-                  height: 260,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.primaryLight.withOpacity(0.5),
-                  ),
-                ),
-              ),
-              Positioned(
-                bottom: -120,
-                left: -60,
-                child: Container(
-                  width: 280,
-                  height: 280,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.primaryLight.withOpacity(0.35),
-                  ),
-                ),
-              ),
-
-              // Main Splash Content
-              Center(
-                child: FadeTransition(
-                  opacity: _fadeAnimation,
-                  child: ScaleTransition(
-                    scale: _scaleAnimation,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // Official MoneyVia Brand Logo Mark & Logotype
-                        const MoneyViaLogo(
-                          size: 135,
-                          showText: false,
-                        ),
-                        const SizedBox(height: 12),
-
-                        // Subtitle
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 14, vertical: 5),
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryLight,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: const Text(
-                            'SEBI-Registered Market Intelligence',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.primaryDark,
-                              letterSpacing: 0.2,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 48),
-
-                        // Modern linear progress loader
-                        SizedBox(
-                          width: 130,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: const LinearProgressIndicator(
-                              minHeight: 4,
-                              backgroundColor: Color(0xFFF1F5F9),
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                AppColors.primary,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-
-              // Bottom Regulatory Tag
-              Positioned(
-                bottom: 28,
-                left: 0,
-                right: 0,
-                child: Center(
-                  child: Text(
-                    'Regulated by SEBI (Research Analysts) Regulations, 2014',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.textMuted,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
+            backgroundColor: AppColors.scaffoldBackground,
+            body: Center(
+                child: SingleChildScrollView(
+                    child: Padding(
+                        padding: const EdgeInsets.all(24),
+                        child: ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 592),
+                            child: FadeTransition(
+                                opacity: _fadeAnimation,
+                                child: ScaleTransition(
+                                    scale: _scaleAnimation,
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Center(
+                                              child: Container(
+                                                  width: 100,
+                                                  height: 100,
+                                                  alignment: Alignment.center,
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                          shape: BoxShape
+                                                              .circle,
+                                                          color: AppColors
+                                                              .primary),
+                                                  child: Text(
+                                                      'T',
+                                                      style: deskText.copyWith(
+                                                          fontSize: 48,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          color:
+                                                              Colors.white)))),
+                                          const SizedBox(height: 30),
+                                          Text('Research, with clarity.',
+                                              textAlign: TextAlign.center,
+                                              style: deskText.copyWith(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w600)),
+                                          const SizedBox(height: 8),
+                                          Text('TRADING · RESEARCH DESK',
+                                              textAlign: TextAlign.center,
+                                              style: deskText.copyWith(
+                                                  fontSize: 12,
+                                                  color:
+                                                      AppColors.textSecondary)),
+                                          const SizedBox(height: 40),
+                                          const SizedBox(
+                                              width: 180,
+                                              child: LinearProgressIndicator(
+                                                  minHeight: 3,
+                                                  backgroundColor:
+                                                      AppColors.border,
+                                                  color: AppColors.primary)),
+                                          const SizedBox(height: 20),
+                                          Text('Preparing your workspace',
+                                              textAlign: TextAlign.center,
+                                              style: deskText.copyWith(
+                                                  fontSize: 13,
+                                                  color:
+                                                      AppColors.textSecondary)),
+                                        ]))))))));
       },
     );
   }

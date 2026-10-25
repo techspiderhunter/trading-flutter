@@ -9,6 +9,7 @@ class MainRoutes {
     ...AuthRoutes.routes,
     ...MainNavRoutes.routes,
     ...DashboardRoutes.routes,
+    ...SettingRoutes.routes,
     ...KycRoutes.routes,
     ...ProfileRoutes.routes,
     ...MitcRoutes.routes,

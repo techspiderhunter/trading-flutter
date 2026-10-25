@@ -294,7 +294,7 @@ class MitcController extends GetxController {
           margin: const EdgeInsets.all(16),
           borderRadius: 12,
           duration: const Duration(seconds: 4),
-          icon: const Icon(Icons.check_circle_rounded, color: AppColors.primary),
+          icon: Icon(Icons.check_circle_rounded, color: AppColors.primary),
         );
       } else {
         _showError('Submission Failed', res.firstErrorMessage);
@@ -400,7 +400,7 @@ class MitcController extends GetxController {
         margin: const EdgeInsets.all(16),
         borderRadius: 12,
         duration: const Duration(seconds: 4),
-        icon: const Icon(Icons.link_rounded, color: AppColors.primary),
+        icon: Icon(Icons.link_rounded, color: AppColors.primary),
       );
     } finally {
       isDownloadingPdf.value = false;
@@ -473,3 +473,4 @@ class MitcController extends GetxController {
     super.onClose();
   }
 }
+

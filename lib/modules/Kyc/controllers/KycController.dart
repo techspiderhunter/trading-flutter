@@ -1,9 +1,11 @@
+import '../../../widgets/DeskUi.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../includes/Storage.dart';
 import '../../../global/Validator/Validators.dart';
 import '../../Dashboard/controllers/DashboardController.dart';
+import '../../Dashboard/routes/DashboardRoutes.dart';
 import '../../MainNav/controllers/MainNavController.dart';
 import '../../MainNav/routes/MainNavRoutes.dart';
 import '../../../themes/AppColors.dart';
@@ -107,7 +109,8 @@ class KycController extends GetxController {
       try {
         final kyc = KycModel.fromJsonString(cachedKycJson);
         currentKyc.value = kyc;
-        currentKycStatus.value = kyc.isVerified ? 'verified' : kyc.verificationStatus;
+        currentKycStatus.value =
+            kyc.isVerified ? 'verified' : kyc.verificationStatus;
         hasExistingKyc.value = true;
         if (kyc.isPending || kyc.isVerified) {
           isEditing.value = false;
@@ -119,7 +122,8 @@ class KycController extends GetxController {
         }
       } catch (_) {}
     } else {
-      final submittedFlag = LocalStorage.read(MainNavController.kycSubmittedStorageKey);
+      final submittedFlag =
+          LocalStorage.read(MainNavController.kycSubmittedStorageKey);
       if (submittedFlag == 'true') {
         currentKycStatus.value = 'pending';
         isEditing.value = false;
@@ -207,7 +211,8 @@ class KycController extends GetxController {
       if (response.success && response.data != null) {
         final kyc = response.data!;
         currentKyc.value = kyc;
-        currentKycStatus.value = kyc.isVerified ? 'verified' : kyc.verificationStatus;
+        currentKycStatus.value =
+            kyc.isVerified ? 'verified' : kyc.verificationStatus;
         hasExistingKyc.value = true;
 
         // Persist fresh server state locally
@@ -221,13 +226,15 @@ class KycController extends GetxController {
         if (Get.isRegistered<MainNavController>()) {
           final mainNav = Get.find<MainNavController>();
           mainNav.kycProfile.value = kyc;
-          mainNav.kycStatus.value = kyc.isVerified ? 'verified' : kyc.verificationStatus;
+          mainNav.kycStatus.value =
+              kyc.isVerified ? 'verified' : kyc.verificationStatus;
           mainNav.isKycSubmitted.value = kyc.isPending || kyc.isVerified;
         }
         if (Get.isRegistered<DashboardController>()) {
           final dash = Get.find<DashboardController>();
           dash.kycProfile.value = kyc;
-          dash.kycStatus.value = kyc.isVerified ? 'verified' : kyc.verificationStatus;
+          dash.kycStatus.value =
+              kyc.isVerified ? 'verified' : kyc.verificationStatus;
           dash.isKycSubmitted.value = kyc.isPending || kyc.isVerified;
           dash.referenceId.value = kyc.referenceId;
           dash.rejectionReason.value = kyc.rejectionReason;
@@ -263,7 +270,8 @@ class KycController extends GetxController {
     if (cachedUserJson != null && cachedUserJson.isNotEmpty) {
       try {
         final user = UserModel.fromJsonString(cachedUserJson);
-        if (fullNameController.text.isEmpty) fullNameController.text = user.name;
+        if (fullNameController.text.isEmpty)
+          fullNameController.text = user.name;
         if (emailController.text.isEmpty) emailController.text = user.email;
         if (phoneController.text.isEmpty) phoneController.text = user.phone;
       } catch (_) {}
@@ -284,7 +292,8 @@ class KycController extends GetxController {
     if (kyc.email != null) emailController.text = kyc.email!;
     if (kyc.phone != null) phoneController.text = kyc.phone!;
     if (kyc.panNumber != null) panNumberController.text = kyc.panNumber!;
-    if (kyc.aadhaarNumber != null) aadhaarNumberController.text = kyc.aadhaarNumber!;
+    if (kyc.aadhaarNumber != null)
+      aadhaarNumberController.text = kyc.aadhaarNumber!;
 
     if (kyc.address != null) addressController.text = kyc.address!;
     if (kyc.city != null) cityController.text = kyc.city!;
@@ -365,7 +374,7 @@ class KycController extends GetxController {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(
+            colorScheme: ColorScheme.light(
               primary: AppColors.primary,
               onPrimary: Colors.white,
               onSurface: AppColors.textPrimary,
@@ -400,7 +409,8 @@ class KycController extends GetxController {
       return false;
     }
 
-    final fatherErr = Validators.name(fatherNameController.text, "Father's name");
+    final fatherErr =
+        Validators.name(fatherNameController.text, "Father's name");
     if (fatherErr != null) {
       _showErrorSnackbar('Personal Details', fatherErr);
       return false;
@@ -412,7 +422,8 @@ class KycController extends GetxController {
     }
 
     if (maritalStatus.value == null || maritalStatus.value!.isEmpty) {
-      _showErrorSnackbar('Personal Details', 'Please select your marital status');
+      _showErrorSnackbar(
+          'Personal Details', 'Please select your marital status');
       return false;
     }
 
@@ -473,17 +484,20 @@ class KycController extends GetxController {
 
   bool validateStep2() {
     if (annualIncome.value == null || annualIncome.value!.isEmpty) {
-      _showErrorSnackbar('Financial Profile', 'Please select your annual gross income');
+      _showErrorSnackbar(
+          'Financial Profile', 'Please select your annual gross income');
       return false;
     }
 
     if (occupation.value == null || occupation.value!.isEmpty) {
-      _showErrorSnackbar('Financial Profile', 'Please select your primary occupation');
+      _showErrorSnackbar(
+          'Financial Profile', 'Please select your primary occupation');
       return false;
     }
 
     if (tradingExperience.value == null || tradingExperience.value!.isEmpty) {
-      _showErrorSnackbar('Risk Profiling', 'Please select your trading experience level');
+      _showErrorSnackbar(
+          'Risk Profiling', 'Please select your trading experience level');
       return false;
     }
 
@@ -491,23 +505,30 @@ class KycController extends GetxController {
   }
 
   bool validateStep3() {
-    if (!panFrontUploaded.value && (panFilePath.value == null || panFilePath.value!.isEmpty)) {
-      _showErrorSnackbar('Documents Required', 'Please attach a clear photo of your PAN card');
+    if (!panFrontUploaded.value &&
+        (panFilePath.value == null || panFilePath.value!.isEmpty)) {
+      _showErrorSnackbar(
+          'Documents Required', 'Please attach a clear photo of your PAN card');
       return false;
     }
 
-    if (!aadhaarFrontUploaded.value && (aadhaarFrontFilePath.value == null || aadhaarFrontFilePath.value!.isEmpty)) {
-      _showErrorSnackbar('Documents Required', 'Please attach Aadhaar front document');
+    if (!aadhaarFrontUploaded.value &&
+        (aadhaarFrontFilePath.value == null ||
+            aadhaarFrontFilePath.value!.isEmpty)) {
+      _showErrorSnackbar(
+          'Documents Required', 'Please attach Aadhaar front document');
       return false;
     }
 
     if (!declareTrueInfo.value) {
-      _showErrorSnackbar('Declaration Required', 'Please acknowledge the accuracy of provided information');
+      _showErrorSnackbar('Declaration Required',
+          'Please acknowledge the accuracy of provided information');
       return false;
     }
 
     if (!declareSebiCompliance.value) {
-      _showErrorSnackbar('Declaration Required', 'Please accept statutory SEBI advisory compliance terms');
+      _showErrorSnackbar('Declaration Required',
+          'Please accept statutory SEBI advisory compliance terms');
       return false;
     }
 
@@ -592,129 +613,34 @@ class KycController extends GetxController {
     required Function(String path, String fileName) onSelected,
   }) async {
     Get.bottomSheet(
-      Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 22),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+      DeskSheetContent(
+          title: 'Attach $documentTitle',
+          subtitle: 'Select source to capture or select document.',
           children: [
-            Center(
-              child: Container(
-                width: 44,
-                height: 4.5,
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(3),
-                ),
-              ),
-            ),
-            const SizedBox(height: 18),
-            Text(
-              'Attach $documentTitle',
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w800,
-                color: AppColors.textPrimary,
-              ),
-            ),
-            const SizedBox(height: 6),
-            const Text(
-              'Select source to capture or select document',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 12.5,
-                color: AppColors.textSecondary,
-              ),
-            ),
-            const SizedBox(height: 22),
-            Row(
-              children: [
-                Expanded(
-                  child: InkWell(
-                    onTap: () async {
-                      Get.back();
-                      await _pickImageFromSource(
-                        source: ImageSource.camera,
-                        title: documentTitle,
-                        onSelected: onSelected,
-                      );
-                    },
-                    borderRadius: BorderRadius.circular(14),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 18),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF1F5F9),
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(color: AppColors.border),
-                      ),
-                      child: const Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.camera_alt_rounded,
-                              color: Color(0xFF1E67FA), size: 32),
-                          SizedBox(height: 8),
-                          Text(
-                            'Take Photo',
-                            style: TextStyle(
-                              fontSize: 13.5,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.textPrimary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: InkWell(
-                    onTap: () async {
-                      Get.back();
-                      await _pickImageFromSource(
-                        source: ImageSource.gallery,
-                        title: documentTitle,
-                        onSelected: onSelected,
-                      );
-                    },
-                    borderRadius: BorderRadius.circular(14),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 18),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF1F5F9),
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(color: AppColors.border),
-                      ),
-                      child: const Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.photo_library_rounded,
-                              color: Color(0xFF475569), size: 32),
-                          SizedBox(height: 8),
-                          Text(
-                            'From Gallery',
-                            style: TextStyle(
-                              fontSize: 13.5,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.textPrimary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-          ],
-        ),
-      ),
+            DeskRow(
+                title: 'Take Photo',
+                subtitle: 'Camera',
+                onTap: () async {
+                  Get.back();
+                  await _pickImageFromSource(
+                    source: ImageSource.camera,
+                    title: documentTitle,
+                    onSelected: onSelected,
+                  );
+                }),
+            const SizedBox(height: 15),
+            DeskRow(
+                title: 'Choose from Gallery',
+                subtitle: 'Device images',
+                onTap: () async {
+                  Get.back();
+                  await _pickImageFromSource(
+                    source: ImageSource.gallery,
+                    title: documentTitle,
+                    onSelected: onSelected,
+                  );
+                })
+          ]),
     );
   }
 
@@ -808,7 +734,8 @@ class KycController extends GetxController {
       isEditing.value = false;
 
       // Persist KYC submission status & full KYC profile
-      await LocalStorage.write(MainNavController.kycSubmittedStorageKey, 'true');
+      await LocalStorage.write(
+          MainNavController.kycSubmittedStorageKey, 'true');
       await LocalStorage.write(LocalStorage.kycDataKey, kycData.toJsonString());
 
       // Update global state in MainNavController
@@ -832,7 +759,7 @@ class KycController extends GetxController {
       }
 
       // Directly redirect to Dashboard as requested
-      Get.offAllNamed(MainNavRoutes.main);
+      Get.offAllNamed(DashboardRoutes.dashboard);
 
       Get.snackbar(
         'KYC Submitted Successfully!',
@@ -842,7 +769,7 @@ class KycController extends GetxController {
         colorText: AppColors.primaryDark,
         margin: const EdgeInsets.all(16),
         borderRadius: 14,
-        icon: const Icon(Icons.check_circle_rounded, color: AppColors.primary),
+        icon: Icon(Icons.check_circle_rounded, color: AppColors.primary),
         duration: const Duration(seconds: 4),
       );
     } else {
@@ -873,7 +800,7 @@ class KycController extends GetxController {
       colorText: AppColors.primaryDark,
       margin: const EdgeInsets.all(16),
       borderRadius: 12,
-      icon: const Icon(Icons.check_circle_rounded, color: AppColors.primary),
+      icon: Icon(Icons.check_circle_rounded, color: AppColors.primary),
       duration: const Duration(seconds: 2),
     );
   }

@@ -12,14 +12,14 @@ class KycActionCard extends StatelessWidget {
       width: double.infinity,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF0F172A), Color(0xFF1E293B)],
+          colors: [Color(0xFF192542), Color(0xFF192542)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF0F172A).withValues(alpha: 0.18),
+            color: const Color(0xFF192542).withValues(alpha: 0.18),
             blurRadius: 18,
             offset: const Offset(0, 8),
           ),
@@ -65,6 +65,7 @@ class KycActionCard extends StatelessWidget {
                           Text(
                             'Action Required',
                             style: TextStyle(
+                              fontFamily: 'DeskSans',
                               fontSize: 11,
                               fontWeight: FontWeight.w700,
                               color: Color(0xFFD97706),
@@ -76,6 +77,7 @@ class KycActionCard extends StatelessWidget {
                     const Text(
                       'SEBI Mandate',
                       style: TextStyle(
+                        fontFamily: 'DeskSans',
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
                         color: Color(0xFF94A3B8),
@@ -87,8 +89,9 @@ class KycActionCard extends StatelessWidget {
                 const Text(
                   'Complete Your Regulatory KYC',
                   style: TextStyle(
+                    fontFamily: 'DeskSans',
                     fontSize: 18,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: Colors.white,
                     letterSpacing: -0.2,
                   ),
@@ -97,6 +100,7 @@ class KycActionCard extends StatelessWidget {
                 const Text(
                   'As mandated by SEBI (Research Analysts) Regulations, 2014, complete verification to unlock premium research calls & advisory feeds.',
                   style: TextStyle(
+                    fontFamily: 'DeskSans',
                     fontSize: 12.5,
                     color: Color(0xFFCBD5E1),
                     height: 1.4,
@@ -123,6 +127,7 @@ class KycActionCard extends StatelessWidget {
                         Text(
                           'Complete KYC Now',
                           style: TextStyle(
+                            fontFamily: 'DeskSans',
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
                             color: Colors.white,

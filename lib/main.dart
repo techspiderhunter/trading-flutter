@@ -32,7 +32,7 @@ class MoneyaraApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Moneyara Research',
+      title: 'Trading',
       debugShowCheckedModeBanner: false,
       theme: lightTheme(),
       initialRoute: SplashRoutes.splashIndex,

@@ -108,6 +108,18 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  fonts:
+    - family: DeskSans
+      fonts:
+        - asset: assets/fonts/DeskSans-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/DeskSans-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/DeskSans-Semibold.ttf
+          weight: 600
+        - asset: assets/fonts/DeskSans-Bold.ttf
+          weight: 700
+
   # To add assets to your application, add an assets section, like this:
   assets:
     #    - assets/images/

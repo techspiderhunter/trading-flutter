@@ -45,6 +45,7 @@ class TextFormInput extends StatelessWidget {
         hintText: placeholder,
 
         hintStyle: const TextStyle(
+          fontFamily: 'DeskSans',
           color: Colors.grey,
           fontSize: 14,
         ),
@@ -176,6 +177,7 @@ class FormDropdownSearch extends StatelessWidget {
           decoration: InputDecoration(
             hintText: "Search...",
             hintStyle: const TextStyle(
+              fontFamily: 'DeskSans',
               color: Colors.grey,
               fontSize: 14,
             ),
@@ -213,6 +215,7 @@ class FormDropdownSearch extends StatelessWidget {
             title: Text(
               item,
               style: const TextStyle(
+                fontFamily: 'DeskSans',
                 fontSize: 14,
               ),
             ),
@@ -239,6 +242,7 @@ class FormDropdownSearch extends StatelessWidget {
         return Text(
           selectedItem ?? placeholder,
           style: TextStyle(
+            fontFamily: 'DeskSans',
             fontSize: 14,
             color: selectedItem == null ? Colors.grey : Colors.black87,
           ),
@@ -256,6 +260,7 @@ class FormDropdownSearch extends StatelessWidget {
           hintText: placeholder,
 
           hintStyle: const TextStyle(
+            fontFamily: 'DeskSans',
             color: Colors.grey,
             fontSize: 14,
           ),

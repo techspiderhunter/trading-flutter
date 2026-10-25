@@ -1,3 +1,4 @@
+import '../themes/colors.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import '../global/requests/GlobalRequest.dart';
@@ -96,17 +97,17 @@ class InvoiceModel {
   }
 
   Color get statusColor {
-    if (isApproved) return const Color(0xFF059669);
-    if (isPending) return const Color(0xFFD97706);
-    if (isCancelled) return const Color(0xFFDC2626);
-    return const Color(0xFF64748B);
+    if (isApproved) return AppColors.success;
+    if (isPending) return AppColors.warning;
+    if (isCancelled) return AppColors.error;
+    return AppColors.textMuted;
   }
 
   Color get statusBgColor {
-    if (isApproved) return const Color(0xFFECFDF5);
-    if (isPending) return const Color(0xFFFEF3C7);
-    if (isCancelled) return const Color(0xFFFEF2F2);
-    return const Color(0xFFF1F5F9);
+    if (isApproved) return AppColors.successBg;
+    if (isPending) return AppColors.warningBg;
+    if (isCancelled) return AppColors.errorBg;
+    return AppColors.surfaceSecondary;
   }
 
   String get displayValidity {
@@ -267,3 +268,4 @@ class InvoiceModel {
   factory InvoiceModel.fromJsonString(String source) =>
       InvoiceModel.fromJson(jsonDecode(source) as Map<String, dynamic>);
 }
+

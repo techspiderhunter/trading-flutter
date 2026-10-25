@@ -1,3 +1,4 @@
+import '../../../../widgets/DeskUi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,7 @@ class _InvoicePreviewModalState extends State<InvoicePreviewModal> {
 
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(const Color(0xFFF8FAFC))
+      ..setBackgroundColor(const Color(0xFFF1F3FA))
       ..setNavigationDelegate(
         NavigationDelegate(
           onProgress: (int progress) {
@@ -100,8 +101,8 @@ class _InvoicePreviewModalState extends State<InvoicePreviewModal> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.90,
       decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        color: AppColors.scaffoldBackground,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
       child: Column(
         children: [
@@ -119,70 +120,34 @@ class _InvoicePreviewModalState extends State<InvoicePreviewModal> {
 
           // Header
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Icon(
-                    Icons.receipt_long_rounded,
-                    color: AppColors.primary,
-                    size: 22,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.invoice.invoiceNumber,
-                        style: const TextStyle(
-                          fontSize: 16.5,
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.textPrimary,
+              padding: const EdgeInsets.fromLTRB(24, 0, 24, 20),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                      if (widget.onDownload != null)
+                        IconButton(
+                          onPressed: widget.onDownload,
+                          tooltip: 'Download PDF',
+                          icon: Icon(
+                            Icons.download_rounded,
+                            color: AppColors.primary,
+                            size: 24,
+                          ),
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Text(
-                        'Tax Invoice • ${widget.invoice.planName}',
-                        style: const TextStyle(
-                          fontSize: 11.5,
+                      IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        icon: const Icon(
+                          Icons.close_rounded,
                           color: AppColors.textSecondary,
-                          fontWeight: FontWeight.w500,
+                          size: 22,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-                if (widget.onDownload != null)
-                  IconButton(
-                    onPressed: widget.onDownload,
-                    tooltip: 'Download PDF',
-                    icon: const Icon(
-                      Icons.download_rounded,
-                      color: AppColors.primary,
-                      size: 24,
-                    ),
-                  ),
-                IconButton(
-                  onPressed: () => Navigator.pop(context),
-                  icon: const Icon(
-                    Icons.close_rounded,
-                    color: AppColors.textSecondary,
-                    size: 22,
-                  ),
-                ),
-              ],
-            ),
-          ),
+                      )
+                    ]),
+                    DeskHero(
+                        title: 'Tax Invoice',
+                        subtitle: widget.invoice.invoiceNumber)
+                  ])),
           const SizedBox(height: 8),
 
           // Progress indicator while loading
@@ -190,67 +155,36 @@ class _InvoicePreviewModalState extends State<InvoicePreviewModal> {
             LinearProgressIndicator(
               value: _progress > 0 ? _progress : null,
               backgroundColor: const Color(0xFFE2E8F0),
-              valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+              valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
               minHeight: 2.5,
             )
           else
-            const Divider(height: 1, thickness: 1, color: Color(0xFFF1F5F9)),
+            const Divider(height: 1, thickness: 1, color: Color(0xFFE9EDF5)),
 
           // Body: WebView or Error Fallback
           Expanded(
             child: _hasError
-                ? Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(24.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                ? SingleChildScrollView(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          const Icon(
-                            Icons.error_outline_rounded,
-                            color: Color(0xFFEF4444),
-                            size: 48,
-                          ),
-                          const SizedBox(height: 12),
-                          const Text(
-                            'Unable to load invoice preview',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.textPrimary,
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          const Text(
-                            'Please check your internet connection or download the PDF directly.',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 12.5,
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          ElevatedButton.icon(
-                            onPressed: () {
-                              setState(() {
-                                _hasError = false;
-                                _isLoading = true;
-                              });
-                              _controller.reload();
-                            },
-                            icon: const Icon(Icons.refresh_rounded, size: 18),
-                            label: const Text('Retry Preview'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primary,
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
+                          const DeskNote(
+                              title: 'Preview unavailable',
+                              description:
+                                  'Please check your connection and try again.',
+                              color: AppColors.error),
+                          const SizedBox(height: 18),
+                          DeskButton(
+                              label: 'Retry Preview',
+                              onPressed: () {
+                                setState(() {
+                                  _hasError = false;
+                                  _isLoading = true;
+                                });
+                                _controller.reload();
+                              })
+                        ]))
                 : ClipRRect(
                     borderRadius:
                         const BorderRadius.vertical(top: Radius.circular(8)),

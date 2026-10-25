@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ui_helpers/ui/colors.dart';
+import '../themes/colors.dart';
 
 class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool showBack;
   final bool centerTitle;
   final PreferredSizeWidget? bottom;
-
-  /// ADD THIS
   final List<Widget>? actions;
 
   const CommonAppBar({
@@ -25,72 +23,41 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       automaticallyImplyLeading: false,
       elevation: 0,
-      backgroundColor: Colors.transparent,
-      toolbarHeight: 90,
-
-      /// Gradient Background
-      flexibleSpace: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              primaryColor,
-              const Color(0xff7B4DFF),
-            ],
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-          ),
-          borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(35),
-            bottomRight: Radius.circular(35),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(.12),
-              blurRadius: 12,
-              offset: const Offset(0, 6),
-            ),
-          ],
-        ),
-      ),
-
-      /// Back Button
+      backgroundColor: Colors.white,
+      toolbarHeight: 72,
       leading: showBack
           ? Padding(
-        padding: const EdgeInsets.only(left: 10, top: 10),
-        child: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_new_rounded,
-            color: Colors.white,
-            size: 22,
-          ),
-          onPressed: () => Get.back(),
-        ),
-      )
+              padding: const EdgeInsets.only(left: 10, top: 8),
+              child: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  color: AppColors.textHeading,
+                  size: 20,
+                ),
+                onPressed: () => Get.back(),
+              ),
+            )
           : null,
-
-      /// Title
       title: Padding(
-        padding: const EdgeInsets.only(top: 10),
+        padding: const EdgeInsets.only(top: 8),
         child: Text(
           title,
           style: const TextStyle(
-            color: Colors.white,
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            letterSpacing: .5,
+            fontFamily: 'DeskSans',
+            color: AppColors.textHeading,
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            letterSpacing: -0.3,
           ),
         ),
       ),
-
       centerTitle: centerTitle,
       bottom: bottom,
-
-      /// ACTIONS ADDED HERE
       actions: actions,
     );
   }
 
   @override
   Size get preferredSize =>
-      Size.fromHeight(95 + (bottom?.preferredSize.height ?? 0));
+      Size.fromHeight(72 + (bottom?.preferredSize.height ?? 0));
 }

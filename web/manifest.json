@@ -1,11 +1,11 @@
 {
-    "name": "MoneyVia",
-    "short_name": "MoneyVia",
+    "name": "Trading",
+    "short_name": "Trading",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#FFFFFF",
-    "theme_color": "#00B074",
-    "description": "MoneyVia - Wealth Advisory & Research Platform",
+    "theme_color": "#00D09E",
+    "description": "Trading - Market Intelligence & Research Desk",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

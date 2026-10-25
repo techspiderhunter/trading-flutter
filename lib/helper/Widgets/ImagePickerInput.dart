@@ -41,7 +41,7 @@ class ImagePickerInput extends StatelessWidget {
             Expanded(
               child: Text(
                 selectedImage == null ? placeholder : "Image Selected",
-                style: TextStyle(color: Colors.grey),
+                style: TextStyle(fontFamily: 'DeskSans', color: Colors.grey),
               ),
             ),
             if (selectedImage != null)

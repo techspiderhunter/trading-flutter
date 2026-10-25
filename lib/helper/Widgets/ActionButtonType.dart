@@ -1,3 +1,4 @@
+import '../../themes/colors.dart';
 import 'package:flutter/material.dart';
 
 enum ActionButtonType { full, outline }
@@ -15,7 +16,7 @@ class ActionButton extends StatelessWidget {
     this.icon,
     required this.onTap,
     this.type = ActionButtonType.full,
-    this.color = Colors.blue, // default theme color
+    this.color = AppColors.primary,
     this.activeColumn = false,
   });
 
@@ -28,7 +29,9 @@ class ActionButton extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(10),
       child: Container(
-        padding:  activeColumn == false ? EdgeInsets.symmetric(horizontal:  16 , vertical: 8) : EdgeInsets.symmetric(horizontal:  11 , vertical: 8),
+        padding: activeColumn == false
+            ? EdgeInsets.symmetric(horizontal: 16, vertical: 8)
+            : EdgeInsets.symmetric(horizontal: 11, vertical: 8),
         decoration: BoxDecoration(
           color: type == ActionButtonType.full ? color : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
@@ -36,37 +39,53 @@ class ActionButton extends StatelessWidget {
               ? Border.all(color: color, width: 1.5)
               : null,
         ),
-        child: activeColumn == false ?
-          Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (hasIcon) Icon(icon, color: type == ActionButtonType.full ? Colors.white : color, size: 18),
-            if (hasIcon && hasLabel) const SizedBox(width: 8),
-            if (hasLabel)
-              Text(
-                label!,
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: type == ActionButtonType.full ? Colors.white : color,
-                ),
+        child: activeColumn == false
+            ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (hasIcon)
+                    Icon(icon,
+                        color: type == ActionButtonType.full
+                            ? Colors.white
+                            : color,
+                        size: 18),
+                  if (hasIcon && hasLabel) const SizedBox(width: 8),
+                  if (hasLabel)
+                    Text(
+                      label!,
+                      style: TextStyle(
+                        fontFamily: 'DeskSans',
+                        fontWeight: FontWeight.w600,
+                        color: type == ActionButtonType.full
+                            ? Colors.white
+                            : color,
+                      ),
+                    ),
+                ],
+              )
+            : Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (hasIcon)
+                    Icon(icon,
+                        color: type == ActionButtonType.full
+                            ? Colors.white
+                            : color,
+                        size: 18),
+                  if (hasLabel)
+                    Text(
+                      label!,
+                      style: TextStyle(
+                        fontFamily: 'DeskSans',
+                        fontSize: 10,
+                        fontWeight: FontWeight.w600,
+                        color: type == ActionButtonType.full
+                            ? Colors.white
+                            : color,
+                      ),
+                    ),
+                ],
               ),
-          ],
-        ) :
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (hasIcon) Icon(icon, color: type == ActionButtonType.full ? Colors.white : color, size: 18),
-            if (hasLabel)
-              Text(
-                label!,
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w600,
-                  color: type == ActionButtonType.full ? Colors.white : color,
-                ),
-              ),
-          ],
-        ),
       ),
     );
   }

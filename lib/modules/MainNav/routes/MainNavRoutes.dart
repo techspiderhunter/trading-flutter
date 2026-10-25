@@ -1,5 +1,10 @@
 import 'package:get/get.dart';
-import '../views/MainNavigationView.dart';
+import '../../Dashboard/views/DashboardView.dart';
+import '../../Dashboard/controllers/DashboardController.dart';
+import '../../Setting/views/SettingView.dart';
+import '../../Profile/controllers/ProfileController.dart';
+import '../../Mitc/controllers/MitcController.dart';
+import '../../Kyc/controllers/KycController.dart';
 import '../controllers/MainNavController.dart';
 
 class MainNavRoutes {
@@ -11,46 +16,55 @@ class MainNavRoutes {
   static final routes = [
     GetPage(
       name: main,
-      page: () => const MainNavigationView(),
+      page: () => const DashboardView(),
       binding: BindingsBuilder(() {
+        if (!Get.isRegistered<DashboardController>()) {
+          Get.lazyPut<DashboardController>(() => DashboardController());
+        }
         if (!Get.isRegistered<MainNavController>()) {
           Get.put<MainNavController>(MainNavController(), permanent: true);
-        } else {
-          Get.find<MainNavController>().currentIndex.value = 0;
         }
       }),
     ),
     GetPage(
       name: mainIndex,
-      page: () => const MainNavigationView(),
+      page: () => const DashboardView(),
       binding: BindingsBuilder(() {
+        if (!Get.isRegistered<DashboardController>()) {
+          Get.lazyPut<DashboardController>(() => DashboardController());
+        }
         if (!Get.isRegistered<MainNavController>()) {
           Get.put<MainNavController>(MainNavController(), permanent: true);
-        } else {
-          Get.find<MainNavController>().currentIndex.value = 0;
         }
       }),
     ),
     GetPage(
       name: dashboard,
-      page: () => const MainNavigationView(),
+      page: () => const DashboardView(),
       binding: BindingsBuilder(() {
+        if (!Get.isRegistered<DashboardController>()) {
+          Get.lazyPut<DashboardController>(() => DashboardController());
+        }
         if (!Get.isRegistered<MainNavController>()) {
           Get.put<MainNavController>(MainNavController(), permanent: true);
-        } else {
-          Get.find<MainNavController>().currentIndex.value = 0;
         }
       }),
     ),
     GetPage(
       name: profile,
-      page: () => const MainNavigationView(),
+      page: () => const SettingView(),
       binding: BindingsBuilder(() {
         if (!Get.isRegistered<MainNavController>()) {
-          final nav = Get.put<MainNavController>(MainNavController(), permanent: true);
-          nav.currentIndex.value = 1;
-        } else {
-          Get.find<MainNavController>().currentIndex.value = 1;
+          Get.put<MainNavController>(MainNavController(), permanent: true);
+        }
+        if (!Get.isRegistered<ProfileController>()) {
+          Get.lazyPut<ProfileController>(() => ProfileController());
+        }
+        if (!Get.isRegistered<MitcController>()) {
+          Get.lazyPut<MitcController>(() => MitcController());
+        }
+        if (!Get.isRegistered<KycController>()) {
+          Get.lazyPut<KycController>(() => KycController());
         }
       }),
     ),

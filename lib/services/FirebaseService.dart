@@ -13,13 +13,11 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import '../firebase_options.dart';
 import '../includes/Storage.dart';
-import '../modules/Kyc/routes/KycRoutes.dart';
-import '../modules/Mitc/routes/MitcRoutes.dart';
+import '../modules/Dashboard/routes/DashboardRoutes.dart';
 import '../modules/MainNav/routes/MainNavRoutes.dart';
 import '../modules/MainNav/controllers/MainNavController.dart';
 import '../modules/Notification/controllers/NotificationController.dart';
 import '../modules/Dashboard/controllers/DashboardController.dart';
-import '../modules/Dashboard/views/widgets/NotificationsBottomSheet.dart';
 import '../global/requests/GlobalRequest.dart';
 
 /// Top-level background message handler required by Firebase Messaging
@@ -423,7 +421,7 @@ class FirebaseService {
         ),
         boxShadows: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.20),
+            color: Colors.black.withValues(alpha: 0.20),
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
@@ -447,7 +445,7 @@ class FirebaseService {
 
       // 2. Redirect to MainNav
       if (Get.currentRoute != MainNavRoutes.main) {
-        Get.offAllNamed(MainNavRoutes.main);
+        Get.offAllNamed(DashboardRoutes.dashboard);
       }
 
       // 3. Ensure Dashboard tab (Tab 0) is active
@@ -480,3 +478,5 @@ class FirebaseService {
     return await _messaging.getToken();
   }
 }
+
+

@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../includes/Storage.dart';
 import '../helpers/Request.dart';
+import '../../modules/Dashboard/routes/DashboardRoutes.dart';
 import '../../modules/MainNav/routes/MainNavRoutes.dart';
 import '../../modules/MainNav/controllers/MainNavController.dart';
 
@@ -144,7 +145,7 @@ class FCMController extends GetxController {
         Get.back();
       }
       if (Get.currentRoute != MainNavRoutes.main) {
-        Get.offAllNamed(MainNavRoutes.main);
+        Get.offAllNamed(DashboardRoutes.dashboard);
       }
       if (Get.isRegistered<MainNavController>()) {
         Get.find<MainNavController>().changeTab(0);
@@ -156,7 +157,7 @@ class FCMController extends GetxController {
 
   void _openNotificationPage(Map<String, String> arguments) {
     if (Get.currentRoute != MainNavRoutes.main) {
-      Get.offAllNamed(MainNavRoutes.main);
+      Get.offAllNamed(DashboardRoutes.dashboard);
     }
   }
 

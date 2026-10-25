@@ -35,7 +35,8 @@ class Loading extends StatelessWidget {
                 trimmedMessage,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                  color: Color(0xFF64748B),
+                  fontFamily: 'DeskSans',
+                  color: Color(0xFF65728B),
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                 ),

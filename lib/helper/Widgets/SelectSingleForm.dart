@@ -1,3 +1,5 @@
+import '../../widgets/DeskUi.dart';
+import '../../themes/colors.dart';
 import 'package:flutter/material.dart';
 
 class SelectSingleForm extends StatefulWidget {
@@ -37,7 +39,7 @@ class _SelectSingleFormState extends State<SelectSingleForm> {
 
   void _setInitialLabel() {
     final selectedItem = widget.items.firstWhere(
-          (e) => e['value'] == widget.value,
+      (e) => e['value'] == widget.value,
       orElse: () => {},
     );
 
@@ -62,27 +64,26 @@ class _SelectSingleFormState extends State<SelectSingleForm> {
                 bottom: MediaQuery.of(context).viewInsets.bottom,
               ),
               child: Container(
-                height: 400,
-                padding: const EdgeInsets.all(16),
+                height: (MediaQuery.sizeOf(context).height -
+                        MediaQuery.viewInsetsOf(context).bottom) *
+                    0.85,
+                padding: const EdgeInsets.all(24),
                 child: Column(
                   children: [
+                    DeskHero(title: widget.label, subtitle: widget.hint),
+                    const SizedBox(height: 25), const DeskLabel('Search'),
+
                     /// 🔍 Search Box
                     TextField(
                       controller: searchController,
-                      decoration: InputDecoration(
-                        hintText: "Search...",
-                        prefixIcon: const Icon(Icons.search),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
+                      decoration: deskInputDecoration(hintText: 'Search…'),
                       onChanged: (val) {
                         setModalState(() {
                           filteredList = widget.items
                               .where((item) => item['label']
-                              .toString()
-                              .toLowerCase()
-                              .contains(val.toLowerCase()))
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(val.toLowerCase()))
                               .toList();
                         });
                       },
@@ -95,22 +96,31 @@ class _SelectSingleFormState extends State<SelectSingleForm> {
                       child: filteredList.isEmpty
                           ? const Center(child: Text("No results found"))
                           : ListView.builder(
-                        itemCount: filteredList.length,
-                        itemBuilder: (context, index) {
-                          final item = filteredList[index];
+                              itemCount: filteredList.length,
+                              itemBuilder: (context, index) {
+                                final item = filteredList[index];
 
-                          return ListTile(
-                            title: Text(item['label']),
-                            onTap: () {
-                              widget.onChanged(item['value']);
-                              setState(() {
-                                selectedLabel = item['label'];
-                              });
-                              Navigator.pop(context);
-                            },
-                          );
-                        },
-                      ),
+                                return Padding(
+                                    padding: const EdgeInsets.only(bottom: 15),
+                                    child: DeskRow(
+                                        title: item['label'],
+                                        trailing: Icon(
+                                            widget.value == item['value']
+                                                ? Icons
+                                                    .radio_button_checked_rounded
+                                                : Icons
+                                                    .radio_button_unchecked_rounded,
+                                            size: 18,
+                                            color: AppColors.primary),
+                                        onTap: () {
+                                          widget.onChanged(item['value']);
+                                          setState(() {
+                                            selectedLabel = item['label'];
+                                          });
+                                          Navigator.pop(context);
+                                        }));
+                              },
+                            ),
                     ),
                   ],
                 ),
@@ -131,6 +141,7 @@ class _SelectSingleFormState extends State<SelectSingleForm> {
         Text(
           widget.label,
           style: const TextStyle(
+            fontFamily: 'DeskSans',
             fontSize: 14,
             fontWeight: FontWeight.w600,
           ),
@@ -160,9 +171,8 @@ class _SelectSingleFormState extends State<SelectSingleForm> {
                 Text(
                   selectedLabel ?? widget.hint,
                   style: TextStyle(
-                    color: selectedLabel == null
-                        ? Colors.grey
-                        : Colors.black,
+                    fontFamily: 'DeskSans',
+                    color: selectedLabel == null ? Colors.grey : Colors.black,
                   ),
                 ),
                 const Icon(Icons.keyboard_arrow_down),

@@ -1,12 +1,16 @@
+import '../../widgets/DeskUi.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
 // import 'package:url_launcher/url_launcher.dart';
 
 class UpdateChecker {
-  static const String packageName = "com.moneyararesearch.app"; // Replace with your app's package name
-  static const String playStoreUrl = "https://play.google.com/store/apps/details?id=$packageName";
-  static const String apiUrl = "https://play.google.com/store/apps/details?id=$packageName&hl=en&gl=US";
+  static const String packageName =
+      "com.moneyararesearch.app"; // Replace with your app's package name
+  static const String playStoreUrl =
+      "https://play.google.com/store/apps/details?id=$packageName";
+  static const String apiUrl =
+      "https://play.google.com/store/apps/details?id=$packageName&hl=en&gl=US";
 
   /// Fetches the latest version from Google Play Store
   static Future<String?> getLatestVersion() async {
@@ -34,7 +38,8 @@ class UpdateChecker {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       String? latestVersion = await getLatestVersion();
       String installedVersion = await getInstalledVersion();
-      print("installedVersion::::${installedVersion}::::latestVersion::::${latestVersion}");
+      print(
+          "installedVersion::::${installedVersion}::::latestVersion::::${latestVersion}");
       if (latestVersion != null && latestVersion != installedVersion) {
         _showUpdateDialog(context);
       }
@@ -43,30 +48,27 @@ class UpdateChecker {
 
   /// Shows the update popup dialog
   static void _showUpdateDialog(BuildContext context) {
-    if (!context.mounted) return; // Ensures context is valid before showing dialog
+    if (!context.mounted)
+      return; // Ensures context is valid before showing dialog
 
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: const Text("Update Available"),
-        content: const Text("A new version of the app is available. Please update to continue."),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("Later"),
-          ),
-          TextButton(
-            onPressed: () async {
-              // final Uri url = Uri.parse(playStoreUrl);
-              // if (await canLaunchUrl(url)) {
-              //   await launchUrl(url, mode: LaunchMode.externalApplication);
-              // }
-            },
-            child: const Text("Update"),
-          ),
-        ],
-      ),
+      builder: (context) => Dialog(
+          alignment: Alignment.bottomCenter,
+          insetPadding: EdgeInsets.zero,
+          child: DeskSheetContent(
+              title: 'Update Available',
+              subtitle:
+                  'A new version of the app is available. Please update to continue.',
+              children: [
+                DeskButton(label: 'Update', onPressed: () async {}),
+                const SizedBox(height: 20),
+                DeskButton(
+                    label: 'Later',
+                    secondary: true,
+                    onPressed: () => Navigator.pop(context))
+              ])),
     );
   }
 }

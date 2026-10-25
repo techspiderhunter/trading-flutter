@@ -1,3 +1,4 @@
+import '../../../../widgets/DeskUi.dart';
 import 'package:flutter/material.dart';
 import '../../../../includes/Storage.dart';
 import '../../../../themes/AppColors.dart';
@@ -48,7 +49,7 @@ class MessageAttachmentViewerModal extends StatelessWidget {
           maxWidth: 540,
         ),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.scaffoldBackground,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
@@ -64,69 +65,32 @@ class MessageAttachmentViewerModal extends StatelessWidget {
           children: [
             // Header Bar
             Padding(
-              padding: const EdgeInsets.fromLTRB(18, 14, 10, 12),
-              child: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(7),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF2563EB).withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Icon(
-                      Icons.image_outlined,
-                      color: Color(0xFF2563EB),
-                      size: 20,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          title,
-                          style: const TextStyle(
-                            fontSize: 14.5,
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.textPrimary,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 1),
-                        Text(
-                          subtitle ?? 'Pinch to zoom • Drag to pan',
-                          style: const TextStyle(
-                            fontSize: 11,
+                padding: const EdgeInsets.fromLTRB(24, 0, 24, 20),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                        IconButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          icon: const Icon(
+                            Icons.close_rounded,
                             color: AppColors.textSecondary,
-                            fontWeight: FontWeight.w500,
+                            size: 22,
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: const Icon(
-                      Icons.close_rounded,
-                      color: AppColors.textSecondary,
-                      size: 22,
-                    ),
-                    tooltip: 'Close',
-                  ),
-                ],
-              ),
-            ),
-            const Divider(height: 1, thickness: 1, color: Color(0xFFF1F5F9)),
+                          tooltip: 'Close',
+                        )
+                      ]),
+                      DeskHero(
+                          title: title,
+                          subtitle: subtitle ?? 'Market attachment')
+                    ])),
+            const Divider(height: 1, thickness: 1, color: Color(0xFFE9EDF5)),
 
             // Image Preview Area with InteractiveViewer
             Flexible(
               child: Container(
                 width: double.infinity,
-                color: const Color(0xFF0F172A),
+                color: Colors.white,
                 child: Center(
                   child: hasRemoteUrl
                       ? InteractiveViewer(
@@ -157,13 +121,14 @@ class MessageAttachmentViewerModal extends StatelessWidget {
                                       strokeWidth: 2.5,
                                       valueColor:
                                           const AlwaysStoppedAnimation<Color>(
-                                        Color(0xFF2563EB),
+                                        Color(0xFF5342C3),
                                       ),
                                     ),
                                     const SizedBox(height: 14),
                                     const Text(
                                       'Loading attachment...',
                                       style: TextStyle(
+                                        fontFamily: 'DeskSans',
                                         color: Colors.white70,
                                         fontSize: 12,
                                       ),
@@ -181,56 +146,12 @@ class MessageAttachmentViewerModal extends StatelessWidget {
             ),
 
             // Bottom Actions Bar
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius:
-                    BorderRadius.vertical(bottom: Radius.circular(20)),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Row(
-                    children: [
-                      Icon(Icons.shield_outlined,
-                          size: 15, color: Color(0xFF2563EB)),
-                      SizedBox(width: 6),
-                      Text(
-                        'Official Advisory Communication',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFF64748B),
-                        ),
-                      ),
-                    ],
-                  ),
-                  ElevatedButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF2563EB),
-                      elevation: 0,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text(
-                      'Done',
-                      style: TextStyle(
-                        fontSize: 12.5,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            Padding(
+                padding: const EdgeInsets.all(24),
+                child: DeskButton(
+                    label: 'Close',
+                    secondary: true,
+                    onPressed: () => Navigator.of(context).pop())),
           ],
         ),
       ),
@@ -238,45 +159,12 @@ class MessageAttachmentViewerModal extends StatelessWidget {
   }
 
   Widget _buildErrorWidget() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(28.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: const BoxDecoration(
-                color: Color(0xFF1E293B),
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.broken_image_outlined,
-                size: 32,
-                color: Colors.white60,
-              ),
-            ),
-            const SizedBox(height: 14),
-            const Text(
-              'Attachment Preview Unavailable',
-              style: TextStyle(
-                fontSize: 13.5,
-                fontWeight: FontWeight.w700,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 4),
-            const Text(
-              'Could not load the attachment image from research storage.',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 11,
-                color: Colors.white60,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+    return SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: DeskNote(
+            title: 'Attachment Preview Unavailable',
+            description:
+                'Could not load the attachment image from research storage.',
+            color: AppColors.error));
   }
 }

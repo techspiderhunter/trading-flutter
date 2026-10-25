@@ -1,3 +1,4 @@
+import '../../../../widgets/DeskUi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -84,8 +85,8 @@ class _TermsWebViewModalState extends State<TermsWebViewModal> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.90,
       decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        color: AppColors.scaffoldBackground,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
       ),
       child: Column(
         children: [
@@ -103,82 +104,40 @@ class _TermsWebViewModalState extends State<TermsWebViewModal> {
 
           // Header
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Icon(
-                    Icons.gavel_rounded,
-                    color: AppColors.primary,
-                    size: 22,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                const Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Terms & Conditions',
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w800,
-                          color: AppColors.textPrimary,
+              padding: const EdgeInsets.fromLTRB(24, 0, 24, 20),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _hasError = false;
+                            _isLoading = true;
+                          });
+                          _controller.reload();
+                        },
+                        tooltip: 'Reload',
+                        icon: const Icon(
+                          Icons.refresh_rounded,
+                          color: AppColors.textSecondary,
+                          size: 22,
                         ),
                       ),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.lock_rounded,
-                            size: 11,
-                            color: Color(0xFF10B981),
-                          ),
-                          SizedBox(width: 4),
-                          Text(
-                            'moneyararesearch.in/terms-and-conditions',
-                            style: TextStyle(
-                              fontSize: 11,
-                              color: AppColors.textSecondary,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _hasError = false;
-                      _isLoading = true;
-                    });
-                    _controller.reload();
-                  },
-                  tooltip: 'Reload',
-                  icon: const Icon(
-                    Icons.refresh_rounded,
-                    color: AppColors.textSecondary,
-                    size: 22,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () => Navigator.pop(context),
-                  tooltip: 'Close',
-                  icon: const Icon(
-                    Icons.close_rounded,
-                    color: AppColors.textSecondary,
-                    size: 22,
-                  ),
-                ),
-              ],
-            ),
-          ),
+                      IconButton(
+                        onPressed: () => Navigator.pop(context),
+                        tooltip: 'Close',
+                        icon: const Icon(
+                          Icons.close_rounded,
+                          color: AppColors.textSecondary,
+                          size: 22,
+                        ),
+                      )
+                    ]),
+                    DeskHero(
+                        title: 'Terms & Conditions',
+                        subtitle: 'Original legal document')
+                  ])),
           const SizedBox(height: 8),
 
           // Loading Progress Bar
@@ -186,67 +145,36 @@ class _TermsWebViewModalState extends State<TermsWebViewModal> {
             LinearProgressIndicator(
               value: _progress > 0 ? _progress : null,
               backgroundColor: const Color(0xFFE2E8F0),
-              valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+              valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
               minHeight: 2.5,
             )
           else
-            const Divider(height: 1, thickness: 1, color: Color(0xFFF1F5F9)),
+            const Divider(height: 1, thickness: 1, color: Color(0xFFE9EDF5)),
 
           // Body: WebView or Error Fallback
           Expanded(
             child: _hasError
-                ? Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(24.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                ? SingleChildScrollView(
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          const Icon(
-                            Icons.cloud_off_rounded,
-                            color: Color(0xFFEF4444),
-                            size: 48,
-                          ),
-                          const SizedBox(height: 12),
-                          const Text(
-                            'Unable to load page',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.textPrimary,
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          const Text(
-                            'Please check your internet connection and try again.',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 12.5,
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          ElevatedButton.icon(
-                            onPressed: () {
-                              setState(() {
-                                _hasError = false;
-                                _isLoading = true;
-                              });
-                              _controller.reload();
-                            },
-                            icon: const Icon(Icons.refresh_rounded, size: 18),
-                            label: const Text('Try Again'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primary,
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
+                          const DeskNote(
+                              title: 'Preview unavailable',
+                              description:
+                                  'Please check your connection and try again.',
+                              color: AppColors.error),
+                          const SizedBox(height: 18),
+                          DeskButton(
+                              label: 'Try Again',
+                              onPressed: () {
+                                setState(() {
+                                  _hasError = false;
+                                  _isLoading = true;
+                                });
+                                _controller.reload();
+                              })
+                        ]))
                 : ClipRRect(
                     child: WebViewWidget(
                       controller: _controller,

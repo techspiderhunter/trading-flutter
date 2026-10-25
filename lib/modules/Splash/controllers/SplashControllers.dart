@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:get/get.dart';
-import '../../MainNav/routes/MainNavRoutes.dart';
+import '../../Dashboard/routes/DashboardRoutes.dart';
+
 import '../../Auth/routes/AuthRoutes.dart';
 import '../../../includes/Storage.dart';
 import '../../Profile/requests/ProfileRequest.dart';
@@ -23,7 +24,7 @@ class SplashController extends GetxController {
           // Pre-fetch profile in background
           ProfileRequest().getProfile().ignore();
           FirebaseService.syncDeviceTokenWithBackend().ignore();
-          Get.offAllNamed(MainNavRoutes.main);
+          Get.offAllNamed(DashboardRoutes.dashboard);
         } else {
           // Unauthenticated -> Registration or Login screen
           Get.offAllNamed(AuthRoutes.login);
@@ -34,7 +35,7 @@ class SplashController extends GetxController {
 
   void skipToDashboard() {
     _timer?.cancel();
-    Get.offAllNamed(MainNavRoutes.main);
+    Get.offAllNamed(DashboardRoutes.dashboard);
   }
 
   void skipToRegister() {

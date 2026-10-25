@@ -1,6 +1,5 @@
-import 'package:ui_helpers/ui/colors.dart';
-
-import '../imports.dart';
+import 'package:flutter/material.dart';
+import '../themes/colors.dart';
 
 class AppLayout extends StatelessWidget {
   final Widget? title;
@@ -18,7 +17,7 @@ class AppLayout extends StatelessWidget {
     this.title,
     this.centerTitle,
     this.drawer,
-    this.backgroundColor = primaryColor,
+    this.backgroundColor,
     this.bottomNavigationBar,
     this.floatingActionButton,
     super.key,
@@ -31,30 +30,19 @@ class AppLayout extends StatelessWidget {
     return Scaffold(
       floatingActionButton: floatingActionButton,
       appBar: AppBar(
-        iconTheme: IconThemeData(
-            color: Colors.white
-        ),
+        iconTheme: const IconThemeData(color: AppColors.textPrimary),
         title: title,
         centerTitle: centerTitle ?? true,
         actions: actions,
         titleSpacing: 0,
-        automaticallyImplyLeading:automaticallyImplyLeading,
+        automaticallyImplyLeading: automaticallyImplyLeading,
+        backgroundColor: Colors.white,
+        elevation: 0,
       ),
       drawer: drawer,
-      drawerScrimColor: Colors.white,
-      body:  Stack(
-        children: [
-          // Solid Color Background
-          Positioned.fill(
-            child: Container(color:primaryColor),
-          ),
-          // Content
-          child,
-        ],
-      ),
-
-
-      backgroundColor: backgroundColor,
+      drawerScrimColor: Colors.black45,
+      body: child,
+      backgroundColor: backgroundColor ?? AppColors.scaffoldBackground,
       bottomNavigationBar: bottomNavigationBar,
     );
   }

@@ -9,14 +9,15 @@ class MarketTickerCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
+            const Text(
               'Market Watchlist',
               style: TextStyle(
+                fontFamily: 'DeskSans',
                 fontSize: 16,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 color: AppColors.textPrimary,
               ),
             ),
@@ -24,10 +25,11 @@ class MarketTickerCard extends StatelessWidget {
               children: [
                 Icon(Icons.fiber_manual_record,
                     color: AppColors.primary, size: 10),
-                SizedBox(width: 4),
+                const SizedBox(width: 4),
                 Text(
                   'Market Open',
                   style: TextStyle(
+                    fontFamily: 'DeskSans',
                     fontSize: 11.5,
                     fontWeight: FontWeight.w600,
                     color: AppColors.primary,
@@ -104,6 +106,7 @@ class MarketTickerCard extends StatelessWidget {
           Text(
             name,
             style: const TextStyle(
+              fontFamily: 'DeskSans',
               fontSize: 12,
               fontWeight: FontWeight.w700,
               color: AppColors.textSecondary,
@@ -113,8 +116,9 @@ class MarketTickerCard extends StatelessWidget {
           Text(
             value,
             style: const TextStyle(
+              fontFamily: 'DeskSans',
               fontSize: 17,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               color: AppColors.textPrimary,
               letterSpacing: -0.2,
             ),
@@ -139,6 +143,7 @@ class MarketTickerCard extends StatelessWidget {
                 Text(
                   change,
                   style: TextStyle(
+                    fontFamily: 'DeskSans',
                     fontSize: 10.5,
                     fontWeight: FontWeight.w700,
                     color: isPositive ? AppColors.primaryDark : AppColors.error,

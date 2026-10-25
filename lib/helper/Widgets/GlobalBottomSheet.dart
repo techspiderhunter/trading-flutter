@@ -45,6 +45,7 @@ class GlobalBottomSheet extends StatelessWidget {
                   child: Text(
                     title!,
                     style: TextStyle(
+                      fontFamily: 'DeskSans',
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),

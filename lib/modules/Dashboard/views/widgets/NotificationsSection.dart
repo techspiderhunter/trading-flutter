@@ -16,7 +16,7 @@ class NotificationsSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Row(
+            Row(
               children: [
                 Icon(Icons.notifications_active_outlined,
                     color: AppColors.primary, size: 20),
@@ -24,8 +24,9 @@ class NotificationsSection extends StatelessWidget {
                 Text(
                   'Notifications & Updates',
                   style: TextStyle(
+                    fontFamily: 'DeskSans',
                     fontSize: 16,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     color: AppColors.textPrimary,
                   ),
                 ),
@@ -40,7 +41,8 @@ class NotificationsSection extends StatelessWidget {
                 ),
                 child: Text(
                   '${mainNavController.notifications.length} alerts',
-                  style: const TextStyle(
+                  style: TextStyle(
+                    fontFamily: 'DeskSans',
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
                     color: AppColors.primaryDark,
@@ -117,6 +119,7 @@ class NotificationsSection extends StatelessWidget {
                                 child: Text(
                                   notif.tag,
                                   style: TextStyle(
+                                    fontFamily: 'DeskSans',
                                     fontSize: 10.5,
                                     fontWeight: FontWeight.w700,
                                     color: notif.tagColor,
@@ -128,6 +131,7 @@ class NotificationsSection extends StatelessWidget {
                                   Text(
                                     notif.time,
                                     style: const TextStyle(
+                                      fontFamily: 'DeskSans',
                                       fontSize: 11,
                                       fontWeight: FontWeight.w500,
                                       color: AppColors.textMuted,
@@ -138,7 +142,7 @@ class NotificationsSection extends StatelessWidget {
                                     Container(
                                       width: 7,
                                       height: 7,
-                                      decoration: const BoxDecoration(
+                                      decoration: BoxDecoration(
                                         color: AppColors.primary,
                                         shape: BoxShape.circle,
                                       ),
@@ -152,9 +156,10 @@ class NotificationsSection extends StatelessWidget {
                           Text(
                             notif.title,
                             style: TextStyle(
+                              fontFamily: 'DeskSans',
                               fontSize: 13.5,
                               fontWeight: notif.isUnread
-                                  ? FontWeight.w800
+                                  ? FontWeight.w600
                                   : FontWeight.w700,
                               color: AppColors.textPrimary,
                               height: 1.25,
@@ -164,6 +169,7 @@ class NotificationsSection extends StatelessWidget {
                           Text(
                             notif.message,
                             style: const TextStyle(
+                              fontFamily: 'DeskSans',
                               fontSize: 12,
                               color: AppColors.textSecondary,
                               height: 1.35,

@@ -12,8 +12,9 @@ class AdvisoryServiceCard extends StatelessWidget {
         const Text(
           'Trading & Advisory Desks',
           style: TextStyle(
+            fontFamily: 'DeskSans',
             fontSize: 16,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             color: AppColors.textPrimary,
           ),
         ),
@@ -85,7 +86,7 @@ class AdvisoryServiceCard extends StatelessWidget {
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(color: AppColors.border),
         boxShadow: [
           BoxShadow(
@@ -117,8 +118,9 @@ class AdvisoryServiceCard extends StatelessWidget {
                     Text(
                       title,
                       style: const TextStyle(
+                        fontFamily: 'DeskSans',
                         fontSize: 15,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
                       ),
                     ),
@@ -133,6 +135,7 @@ class AdvisoryServiceCard extends StatelessWidget {
                       child: Text(
                         tag,
                         style: TextStyle(
+                          fontFamily: 'DeskSans',
                           fontSize: 10.5,
                           fontWeight: FontWeight.w700,
                           color: tagColor,
@@ -153,6 +156,7 @@ class AdvisoryServiceCard extends StatelessWidget {
           Text(
             description,
             style: const TextStyle(
+              fontFamily: 'DeskSans',
               fontSize: 12.5,
               color: AppColors.textSecondary,
               height: 1.4,
@@ -161,9 +165,11 @@ class AdvisoryServiceCard extends StatelessWidget {
           const SizedBox(height: 14),
           Row(
             children: [
-              _buildBadge(Icons.check_circle_rounded, accuracy, AppColors.primary),
+              _buildBadge(
+                  Icons.check_circle_rounded, accuracy, AppColors.primary),
               const SizedBox(width: 10),
-              _buildBadge(Icons.shield_outlined, riskLevel, AppColors.textSecondary),
+              _buildBadge(
+                  Icons.shield_outlined, riskLevel, AppColors.textSecondary),
             ],
           ),
         ],
@@ -180,6 +186,7 @@ class AdvisoryServiceCard extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
+            fontFamily: 'DeskSans',
             fontSize: 11,
             fontWeight: FontWeight.w600,
             color: color,

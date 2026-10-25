@@ -1,3 +1,4 @@
+import '../../../widgets/DeskUi.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -42,7 +43,6 @@ class ProfileController extends GetxController {
   final phoneEditController = TextEditingController();
   final emailEditController = TextEditingController();
   final isUpdatingProfileInfo = false.obs;
-
 
   String? get _currentValidName {
     final n = clientName.value.trim();
@@ -135,7 +135,7 @@ class ProfileController extends GetxController {
         colorText: AppColors.primaryDark,
         margin: const EdgeInsets.all(16),
         borderRadius: 12,
-        icon: const Icon(Icons.check_circle_outline, color: AppColors.primary),
+        icon: Icon(Icons.check_circle_outline, color: AppColors.primary),
       );
     } else {
       _showSnackbar('Update Failed', response.firstErrorMessage);
@@ -206,13 +206,12 @@ class ProfileController extends GetxController {
         colorText: AppColors.primaryDark,
         margin: const EdgeInsets.all(16),
         borderRadius: 12,
-        icon: const Icon(Icons.check_circle_outline, color: AppColors.primary),
+        icon: Icon(Icons.check_circle_outline, color: AppColors.primary),
       );
     } else {
       _showSnackbar('Update Failed', response.firstErrorMessage);
     }
   }
-
 
   /// Pick & upload avatar picture via ProfileRequest
   Future<void> pickAndUploadAvatar() async {
@@ -259,50 +258,48 @@ class ProfileController extends GetxController {
   /// Sign out client session via ProfileRequest
   void logout() {
     Get.dialog(
-      AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('Sign Out', style: TextStyle(fontWeight: FontWeight.w700)),
-        content: const Text('Are you sure you want to sign out from your Moneyara account?'),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: const Text('Cancel',
-                style: TextStyle(color: AppColors.textSecondary)),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              Get.back();
-              await _profileRequest.logout();
-              await LocalStorage.write(MainNavController.kycSubmittedStorageKey, 'false');
-              await LocalStorage.remove(LocalStorage.kycDataKey);
-              if (Get.isRegistered<MainNavController>()) {
-                Get.find<MainNavController>().currentIndex.value = 0;
-                Get.delete<MainNavController>(force: true);
-              }
-              if (Get.isRegistered<DashboardController>()) {
-                Get.delete<DashboardController>(force: true);
-              }
-              Get.offAllNamed(AuthRoutes.login);
-              Get.snackbar(
-                'Signed Out',
-                'You have been logged out successfully.',
-                snackPosition: SnackPosition.BOTTOM,
-                backgroundColor: AppColors.infoBg,
-                colorText: AppColors.textPrimary,
-                margin: const EdgeInsets.all(16),
-                borderRadius: 12,
-                icon: const Icon(Icons.info_outline, color: AppColors.info),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.error,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            ),
-            child: const Text('Sign Out',
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
-          ),
-        ],
-      ),
+      Dialog(
+          alignment: Alignment.bottomCenter,
+          insetPadding: EdgeInsets.zero,
+          child: DeskSheetContent(
+              title: 'Sign Out',
+              subtitle:
+                  'Are you sure you want to sign out from your Moneyara account?',
+              children: [
+                DeskButton(
+                    label: 'Sign Out',
+                    onPressed: () async {
+                      Get.back();
+                      await _profileRequest.logout();
+                      await LocalStorage.write(
+                          MainNavController.kycSubmittedStorageKey, 'false');
+                      await LocalStorage.remove(LocalStorage.kycDataKey);
+                      if (Get.isRegistered<MainNavController>()) {
+                        Get.find<MainNavController>().currentIndex.value = 0;
+                        Get.delete<MainNavController>(force: true);
+                      }
+                      if (Get.isRegistered<DashboardController>()) {
+                        Get.delete<DashboardController>(force: true);
+                      }
+                      Get.offAllNamed(AuthRoutes.login);
+                      Get.snackbar(
+                        'Signed Out',
+                        'You have been logged out successfully.',
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: AppColors.infoBg,
+                        colorText: AppColors.textPrimary,
+                        margin: const EdgeInsets.all(16),
+                        borderRadius: 12,
+                        icon: const Icon(Icons.info_outline,
+                            color: AppColors.info),
+                      );
+                    }),
+                const SizedBox(height: 20),
+                DeskButton(
+                    label: 'Cancel',
+                    secondary: true,
+                    onPressed: () => Get.back())
+              ])),
     );
   }
 

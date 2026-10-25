@@ -154,7 +154,7 @@ class InvoiceController extends GetxController {
         margin: const EdgeInsets.all(16),
         borderRadius: 12,
         duration: const Duration(seconds: 4),
-        icon: const Icon(Icons.link_rounded, color: AppColors.primary),
+        icon: Icon(Icons.link_rounded, color: AppColors.primary),
       );
     } finally {
       isDownloading.value = false;

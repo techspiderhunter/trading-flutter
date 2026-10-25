@@ -288,3 +288,4 @@ class MainNavController extends GetxController {
     ]);
   }
 }
+

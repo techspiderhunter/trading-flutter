@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../Dashboard/controllers/DashboardController.dart';
+import '../../Dashboard/routes/DashboardRoutes.dart';
 import '../../MainNav/routes/MainNavRoutes.dart';
 import '../../MainNav/controllers/MainNavController.dart';
 import '../routes/AuthRoutes.dart';
@@ -165,7 +166,7 @@ class AuthController extends GetxController {
       // Sync FCM push notification token with backend
       FirebaseService.syncDeviceTokenWithBackend().ignore();
 
-      Get.offAllNamed(MainNavRoutes.main);
+      Get.offAllNamed(DashboardRoutes.dashboard);
       _showSuccessSnackbar(
         'Account Created!',
         'Welcome ${response.data!.name}! Your trading account has been registered.',
@@ -252,7 +253,7 @@ class AuthController extends GetxController {
         // Sync FCM push notification token with backend
         FirebaseService.syncDeviceTokenWithBackend().ignore();
 
-        Get.offAllNamed(MainNavRoutes.main);
+        Get.offAllNamed(DashboardRoutes.dashboard);
         _showSuccessSnackbar('Welcome Back!', 'Login successful. Navigating to Dashboard.');
       }
     } else {
@@ -309,7 +310,7 @@ class AuthController extends GetxController {
       // Sync FCM push notification token with backend
       FirebaseService.syncDeviceTokenWithBackend().ignore();
 
-      Get.offAllNamed(MainNavRoutes.main);
+      Get.offAllNamed(DashboardRoutes.dashboard);
       _showSuccessSnackbar('Welcome Back!', 'Verification successful. Welcome to your Dashboard.');
     } else {
       _showSnackbar('Verification Failed', response.firstErrorMessage);
@@ -356,7 +357,7 @@ class AuthController extends GetxController {
       colorText: AppColors.primaryDark,
       margin: const EdgeInsets.all(16),
       borderRadius: 12,
-      icon: const Icon(Icons.check_circle_outline, color: AppColors.primary),
+      icon: Icon(Icons.check_circle_outline, color: AppColors.primary),
       duration: const Duration(seconds: 3),
     );
   }

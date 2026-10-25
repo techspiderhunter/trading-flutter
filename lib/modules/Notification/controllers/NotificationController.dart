@@ -1,3 +1,4 @@
+import '../../../widgets/DeskUi.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../models/NotificationModels.dart';
@@ -29,7 +30,8 @@ class NotificationController extends GetxController {
 
   final isLoading = false.obs;
 
-  int get totalUnreadCount => unreadNotificationsCount.value + unreadMessagesCount.value;
+  int get totalUnreadCount =>
+      unreadNotificationsCount.value + unreadMessagesCount.value;
 
   @override
   void onInit() {
@@ -154,7 +156,8 @@ class NotificationController extends GetxController {
         );
       }
 
-      unreadNotificationsCount.value = notifications.where((n) => n.isUnread).length;
+      unreadNotificationsCount.value =
+          notifications.where((n) => n.isUnread).length;
       _syncDashboardUnread();
     }
 
@@ -213,150 +216,32 @@ class NotificationController extends GetxController {
     showDialog(
       context: context,
       builder: (dialogCtx) => Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFEFF6FF),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Icon(
-                      Icons.campaign_rounded,
-                      color: Color(0xFF1E67FA),
-                      size: 22,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          msg.subject,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w800,
-                            color: Color(0xFF0F172A),
-                          ),
-                        ),
-                        const SizedBox(height: 3),
-                        Text(
-                          '${msg.sender} • ${msg.date}',
-                          style: const TextStyle(
-                            fontSize: 11.5,
-                            color: Color(0xFF64748B),
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () => Navigator.of(dialogCtx).pop(),
-                    icon: const Icon(Icons.close_rounded, size: 20),
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              const Divider(height: 1, color: Color(0xFFF1F5F9)),
-              const SizedBox(height: 16),
-
-              // Message Body
-              Flexible(
-                child: SingleChildScrollView(
-                  child: Text(
-                    msg.message,
-                    style: const TextStyle(
-                      fontSize: 13.5,
-                      color: Color(0xFF334155),
-                      height: 1.5,
-                    ),
-                  ),
-                ),
-              ),
-
-              // Attachment Action Button - ONLY rendered if message has an attachment
-              if (msg.hasAttachment) ...[
-                const SizedBox(height: 18),
-                InkWell(
-                  onTap: () {
+          alignment: Alignment.bottomCenter,
+          insetPadding: EdgeInsets.zero,
+          child: DeskSheetContent(
+              title: msg.subject,
+              subtitle: '${msg.sender} · ${msg.date}',
+              children: [
+                const DeskSection('Message'),
+                const SizedBox(height: 8),
+                Text(msg.message, style: deskText),
+                const SizedBox(height: 24),
+                if (msg.hasAttachment) ...[
+                  DeskAttachmentAction(onPressed: () {
                     MessageAttachmentViewerModal.show(
                       dialogCtx,
                       imageUrl: msg.resolvedAttachmentUrl!,
                       title: msg.subject,
                       subtitle: msg.date,
                     );
-                  },
-                  borderRadius: BorderRadius.circular(10),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFEFF6FF),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: const Color(0xFFBFDBFE)),
-                    ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.attachment_rounded, size: 18, color: Color(0xFF1E67FA)),
-                        SizedBox(width: 8),
-                        Text(
-                          'View Attachment',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xFF1E67FA),
-                          ),
-                        ),
-                        SizedBox(width: 4),
-                        Icon(Icons.open_in_new_rounded, size: 16, color: Color(0xFF1E67FA)),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-
-              const SizedBox(height: 16),
-              // Close Button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => Navigator.of(dialogCtx).pop(),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF0F172A),
-                    elevation: 0,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: const Text(
-                    'Close',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 13,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+                  }),
+                  const SizedBox(height: 20)
+                ],
+                DeskButton(
+                    label: 'Close',
+                    secondary: true,
+                    onPressed: () => Navigator.of(dialogCtx).pop())
+              ])),
     );
   }
 
