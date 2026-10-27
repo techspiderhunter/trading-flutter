@@ -3,6 +3,7 @@ import '../../MainNav/controllers/MainNavController.dart';
 import '../../../models/UserModel.dart';
 import '../../../models/KycModel.dart';
 import '../../../models/ClientMessageModel.dart';
+import '../../../models/ServiceExpiryModel.dart';
 import '../../../includes/Storage.dart';
 import '../../../database/db_helper.dart';
 import '../requests/DashboardRequest.dart';
@@ -26,20 +27,31 @@ class DashboardController extends GetxController {
   final isMessagesLoading = false.obs;
   final unreadNotificationsCount = 0.obs;
 
+  // Dynamic Service Expiry & Access Control
+  final isExpired = false.obs;
+  final expiredAlert = Rx<ExpiredAlertInfo?>(null);
+  final serviceAccess = Rx<ServiceAccessInfo?>(null);
+
+  static const String serviceExpiryStorageKey = 'cached_service_expiry';
+
   @override
   void onInit() {
     super.onInit();
-    _loadCachedMessagesImmediately();
     _readCachedData();
+    _loadCachedMessagesImmediately();
     _bindWithMainNav();
     syncDashboard();
   }
 
-  /// Instant Offline Load from SQLite
+  /// Instant Offline Load from SQLite (ONLY if services are NOT expired)
   Future<void> _loadCachedMessagesImmediately() async {
+    if (isExpired.value) {
+      messages.clear();
+      return;
+    }
     try {
       final cached = await DBHelper().getMessages(limit: 20);
-      if (cached.isNotEmpty) {
+      if (cached.isNotEmpty && !isExpired.value) {
         messages.assignAll(cached);
       }
     } catch (_) {}
@@ -117,15 +129,28 @@ class DashboardController extends GetxController {
         }
       }
 
-      // 3. Fetch dynamic communications / messages (Quiet background sync if SQLite has data)
-      if (messages.isEmpty) {
+      // 3. Fetch dynamic communications, messages & service expiry status
+      if (messages.isEmpty && !isExpired.value) {
         isMessagesLoading.value = true;
       }
-      final msgRes = await _dashboardRequest.getClientMessages();
+      final feedRes = await _dashboardRequest.getClientMessagesFeed();
       isMessagesLoading.value = false;
-      if (msgRes.success && msgRes.data != null) {
-        messages.assignAll(msgRes.data!);
-        await DBHelper().saveMessages(msgRes.data!);
+      if (feedRes.success && feedRes.data != null) {
+        final feed = feedRes.data!;
+        isExpired.value = feed.isExpired;
+        expiredAlert.value = feed.expiredAlert;
+        serviceAccess.value = feed.serviceAccess;
+
+        // Persist expiry status to LocalStorage for instant offline hydration
+        await LocalStorage.write(serviceExpiryStorageKey, feed.toJsonString());
+
+        if (feed.isExpired) {
+          // Strict Rule: When services are expired, messages must be completely hidden!
+          messages.clear();
+        } else {
+          messages.assignAll(feed.messages);
+          await DBHelper().saveMessages(feed.messages);
+        }
       }
 
       // 4. Fetch notifications & update unread count badge
@@ -160,6 +185,17 @@ class DashboardController extends GetxController {
       } catch (_) {}
     }
 
+    // Read cached service expiry state for instant flicker-free rendering
+    final cachedExpiryJson = LocalStorage.read(serviceExpiryStorageKey);
+    if (cachedExpiryJson != null && cachedExpiryJson.isNotEmpty) {
+      try {
+        final feed = ClientMessagesFeedPayload.fromJsonString(cachedExpiryJson);
+        isExpired.value = feed.isExpired;
+        expiredAlert.value = feed.expiredAlert;
+        serviceAccess.value = feed.serviceAccess;
+      } catch (_) {}
+    }
+
     final cachedKycJson = LocalStorage.read(LocalStorage.kycDataKey);
     if (cachedKycJson != null && cachedKycJson.isNotEmpty) {
       try {
@@ -189,11 +225,15 @@ class DashboardController extends GetxController {
       isKycSubmitted.value = false;
     }
 
-    // Read cached messages from local SQLite immediately
-    DBHelper().getMessages(limit: 20).then((cachedMsgs) {
-      if (cachedMsgs.isNotEmpty && messages.isEmpty) {
-        messages.assignAll(cachedMsgs);
-      }
-    });
+    // Read cached messages from local SQLite immediately (ONLY if services are NOT expired)
+    if (!isExpired.value) {
+      DBHelper().getMessages(limit: 20).then((cachedMsgs) {
+        if (cachedMsgs.isNotEmpty && messages.isEmpty && !isExpired.value) {
+          messages.assignAll(cachedMsgs);
+        }
+      });
+    } else {
+      messages.clear();
+    }
   }
 }

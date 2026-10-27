@@ -4,6 +4,7 @@ import '../../../models/UserModel.dart';
 import '../../../models/KycModel.dart';
 
 import '../../../models/ClientMessageModel.dart';
+import '../../../models/ServiceExpiryModel.dart';
 
 /// Module-specific Request File for Dashboard
 /// Handles dashboard metrics, portal status, communications, and client notifications.
@@ -28,27 +29,23 @@ class DashboardRequest {
     return response;
   }
 
-  /// Fetch Typed Client Messages: GET /api/client/messages
-  Future<ApiResponse<List<ClientMessageModel>>> getClientMessages() async {
-    final response = await _network.get<List<ClientMessageModel>>(
+  /// Fetch Typed Messages Feed with Service Expiry & Access Info: GET /api/client/messages
+  Future<ApiResponse<ClientMessagesFeedPayload>> getClientMessagesFeed() async {
+    final response = await _network.get<ClientMessagesFeedPayload>(
       '/api/client/messages',
-      fromJson: (json) {
-        if (json is Map && json['messages'] is List) {
-          return (json['messages'] as List)
-              .whereType<Map<String, dynamic>>()
-              .map((item) => ClientMessageModel.fromJson(item))
-              .toList();
-        }
-        if (json is List) {
-          return json
-              .whereType<Map<String, dynamic>>()
-              .map((item) => ClientMessageModel.fromJson(item))
-              .toList();
-        }
-        return [];
-      },
+      fromJson: (json) => ClientMessagesFeedPayload.fromJson(json),
     );
     return response;
+  }
+
+  /// Fetch Typed Client Messages: GET /api/client/messages
+  Future<ApiResponse<List<ClientMessageModel>>> getClientMessages() async {
+    final feedRes = await getClientMessagesFeed();
+    return ApiResponse<List<ClientMessageModel>>(
+      success: feedRes.success,
+      message: feedRes.message,
+      data: feedRes.data?.messages ?? [],
+    );
   }
 
   /// Fetch Notifications: GET /api/client/notifications

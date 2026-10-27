@@ -169,13 +169,23 @@ class DashboardView extends StatelessWidget {
                             // 5. Default / Fallback: Lock Card with "Start KYC" button
                             return const KycInitialLockCard();
                           }),
-                          const SizedBox(height: 18),
-                          const DeskSection('Research Desk'),
-                          Text('Official communications · Secure access',
-                              style: deskText.copyWith(
-                                  fontSize: 11,
-                                  color: AppColors.textSecondary)),
-                          const SizedBox(height: 24),
+                          Obx(() {
+                            if (dashboardController.isExpired.value) {
+                              return const SizedBox.shrink();
+                            }
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                const SizedBox(height: 18),
+                                const DeskSection('Research Desk'),
+                                Text('Official communications · Secure access',
+                                    style: deskText.copyWith(
+                                        fontSize: 11,
+                                        color: AppColors.textSecondary)),
+                                const SizedBox(height: 24),
+                              ],
+                            );
+                          }),
                         ],
                       ),
                     ),
@@ -204,16 +214,30 @@ class DashboardView extends StatelessWidget {
   }
 
   Widget _buildVerifiedActiveCard(String clientName) {
+    final dash = Get.isRegistered<DashboardController>()
+        ? Get.find<DashboardController>()
+        : Get.put(DashboardController());
+
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-      const DeskNote(
-          title: 'Verified',
-          description:
-              'Your identity is verified. Your research feed is ready.',
-          color: AppColors.success,
-          icon: Icons.check_rounded),
-      const SizedBox(height: 18),
-      const DeskSection('Messages & Advisories'),
-      const SizedBox(height: 8),
+      Obx(() {
+        if (dash.isExpired.value) {
+          return const SizedBox.shrink();
+        }
+        return const Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            DeskNote(
+                title: 'Verified',
+                description:
+                    'Your identity is verified. Your research feed is ready.',
+                color: AppColors.success,
+                icon: Icons.check_rounded),
+            SizedBox(height: 18),
+            DeskSection('Messages & Advisories'),
+            SizedBox(height: 8),
+          ],
+        );
+      }),
       ActiveMessagesFeed(clientName: clientName),
     ]);
   }

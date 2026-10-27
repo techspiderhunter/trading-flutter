@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../models/NotificationModels.dart';
 import '../requests/NotificationRequest.dart';
 import '../../../models/ClientMessageModel.dart';
+import '../../../models/ServiceExpiryModel.dart';
 import '../../../includes/Storage.dart';
 import '../../Kyc/routes/KycRoutes.dart';
 import '../../Mitc/routes/MitcRoutes.dart';
@@ -28,6 +29,10 @@ class NotificationController extends GetxController {
   final messages = <ClientMessageModel>[].obs;
   final unreadMessagesCount = 0.obs;
 
+  // Service Expiry State
+  final isExpired = false.obs;
+  final expiredAlert = Rx<ExpiredAlertInfo?>(null);
+
   final isLoading = false.obs;
 
   int get totalUnreadCount =>
@@ -42,9 +47,24 @@ class NotificationController extends GetxController {
 
   /// Instant Offline Load from SQLite
   Future<void> _loadCachedMessagesImmediately() async {
+    final cachedExpiryJson =
+        LocalStorage.read(DashboardController.serviceExpiryStorageKey);
+    if (cachedExpiryJson != null && cachedExpiryJson.isNotEmpty) {
+      try {
+        final feed = ClientMessagesFeedPayload.fromJsonString(cachedExpiryJson);
+        isExpired.value = feed.isExpired;
+        expiredAlert.value = feed.expiredAlert;
+        if (isExpired.value) {
+          messages.clear();
+          unreadMessagesCount.value = 0;
+          return;
+        }
+      } catch (_) {}
+    }
+
     try {
       final cached = await DBHelper().getMessages(limit: 100);
-      if (cached.isNotEmpty) {
+      if (cached.isNotEmpty && !isExpired.value) {
         messages.assignAll(cached);
         unreadMessagesCount.value = messages.where((m) => m.isUnread).length;
       }
@@ -87,7 +107,7 @@ class NotificationController extends GetxController {
   }
 
   /// Load Official Broadcast Messages: GET /api/client/messages
-  /// Uses Offline-First architecture with sqflite local caching
+  /// Uses Offline-First architecture with sqflite local caching & service expiry checking
   Future<void> loadMessages() async {
     if (!LocalStorage.hasToken()) {
       messages.clear();
@@ -96,29 +116,51 @@ class NotificationController extends GetxController {
     }
 
     try {
-      // 1. Instant Offline Load from SQLite:
-      final cached = await DBHelper().getMessages(limit: 100);
-      if (cached.isNotEmpty) {
-        messages.assignAll(cached);
-        unreadMessagesCount.value = messages.where((m) => m.isUnread).length;
-        if (Get.isRegistered<DashboardController>()) {
-          Get.find<DashboardController>().messages.assignAll(cached);
+      // 1. Instant Offline Load from SQLite (only if NOT expired):
+      if (!isExpired.value) {
+        final cached = await DBHelper().getMessages(limit: 100);
+        if (cached.isNotEmpty && !isExpired.value) {
+          messages.assignAll(cached);
+          unreadMessagesCount.value = messages.where((m) => m.isUnread).length;
+          if (Get.isRegistered<DashboardController>()) {
+            Get.find<DashboardController>().messages.assignAll(cached);
+          }
         }
       }
 
       // 2. Fresh Network Sync from Laravel API:
-      final res = await _notificationRequest.getTypedMessages();
+      final res = await _notificationRequest.getClientMessagesFeed();
       if (res.success && res.data != null) {
-        messages.assignAll(res.data!);
-        final count = messages.where((m) => m.isUnread).length;
-        unreadMessagesCount.value = count;
+        final feed = res.data!;
+        isExpired.value = feed.isExpired;
+        expiredAlert.value = feed.expiredAlert;
 
-        // 3. Save fresh messages to local SQLite database:
-        await DBHelper().saveMessages(res.data!);
-
-        // Also sync with DashboardController messages
+        // Sync with DashboardController
         if (Get.isRegistered<DashboardController>()) {
-          Get.find<DashboardController>().messages.assignAll(res.data!);
+          final dash = Get.find<DashboardController>();
+          dash.isExpired.value = feed.isExpired;
+          dash.expiredAlert.value = feed.expiredAlert;
+          dash.serviceAccess.value = feed.serviceAccess;
+        }
+
+        if (feed.isExpired) {
+          messages.clear();
+          unreadMessagesCount.value = 0;
+          if (Get.isRegistered<DashboardController>()) {
+            Get.find<DashboardController>().messages.clear();
+          }
+        } else {
+          messages.assignAll(feed.messages);
+          final count = messages.where((m) => m.isUnread).length;
+          unreadMessagesCount.value = count;
+
+          // 3. Save fresh messages to local SQLite database:
+          await DBHelper().saveMessages(feed.messages);
+
+          // Also sync with DashboardController messages
+          if (Get.isRegistered<DashboardController>()) {
+            Get.find<DashboardController>().messages.assignAll(feed.messages);
+          }
         }
       }
     } catch (_) {
