@@ -138,7 +138,11 @@ class ClientMessagesFeedPayload {
           .toList();
     }
 
-    final isExpired = json['isExpired'] == true;
+    final rawIsExpired = json['isExpired'];
+    final bool isExpiredParsed = rawIsExpired == true ||
+        rawIsExpired == 1 ||
+        rawIsExpired == 'true' ||
+        rawIsExpired == '1';
 
     ExpiredAlertInfo? alertInfo;
     if (json['expiredAlert'] is Map) {
@@ -152,9 +156,15 @@ class ClientMessagesFeedPayload {
           Map<String, dynamic>.from(json['serviceAccess'] as Map));
     }
 
+    final bool isStrictlyExpired = isExpiredParsed ||
+        (accessInfo != null &&
+            !accessInfo.hasActiveServices &&
+            accessInfo.expiredServicesCount > 0) ||
+        (accessInfo != null && !accessInfo.canViewServiceMessages);
+
     return ClientMessagesFeedPayload(
       messages: msgs,
-      isExpired: isExpired,
+      isExpired: isStrictlyExpired,
       expiredAlert: alertInfo,
       serviceAccess: accessInfo,
     );

@@ -102,21 +102,23 @@ class ServiceExpiredUnderProgressCard extends StatelessWidget {
     final message = alertInfo?.message ??
         'Your services have expired. Please contact our team to renew your services.';
 
+
+
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: const Color(0xFFFECACA), // Soft red/coral border
-          width: 1.2,
+          color: const Color(0xFFFECACA),
+          width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFFEF4444).withValues(alpha: 0.05),
-            blurRadius: 18,
-            offset: const Offset(0, 6),
+            color: const Color(0xFFEF4444).withValues(alpha: 0.035),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -124,12 +126,15 @@ class ServiceExpiredUnderProgressCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // 1. Status Pill: Renewal / Under Progress Alert
+          // Status
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3.5),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 8,
+              vertical: 3,
+            ),
             decoration: BoxDecoration(
-              color: const Color(0xFFFEF2F2),
-              borderRadius: BorderRadius.circular(16),
+              color: const Color(0xFFFFF1F2),
+              borderRadius: BorderRadius.circular(20),
               border: Border.all(color: const Color(0xFFFECACA)),
             ),
             child: const Row(
@@ -137,193 +142,217 @@ class ServiceExpiredUnderProgressCard extends StatelessWidget {
               children: [
                 Icon(
                   Icons.hourglass_top_rounded,
-                  size: 12,
+                  size: 11,
                   color: Color(0xFFDC2626),
                 ),
-                SizedBox(width: 5),
+                SizedBox(width: 4),
                 Text(
                   'RENEWAL IN PROGRESS',
                   style: TextStyle(
-                    fontSize: 9.5,
+                    fontSize: 9,
                     fontWeight: FontWeight.w800,
                     color: Color(0xFFDC2626),
-                    letterSpacing: 0.6,
+                    letterSpacing: 0.3,
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 10),
 
-          // 2. Circular Icon Badge
+          const SizedBox(height: 6),
+
+          // Compact Icon
           Container(
-            width: 52,
-            height: 52,
+            width: 34,
+            height: 34,
             decoration: const BoxDecoration(
               color: Color(0xFFFFF1F2),
               shape: BoxShape.circle,
             ),
-            child: Center(
-              child: Container(
-                width: 40,
-                height: 40,
-                decoration: const BoxDecoration(
-                  color: Color(0xFFFEE2E2),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(
-                  Icons.lock_clock_rounded,
-                  color: Color(0xFFDC2626),
-                  size: 22,
-                ),
-              ),
+            child: const Icon(
+              Icons.lock_clock_rounded,
+              color: Color(0xFFDC2626),
+              size: 19,
             ),
           ),
-          const SizedBox(height: 10),
 
-          // 3. Title
+          const SizedBox(height: 6),
+
+          // Title
           const Text(
             'Service Subscription Expired',
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 16.5,
+              fontSize: 14.5,
               fontWeight: FontWeight.w800,
               color: Color(0xFF0F172A),
-              letterSpacing: -0.3,
-              height: 1.2,
-            ),
-          ),
-          const SizedBox(height: 4),
-
-          // 4. Backend Alert Message
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: Text(
-              message,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-                color: Color(0xFF64748B),
-                height: 1.35,
-              ),
+              letterSpacing: -0.2,
+              height: 1.15,
             ),
           ),
 
-          // 5. Expired Services Breakdown (Shows FULL names without truncation)
+          const SizedBox(height: 3),
+
+          // Backend Message
+          Text(
+            message,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 11,
+              color: Color(0xFF64748B),
+              height: 1.25,
+            ),
+          ),
+
+          // Services List
           if (services.isNotEmpty) ...[
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
+
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 9,
+                vertical: 4,
+              ),
               decoration: BoxDecoration(
-                color: const Color(0xFFF8FAFC),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFFE2E8F0)),
+                color: const Color(0xFFFFFBFB),
+                borderRadius: BorderRadius.circular(9),
+                border: Border.all(
+                  color: const Color(0xFFFEE2E2),
+                ),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Row(
-                    children: [
-                      Icon(Icons.history_toggle_off_rounded,
-                          size: 13, color: Color(0xFF64748B)),
-                      SizedBox(width: 5),
-                      Text(
-                        'EXPIRED SERVICES',
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w800,
-                          color: Color(0xFF64748B),
-                          letterSpacing: 0.7,
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 4),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.history_toggle_off_rounded,
+                          size: 12,
+                          color: Color(0xFFDC2626),
                         ),
-                      ),
-                    ],
+                        SizedBox(width: 5),
+                        Text(
+                          'YOUR EXPIRED SERVICES',
+                          style: TextStyle(
+                            fontSize: 9,
+                            fontWeight: FontWeight.w800,
+                            color: Color(0xFF64748B),
+                            letterSpacing: 0.4,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 6),
-                  ...services.map((svc) => Padding(
-                        padding: const EdgeInsets.only(bottom: 6),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.only(top: 5),
-                              width: 5,
-                              height: 5,
-                              decoration: const BoxDecoration(
-                                color: Color(0xFFEF4444),
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-                            const SizedBox(width: 7),
-                            // Service Name: Fully visible, NO truncation (softWrap enabled)
-                            Expanded(
-                              child: Text(
-                                svc.name,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w700,
-                                  color: Color(0xFF1E293B),
-                                  height: 1.25,
-                                ),
-                                softWrap: true,
-                              ),
-                            ),
-                            if (svc.expiryDate != null && svc.expiryDate!.isNotEmpty) ...[
-                              const SizedBox(width: 8),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 6, vertical: 2),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFFEF2F2),
-                                  borderRadius: BorderRadius.circular(5),
-                                  border: Border.all(
-                                      color: const Color(0xFFFECACA), width: 0.8),
-                                ),
+
+                  const Divider(
+                    height: 1,
+                    thickness: 0.7,
+                    color: Color(0xFFFEE2E2),
+                  ),
+
+                  ...services.asMap().entries.map((entry) {
+                    final index = entry.key;
+                    final svc = entry.value;
+                    final expiryDate = svc.expiryDate?.trim() ?? '';
+
+                    return Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
                                 child: Text(
-                                  'Expired: ${svc.expiryDate}',
+                                  svc.name,
+                                  softWrap: true,
                                   style: const TextStyle(
-                                    fontSize: 9.5,
-                                    fontWeight: FontWeight.w700,
-                                    color: Color(0xFFDC2626),
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFF1E293B),
+                                    height: 1.2,
                                   ),
                                 ),
                               ),
+
+                              const SizedBox(width: 5),
+
+                              if (expiryDate.isNotEmpty)
+                                Flexible(
+                                  child: Text(
+                                    expiryDate,
+                                    textAlign: TextAlign.end,
+                                    softWrap: true,
+                                    style: const TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w600,
+                                      color: Color(0xFFDC2626),
+                                      height: 1.2,
+                                    ),
+                                  ),
+                                ),
+
+                              // Comma after each service/date
+                              const Text(
+                                ',',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w700,
+                                  color: Color(0xFF64748B),
+                                ),
+                              ),
                             ],
-                          ],
+                          ),
                         ),
-                      )),
+
+                        if (index != services.length - 1)
+                          const Divider(
+                            height: 1,
+                            thickness: 0.6,
+                            color: Color(0xFFF1F5F9),
+                          ),
+                      ],
+                    );
+                  }),
                 ],
               ),
             ),
           ],
 
-          const SizedBox(height: 10),
+          const SizedBox(height: 7),
 
-          // 6. Explanatory Note regarding paused feed
+          // Compact Information Note
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 8,
+              vertical: 5,
+            ),
             decoration: BoxDecoration(
               color: const Color(0xFFFFFBEB),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: const Color(0xFFFDE68A)),
+              borderRadius: BorderRadius.circular(7),
+              border: Border.all(
+                color: const Color(0xFFFDE68A),
+                width: 0.7,
+              ),
             ),
             child: const Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Icon(
                   Icons.info_outline_rounded,
-                  size: 14,
+                  size: 12,
                   color: Color(0xFFD97706),
                 ),
-                SizedBox(width: 6),
+                SizedBox(width: 5),
                 Expanded(
                   child: Text(
                     'Live market calls will resume immediately upon subscription renewal.',
                     style: TextStyle(
-                      fontSize: 11,
+                      fontSize: 10,
                       color: Color(0xFF92400E),
-                      height: 1.25,
+                      height: 1.2,
                     ),
                   ),
                 ),
@@ -331,46 +360,59 @@ class ServiceExpiredUnderProgressCard extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
 
-          // 7. Action Button: Contact Advisory Desk / Renew
+          // Contact / Renew Button
           SizedBox(
             width: double.infinity,
-            height: 42,
+            height: 35,
             child: ElevatedButton.icon(
               onPressed: () => _handleContactDesk(context),
-              icon: const Icon(Icons.phone_in_talk_rounded, size: 16, color: Colors.white),
+              icon: const Icon(
+                Icons.phone_in_talk_rounded,
+                size: 14,
+                color: Colors.white,
+              ),
               label: const Text(
                 'Contact Advisory Desk / Renew',
                 style: TextStyle(
-                  fontSize: 13,
+                  fontSize: 11.5,
                   fontWeight: FontWeight.w700,
                   color: Colors.white,
                 ),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFDC2626),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
+                foregroundColor: Colors.white,
                 elevation: 0,
+                padding: const EdgeInsets.symmetric(horizontal: 6),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
-          const SizedBox(height: 4),
 
-          // 8. Refresh Check Status button (Compact)
+          // Check Renewal Status
           TextButton.icon(
             onPressed: () => dash.syncDashboard(),
             style: TextButton.styleFrom(
               visualDensity: VisualDensity.compact,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8,
+                vertical: 1,
+              ),
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
-            icon: const Icon(Icons.refresh_rounded, size: 15, color: Color(0xFF64748B)),
+            icon: const Icon(
+              Icons.refresh_rounded,
+              size: 13,
+              color: Color(0xFF64748B),
+            ),
             label: const Text(
               'Check Renewal Status',
               style: TextStyle(
-                fontSize: 11.5,
+                fontSize: 10.5,
                 fontWeight: FontWeight.w600,
                 color: Color(0xFF64748B),
               ),
@@ -379,5 +421,7 @@ class ServiceExpiredUnderProgressCard extends StatelessWidget {
         ],
       ),
     );
+
+
   }
 }

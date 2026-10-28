@@ -226,12 +226,12 @@ class DashboardView extends StatelessWidget {
         return const Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            DeskNote(
-                title: 'Verified',
-                description:
-                    'Your identity is verified. Your research feed is ready.',
-                color: AppColors.success,
-                icon: Icons.check_rounded),
+            // DeskNote(
+            //     title: 'Verified',
+            //     description:
+            //         'Your identity is verified. Your research feed is ready.',
+            //     color: AppColors.success,
+            //     icon: Icons.check_rounded),
             SizedBox(height: 18),
             DeskSection('Messages & Advisories'),
             SizedBox(height: 8),

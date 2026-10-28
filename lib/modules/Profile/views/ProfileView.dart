@@ -54,20 +54,7 @@ class ProfileView extends StatelessWidget {
                                   style: deskText.copyWith(
                                       fontSize: 28,
                                       color: AppColors.primary)))),
-              Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: SizedBox(
-                      width: 29,
-                      height: 29,
-                      child: Material(
-                          color: AppColors.primary,
-                          shape: const CircleBorder(),
-                          child: InkWell(
-                              customBorder: const CircleBorder(),
-                              onTap: controller.pickAndUploadAvatar,
-                              child: const Icon(Icons.add_rounded,
-                                  size: 19, color: Colors.white))))),
+
             ]);
           })),
           const SizedBox(height: 24),
@@ -113,32 +100,7 @@ class ProfileView extends StatelessWidget {
                 prefixIcon: Icons.phone_outlined,
               )),
           const SizedBox(height: 16),
-          const DeskLabel('Account ID · Read-only'),
-          Obx(() => TextFormField(
-              key: ValueKey(controller.accountId.value),
-              initialValue: controller.accountId.value,
-              readOnly: true,
-              style: deskText,
-              decoration: deskInputDecoration(
-                  enabled: true,
-                  suffixIcon: IconButton(
-                      tooltip: 'Copy Account ID',
-                      icon: const Icon(Icons.copy_rounded, size: 16),
-                      onPressed: () {
-                        Clipboard.setData(
-                            ClipboardData(text: controller.accountId.value));
-                        Get.snackbar(
-                          'Copied',
-                          'Account ID copied',
-                          snackPosition: SnackPosition.BOTTOM,
-                          backgroundColor: Colors.white,
-                          colorText: AppColors.textHeading,
-                          margin: const EdgeInsets.all(16),
-                          borderRadius: 12,
-                          duration: const Duration(seconds: 2),
-                        );
-                      })))),
-          const SizedBox(height: 16),
+
           Obx(() => DeskButton(
               label: 'Save Changes',
               loading: controller.isUpdatingProfileInfo.value,

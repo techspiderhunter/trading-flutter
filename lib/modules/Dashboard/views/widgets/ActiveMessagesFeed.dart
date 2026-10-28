@@ -21,9 +21,16 @@ class ActiveMessagesFeed extends StatelessWidget {
         : Get.put(NotificationController());
 
     return Obx(() {
+      final serviceAccess = dash.serviceAccess.value;
+      final bool isFullyExpired = dash.isExpired.value ||
+          (serviceAccess != null &&
+              !serviceAccess.hasActiveServices &&
+              serviceAccess.expiredServicesCount > 0) ||
+          (serviceAccess != null && !serviceAccess.canViewServiceMessages);
+
       // 1. Full Expiry: When ALL services are expired (isExpired == true)
       // Strict rule: Hide all messages completely and render "Under Progress / Service Expired" card!
-      if (dash.isExpired.value) {
+      if (isFullyExpired) {
         return ServiceExpiredUnderProgressCard(
           alertInfo: dash.expiredAlert.value,
           accessInfo: dash.serviceAccess.value,
@@ -38,7 +45,7 @@ class ActiveMessagesFeed extends StatelessWidget {
       }
 
       final messagesList = dash.messages;
-      final hasPartialExpiryAlert = !dash.isExpired.value &&
+      final hasPartialExpiryAlert = !isFullyExpired &&
           dash.expiredAlert.value != null &&
           dash.expiredAlert.value!.services.isNotEmpty;
 
@@ -77,7 +84,7 @@ class ActiveMessagesFeed extends StatelessWidget {
               itemBuilder: (context, index) {
                 final item = messagesList[index];
                 return DeskMessageCard(
-                  title: item.subject,
+                  title: '', // Title/Subject removed as requested: only message body & date/sender shown
                   subtitle:
                       '${item.sender} · ${item.date}${item.isUnread ? ' · Unread' : ''}',
                   message: item.message,
@@ -89,7 +96,7 @@ class ActiveMessagesFeed extends StatelessWidget {
                           MessageAttachmentViewerModal.show(
                             context,
                             imageUrl: item.resolvedAttachmentUrl!,
-                            title: item.subject,
+                            title: 'Attachment',
                             subtitle: '${item.sender} • ${item.date}',
                           );
                         }
