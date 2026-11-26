@@ -5,6 +5,7 @@ import '../../../models/KycModel.dart';
 import '../../../themes/AppColors.dart';
 import '../controllers/KycController.dart';
 import '../../../global/Validator/Validators.dart';
+import '../../Dashboard/routes/DashboardRoutes.dart';
 import 'widgets/KycDocumentViewerModal.dart';
 
 class KycView extends StatelessWidget {
@@ -54,7 +55,10 @@ class KycView extends StatelessWidget {
               }
 
               // 1. If user is in Form/Edit mode (new KYC submission OR re-submitting after rejection)
-              if (isEditing || status == 'not_submitted' || kyc == null) {
+              if (isEditing ||
+                  status == 'not_submitted' ||
+                  kyc == null ||
+                  kyc.isNotSubmitted) {
                 return Column(
                   children: [
                     // TOP STEPPER PROGRESS INDICATOR (4 STEPS)
@@ -86,12 +90,12 @@ class KycView extends StatelessWidget {
                 );
               }
 
-              // 2. Direct Show Page when Verified / Approved
+              // 2. Direct Show Page ONLY when Verified / Approved by compliance officer
               if (status == 'verified' || kyc.isVerified) {
                 return _buildVerifiedShowPage(controller, kyc, context);
               }
 
-              // 3. Under Review / Pending State
+              // 3. Under Review / Pending State (Dedicated Pending Status screen, NOT the show page!)
               if (status == 'pending' ||
                   status == 'under_review' ||
                   kyc.isPending) {
@@ -975,125 +979,146 @@ class KycView extends StatelessWidget {
 
   Widget _buildUnderReviewPage(
       KycController controller, KycModel kyc, BuildContext context) {
-    final addressText = [kyc.address, kyc.city, kyc.state, kyc.pincode]
-        .where((e) => e != null && e.toString().trim().isNotEmpty)
-        .join(', ');
     return DeskBody(children: [
-      const DeskHero(title: 'Identity verification.'),
-      const SizedBox(height: 25),
-      ComplianceStatus(
-          reference: kyc.displayReferenceId,
-          title: 'Under Review',
-          description: 'Your submission is under review.',
-          color: AppColors.warning,
-          icon: Icons.schedule_rounded),
-      const SizedBox(height: 18),
-      ComplianceGroup(
-          title: 'Personal information',
-          icon: Icons.person_outline_rounded,
-          children: [
-            _buildKycInfoRow(
-                'Full Legal Name', kyc.fullName ?? 'Verified Client'),
-            if (kyc.fatherName != null && kyc.fatherName!.isNotEmpty)
-              _buildKycInfoRow('Father\'s Name', kyc.fatherName!),
-            if (kyc.dateOfBirth != null && kyc.dateOfBirth!.isNotEmpty)
-              _buildKycInfoRow('Date of Birth', kyc.dateOfBirth!),
-            if (kyc.gender != null && kyc.gender!.isNotEmpty)
-              _buildKycInfoRow('Gender', kyc.gender!),
-          ]),
-      const SizedBox(height: 16),
-      ComplianceGroup(
-          title: 'Identity & address',
-          icon: Icons.badge_outlined,
-          children: [
-            _buildKycInfoRow('Permanent Account (PAN)',
-                kyc.panNumber ?? 'Verified on record'),
-            if (kyc.aadhaarNumber != null && kyc.aadhaarNumber!.isNotEmpty)
-              _buildKycInfoRow(
-                'Aadhaar Number',
-                kyc.aadhaarNumber!.length >= 4
-                    ? 'XXXX-XXXX-${kyc.aadhaarNumber!.substring(kyc.aadhaarNumber!.length - 4)}'
-                    : kyc.aadhaarNumber!,
+      const SizedBox(height: 12),
+      Center(
+        child: Container(
+          width: 76,
+          height: 76,
+          decoration: BoxDecoration(
+            color: const Color(0xFFFEF3C7),
+            shape: BoxShape.circle,
+            border: Border.all(color: const Color(0xFFFDE68A), width: 1.5),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFFD97706).withValues(alpha: 0.12),
+                blurRadius: 16,
+                offset: const Offset(0, 6),
               ),
-            if (addressText.isNotEmpty)
-              _buildKycInfoRow('Residential Address', addressText),
-          ]),
-      const SizedBox(height: 16),
-      if ((kyc.occupation?.isNotEmpty ?? false) ||
-          (kyc.incomeRange?.isNotEmpty ?? false) ||
-          (kyc.experience?.isNotEmpty ?? false))
-        ComplianceGroup(
-            title: 'Financial profile',
-            icon: Icons.account_balance_wallet_outlined,
-            children: [
-              if (kyc.occupation != null && kyc.occupation!.isNotEmpty)
-                _buildKycInfoRow('Occupation', kyc.occupation!),
-              if (kyc.incomeRange != null && kyc.incomeRange!.isNotEmpty)
-                _buildKycInfoRow('Annual Income', kyc.incomeRange!),
-              if (kyc.experience != null && kyc.experience!.isNotEmpty)
-                _buildKycInfoRow('Trading Experience', kyc.experience!),
-            ]),
-      const SizedBox(height: 16),
-      ComplianceGroup(
-          title: 'Compliance details',
-          icon: Icons.verified_user_outlined,
-          children: [
-            if (kyc.verifiedAt != null && kyc.verifiedAt!.isNotEmpty)
-              _buildKycInfoRow('Verified On', kyc.verifiedAt!),
-            _buildKycInfoRow(
-                'Compliance Standard', 'SEBI (RA) Regulations, 2014'),
-          ]),
-      const SizedBox(height: 18),
-      ComplianceGroup(
-          title: 'Identity documents',
-          icon: Icons.folder_outlined,
-          children: [
-            _buildDocItem(
-              context: context,
-              title: 'PAN Card (Front)',
-              isAttached: true,
-              onPreview: () => KycDocumentViewerModal.show(
-                context,
-                title: 'PAN Card (Front)',
-                imageUrl: kyc.securePanDocumentUrl,
-                localFilePath: controller.panFilePath.value,
-              ),
+            ],
+          ),
+          child: const Icon(
+            Icons.lock_clock_rounded,
+            size: 38,
+            color: Color(0xFFD97706),
+          ),
+        ),
+      ),
+      const SizedBox(height: 20),
+      const Text(
+        'Your Document Verification is Under Review',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontFamily: 'DeskSans',
+          fontSize: 22,
+          fontWeight: FontWeight.w700,
+          color: AppColors.textHeading,
+          letterSpacing: -0.3,
+        ),
+      ),
+      const SizedBox(height: 12),
+      const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 8),
+        child: Text(
+          'Advisory bulletins, market recommendations, and direct communication feeds are locked while your identity documents are undergoing compliance review.',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontFamily: 'DeskSans',
+            fontSize: 13.5,
+            color: AppColors.textSecondary,
+            height: 1.55,
+          ),
+        ),
+      ),
+      const SizedBox(height: 24),
+
+      // Reference & Status Pill Card
+      Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: const Color(0xFFFDE68A)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.03),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
-            _buildDocItem(
-              context: context,
-              title: 'Aadhaar Card (Front)',
-              isAttached: true,
-              onPreview: () => KycDocumentViewerModal.show(
-                context,
-                title: 'Aadhaar Card (Front)',
-                imageUrl: kyc.secureAadhaarFrontUrl,
-                localFilePath: controller.aadhaarFrontFilePath.value,
-              ),
-            ),
-            _buildDocItem(
-              context: context,
-              title: 'Aadhaar Card (Back)',
-              isAttached: true,
-              onPreview: () => KycDocumentViewerModal.show(
-                context,
-                title: 'Aadhaar Card (Back)',
-                imageUrl: kyc.secureAadhaarBackUrl,
-                localFilePath: controller.aadhaarBackFilePath.value,
-              ),
-            ),
-            if (kyc.panBackImage != null && kyc.panBackImage!.isNotEmpty)
-              _buildDocItem(
-                context: context,
-                title: 'PAN Card (Back)',
-                isAttached: true,
-                onPreview: () => KycDocumentViewerModal.show(
-                  context,
-                  title: 'PAN Card (Back)',
-                  imageUrl: kyc.securePanBackUrl,
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'APPLICATION REFERENCE',
+                  style: TextStyle(
+                    fontFamily: 'DeskSans',
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF94A3B8),
+                    letterSpacing: 0.5,
+                  ),
                 ),
+                const SizedBox(height: 4),
+                Text(
+                  kyc.displayReferenceId,
+                  style: const TextStyle(
+                    fontFamily: 'DeskSans',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.textHeading,
+                  ),
+                ),
+              ],
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFEF3C7),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: const Color(0xFFFDE68A)),
               ),
-          ]),
-      const SizedBox(height: 16),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.schedule_rounded,
+                      size: 13, color: Color(0xFFD97706)),
+                  SizedBox(width: 5),
+                  Text(
+                    'UNDER REVIEW',
+                    style: TextStyle(
+                      fontFamily: 'DeskSans',
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFFD97706),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+
+      // const SizedBox(height: 24),
+
+      // Action Buttons
+      // DeskButton(
+      //   label: 'Refresh Status',
+      //   loading: controller.isLoadingKyc.value,
+      //   onPressed: controller.loadExistingKycOrPrefill,
+      // ),
+      const SizedBox(height: 14),
+      DeskButton(
+        label: 'Back to Dashboard',
+        secondary: true,
+        onPressed: () => Get.offAllNamed(DashboardRoutes.dashboard),
+      ),
+      const SizedBox(height: 24),
     ]);
   }
 

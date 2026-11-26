@@ -26,34 +26,34 @@ class InvoiceIndexView extends StatelessWidget {
                   title: 'All your invoices.',
                   subtitle: 'GST invoices and payment receipts.'),
               const SizedBox(height: 25),
-              Obx(() => DeskNote(
-                  title: 'Total paid · ${controller.totalPaidAmount}',
-                  description:
-                      '${controller.totalInvoices} invoices · ${controller.approvedInvoices} approved · ${controller.pendingInvoices} pending')),
-              const SizedBox(height: 18),
-              Obx(() => Wrap(
-                  spacing: 7,
-                  runSpacing: 8,
-                  children: ['all', 'approved', 'pending', 'cancelled']
-                      .map((filter) => ChoiceChip(
-                          label: Text(
-                              '${filter[0].toUpperCase()}${filter.substring(1)}',
-                              style: deskText.copyWith(
-                                  fontSize: 10,
-                                  color:
-                                      controller.selectedFilter.value == filter
-                                          ? Colors.white
-                                          : AppColors.textSecondary)),
-                          selected: controller.selectedFilter.value == filter,
-                          showCheckmark: false,
-                          selectedColor: AppColors.primary,
-                          backgroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(11),
-                              side: const BorderSide(color: AppColors.border)),
-                          onSelected: (_) => controller.setFilter(filter)))
-                      .toList())),
-              const SizedBox(height: 24),
+              // Obx(() => DeskNote(
+              //     title: 'Total paid · ${controller.totalPaidAmount}',
+              //     description:
+              //         '${controller.totalInvoices} invoices · ${controller.approvedInvoices} approved · ${controller.pendingInvoices} pending')),
+              // const SizedBox(height: 18),
+              // Obx(() => Wrap(
+              //     spacing: 7,
+              //     runSpacing: 8,
+              //     children: ['all', 'approved', 'pending', 'cancelled']
+              //         .map((filter) => ChoiceChip(
+              //             label: Text(
+              //                 '${filter[0].toUpperCase()}${filter.substring(1)}',
+              //                 style: deskText.copyWith(
+              //                     fontSize: 10,
+              //                     color:
+              //                         controller.selectedFilter.value == filter
+              //                             ? Colors.white
+              //                             : AppColors.textSecondary)),
+              //             selected: controller.selectedFilter.value == filter,
+              //             showCheckmark: false,
+              //             selectedColor: AppColors.primary,
+              //             backgroundColor: Colors.white,
+              //             shape: RoundedRectangleBorder(
+              //                 borderRadius: BorderRadius.circular(11),
+              //                 side: const BorderSide(color: AppColors.border)),
+              //             onSelected: (_) => controller.setFilter(filter)))
+              //         .toList())),
+              // const SizedBox(height: 24),
               Obx(() {
                 if (controller.isLoading.value)
                   return const Padding(

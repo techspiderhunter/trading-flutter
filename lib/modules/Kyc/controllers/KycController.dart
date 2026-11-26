@@ -7,7 +7,6 @@ import '../../../global/Validator/Validators.dart';
 import '../../Dashboard/controllers/DashboardController.dart';
 import '../../Dashboard/routes/DashboardRoutes.dart';
 import '../../MainNav/controllers/MainNavController.dart';
-import '../../MainNav/routes/MainNavRoutes.dart';
 import '../../../themes/AppColors.dart';
 import '../../../models/UserModel.dart';
 import '../../../models/KycModel.dart';
@@ -108,26 +107,37 @@ class KycController extends GetxController {
     if (cachedKycJson != null && cachedKycJson.isNotEmpty) {
       try {
         final kyc = KycModel.fromJsonString(cachedKycJson);
-        currentKyc.value = kyc;
-        currentKycStatus.value =
-            kyc.isVerified ? 'verified' : kyc.verificationStatus;
-        hasExistingKyc.value = true;
-        if (kyc.isPending || kyc.isVerified) {
-          isEditing.value = false;
-        } else if (kyc.isRejected) {
-          isEditing.value = false;
-          _prefillFromKyc(kyc);
-        } else {
+        final status = kyc.verificationStatus.trim().toLowerCase();
+        if (kyc.isNotSubmitted || status == 'not_submitted' || status.isEmpty) {
+          currentKyc.value = null;
+          currentKycStatus.value = 'not_submitted';
+          hasExistingKyc.value = false;
           isEditing.value = true;
+        } else {
+          currentKyc.value = kyc;
+          currentKycStatus.value =
+              kyc.isVerified ? 'verified' : kyc.verificationStatus;
+          hasExistingKyc.value = true;
+          if (kyc.isPending || kyc.isVerified) {
+            isEditing.value = false;
+          } else if (kyc.isRejected) {
+            isEditing.value = false;
+            _prefillFromKyc(kyc);
+          } else {
+            isEditing.value = true;
+          }
         }
-      } catch (_) {}
-    } else {
-      final submittedFlag =
-          LocalStorage.read(MainNavController.kycSubmittedStorageKey);
-      if (submittedFlag == 'true') {
-        currentKycStatus.value = 'pending';
-        isEditing.value = false;
+      } catch (_) {
+        currentKyc.value = null;
+        currentKycStatus.value = 'not_submitted';
+        hasExistingKyc.value = false;
+        isEditing.value = true;
       }
+    } else {
+      currentKyc.value = null;
+      currentKycStatus.value = 'not_submitted';
+      hasExistingKyc.value = false;
+      isEditing.value = true;
     }
   }
 
@@ -210,6 +220,40 @@ class KycController extends GetxController {
       final response = await _kycRequest.getKyc();
       if (response.success && response.data != null) {
         final kyc = response.data!;
+        final status = kyc.verificationStatus.trim().toLowerCase();
+
+        // 1. If Not Submitted: Clear any stale flags and strictly show 4-step Form!
+        if (kyc.isNotSubmitted || status == 'not_submitted' || status.isEmpty) {
+          currentKyc.value = null;
+          currentKycStatus.value = 'not_submitted';
+          hasExistingKyc.value = false;
+          isEditing.value = true;
+
+          await LocalStorage.write(
+              MainNavController.kycSubmittedStorageKey, 'false');
+          await LocalStorage.remove(LocalStorage.kycDataKey);
+
+          if (Get.isRegistered<MainNavController>()) {
+            final mainNav = Get.find<MainNavController>();
+            mainNav.kycProfile.value = null;
+            mainNav.kycStatus.value = 'not_submitted';
+            mainNav.isKycSubmitted.value = false;
+          }
+          if (Get.isRegistered<DashboardController>()) {
+            final dash = Get.find<DashboardController>();
+            dash.kycProfile.value = null;
+            dash.kycStatus.value = 'not_submitted';
+            dash.isKycSubmitted.value = false;
+            dash.referenceId.value = null;
+            dash.rejectionReason.value = null;
+          }
+
+          clearForm();
+          _prefillBasicUser();
+          isLoadingKyc.value = false;
+          return;
+        }
+
         currentKyc.value = kyc;
         currentKycStatus.value =
             kyc.isVerified ? 'verified' : kyc.verificationStatus;
@@ -240,7 +284,7 @@ class KycController extends GetxController {
           dash.rejectionReason.value = kyc.rejectionReason;
         }
 
-        // If Under Review or Verified: DO NOT show form! Show Show Page or Under Review page.
+        // 2. If Under Review or Verified: DO NOT show form!
         if (kyc.isPending || kyc.isVerified) {
           isEditing.value = false;
           clearForm();
@@ -248,7 +292,7 @@ class KycController extends GetxController {
           return;
         }
 
-        // If Rejected: Show Rejected card with Re-submit button
+        // 3. If Rejected: Show Rejected card with Re-submit button
         if (kyc.isRejected) {
           isEditing.value = false;
           _prefillFromKyc(kyc);
@@ -258,7 +302,10 @@ class KycController extends GetxController {
       }
     }
 
-    // Default / Not Submitted: Clear form and show 4-step wizard prefilled with account info
+    // Default Fallback: Clear form and show 4-step wizard prefilled with account info
+    currentKyc.value = null;
+    currentKycStatus.value = 'not_submitted';
+    hasExistingKyc.value = false;
     isEditing.value = true;
     clearForm();
     _prefillBasicUser();

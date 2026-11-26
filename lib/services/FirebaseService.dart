@@ -39,7 +39,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
       const channel = AndroidNotificationChannel(
         'moneyara_urgent_heads_up_v3',
-        'Moneyara Notifications',
+        'NM Research Partner Notifications',
         description:
             'Real-time compliance alerts, KYC/MITC updates, and trade advisories.',
         importance: Importance.max,
@@ -53,7 +53,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
           ?.createNotificationChannel(channel);
 
       final title =
-          message.data['title'] ?? message.data['subject'] ?? 'Moneyara Alert';
+          message.data['title'] ?? message.data['subject'] ?? 'NM Research Partner Alert';
       final body = message.data['body'] ??
           message.data['message'] ??
           message.data['text'] ??
@@ -66,7 +66,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
           channelDescription: channel.description,
           importance: Importance.max,
           priority: Priority.max,
-          ticker: 'Moneyara Alert',
+          ticker: 'NM Research Partner Alert',
           category: AndroidNotificationCategory.message,
           visibility: NotificationVisibility.public,
           icon: 'ic_stat_moneyara',
@@ -100,7 +100,7 @@ class FirebaseService {
 
   static const AndroidNotificationChannel _channel = AndroidNotificationChannel(
     'moneyara_urgent_heads_up_v3',
-    'Moneyara Notifications',
+    'NM Research Partner Notifications',
     description:
         'Real-time compliance alerts, KYC/MITC updates, and trade advisories.',
     importance: Importance.max,
@@ -346,7 +346,7 @@ class FirebaseService {
     final title = message.notification?.title ??
         message.data['title'] ??
         message.data['subject'] ??
-        'Moneyara Alert';
+        'NM Research Partner Alert';
     final body = message.notification?.body ??
         message.data['body'] ??
         message.data['message'] ??
@@ -359,7 +359,7 @@ class FirebaseService {
       channelDescription: _channel.description,
       importance: Importance.max,
       priority: Priority.max,
-      ticker: 'Moneyara Alert',
+      ticker: 'NM Research Partner Alert',
       category: AndroidNotificationCategory.message,
       visibility: NotificationVisibility.public,
       icon: 'ic_stat_moneyara',
@@ -369,7 +369,7 @@ class FirebaseService {
       styleInformation: BigTextStyleInformation(
         body,
         contentTitle: title,
-        summaryText: 'Moneyara',
+        summaryText: 'NM Research Partner',
       ),
     );
 
@@ -398,7 +398,7 @@ class FirebaseService {
     try {
       final title = message.notification?.title ??
           message.data['title'] ??
-          'Moneyara Alert';
+          'NM Research Partner Alert';
       final body = message.notification?.body ??
           message.data['body'] ??
           message.data['message'] ??

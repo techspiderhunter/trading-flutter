@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Signature Trading Brand Logo Pill Badge
+/// Signature NM Brand Logo Pill Badge
 class TradingPillBadge extends StatelessWidget {
   final double height;
   final String title;
@@ -8,45 +8,15 @@ class TradingPillBadge extends StatelessWidget {
   const TradingPillBadge({
     super.key,
     this.height = 48,
-    this.title = 'Trading',
+    this.title = 'NM Research Partner',
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
-      decoration: BoxDecoration(
-        color: const Color(0xFF6554D9),
-        borderRadius: BorderRadius.circular(28),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF6554D9).withValues(alpha: 0.35),
-            blurRadius: 16,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(
-            Icons.trending_up_rounded,
-            color: Colors.white,
-            size: 26,
-          ),
-          const SizedBox(width: 8),
-          Text(
-            title,
-            style: const TextStyle(
-              fontFamily: 'DeskSans',
-              fontSize: 22,
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
-              letterSpacing: -0.4,
-            ),
-          ),
-        ],
-      ),
+    return Image.asset(
+      'assets/system/logo.png',
+      height: height,
+      fit: BoxFit.contain,
     );
   }
 }
@@ -54,7 +24,7 @@ class TradingPillBadge extends StatelessWidget {
 /// Backward compatibility alias
 typedef FinwiseLogoBadge = TradingPillBadge;
 
-/// Compact Trading Emblem for AppBars & Headers
+/// Compact NM Logo Emblem for AppBars & Headers
 class TradingLogoBadge extends StatelessWidget {
   final double size;
 
@@ -65,22 +35,24 @@ class TradingLogoBadge extends StatelessWidget {
     return Container(
       width: size,
       height: size,
+      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: const Color(0xFF6554D9),
-        borderRadius: BorderRadius.circular(size * 0.28),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(size * 0.25),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF6554D9).withValues(alpha: 0.32),
-            blurRadius: 8,
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 6,
             offset: const Offset(0, 2),
           ),
         ],
       ),
       child: Center(
-        child: Icon(
-          Icons.trending_up_rounded,
-          color: Colors.white,
-          size: size * 0.6,
+        child: Image.asset(
+          'assets/system/logo_icon.png',
+          width: size,
+          height: size,
+          fit: BoxFit.contain,
         ),
       ),
     );
@@ -91,7 +63,7 @@ class TradingLogoBadge extends StatelessWidget {
 typedef MoneyaraLogoBadge = TradingLogoBadge;
 typedef MoneyViaLogoBadge = TradingLogoBadge;
 
-/// Full Trading Brand Logo with Icon + Bold Logotype
+/// Full NM Research Partner Brand Logo
 class TradingBrandLogo extends StatelessWidget {
   final double iconSize;
   final double fontSize;
@@ -103,58 +75,26 @@ class TradingBrandLogo extends StatelessWidget {
     this.iconSize = 44,
     this.fontSize = 26,
     this.showSubtitle = true,
-    this.subtitle = 'RESEARCH DESK',
+    this.subtitle = 'PRIVATE LIMITED',
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TradingLogoBadge(size: iconSize),
-            const SizedBox(width: 12),
-            Text(
-              'Trading',
-              style: TextStyle(
-                fontFamily: 'DeskSans',
-                fontSize: fontSize,
-                fontWeight: FontWeight.w700,
-                color: const Color(0xFF192542),
-                letterSpacing: -0.5,
-              ),
-            ),
-          ],
-        ),
-        if (showSubtitle) ...[
-          const SizedBox(height: 5),
-          Text(
-            subtitle,
-            style: const TextStyle(
-              fontFamily: 'DeskSans',
-              fontSize: 9.5,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFF6554D9),
-              letterSpacing: 2.2,
-            ),
-          ),
-        ],
-      ],
+    return Image.asset(
+      'assets/system/logo.png',
+      width: iconSize * 4.5,
+      fit: BoxFit.contain,
     );
   }
 }
 
-/// Brand Logo Widget for Splash & Auth Screens (Renders Trading)
-class MoneyaraLogo extends StatelessWidget {
+/// Brand Logo Widget for Splash & Auth Screens
+class NMResearchPartnerLogo extends StatelessWidget {
   final double size;
   final bool showText;
   final double textSize;
 
-  const MoneyaraLogo({
+  const NMResearchPartnerLogo({
     super.key,
     this.size = 90,
     this.showText = false,
@@ -163,14 +103,14 @@ class MoneyaraLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const TradingBrandLogo(
-      iconSize: 56,
-      fontSize: 32,
-      showSubtitle: true,
-      subtitle: 'RESEARCH DESK',
+    return Image.asset(
+      'assets/system/logo.png',
+      width: size * 2.6,
+      fit: BoxFit.contain,
     );
   }
 }
 
-/// Backward compatibility alias for MoneyaraLogo
-typedef MoneyViaLogo = MoneyaraLogo;
+/// Backward compatibility aliases
+typedef MoneyaraLogo = NMResearchPartnerLogo;
+typedef MoneyViaLogo = NMResearchPartnerLogo;

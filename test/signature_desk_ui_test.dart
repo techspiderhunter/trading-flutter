@@ -431,7 +431,7 @@ void main() {
       c.selectedTab.value = 1;
       c.notifications.add(NotificationModel.fromJson({
         'id': 'welcome',
-        'title': 'Welcome to Moneyara Research!',
+        'title': 'Welcome to NM Research Partner!',
         'message':
             'Your trading account has been registered successfully. Please submit your KYC to activate advisory channels.',
         'type': 'welcome',
@@ -443,7 +443,7 @@ void main() {
       expect(card, findsOneWidget);
       expect(
           find.descendant(
-              of: card, matching: find.text('Welcome to Moneyara Research!')),
+              of: card, matching: find.text('Welcome to NM Research Partner!')),
           findsOneWidget);
       expect(
           find.descendant(

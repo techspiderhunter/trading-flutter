@@ -20,19 +20,19 @@ void main() async {
       log("⚠️ FirebaseService init timeout/bypass: $e");
     }
 
-    runApp(const MoneyaraApp());
+    runApp(const NMResearchPartnerApp());
   }, (error, stackTrace) {
     log("🔥 Static App Error: $error", error: error, stackTrace: stackTrace);
   });
 }
 
-class MoneyaraApp extends StatelessWidget {
-  const MoneyaraApp({super.key});
+class NMResearchPartnerApp extends StatelessWidget {
+  const NMResearchPartnerApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Trading',
+      title: 'NM Research Partner',
       debugShowCheckedModeBanner: false,
       theme: lightTheme(),
       initialRoute: SplashRoutes.splashIndex,
@@ -41,4 +41,5 @@ class MoneyaraApp extends StatelessWidget {
   }
 }
 
-typedef MoneyViaApp = MoneyaraApp;
+typedef MoneyaraApp = NMResearchPartnerApp;
+typedef MoneyViaApp = NMResearchPartnerApp;

@@ -1,9 +1,8 @@
-import 'dart:io';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../includes/Storage.dart';
 import '../../../models/UserModel.dart';
 import '../../../models/KycModel.dart';
@@ -294,7 +293,7 @@ class MitcController extends GetxController {
           margin: const EdgeInsets.all(16),
           borderRadius: 12,
           duration: const Duration(seconds: 4),
-          icon: Icon(Icons.check_circle_rounded, color: AppColors.primary),
+          icon: const Icon(Icons.check_circle_rounded, color: AppColors.primary),
         );
       } else {
         _showError('Submission Failed', res.firstErrorMessage);
@@ -306,6 +305,7 @@ class MitcController extends GetxController {
     }
   }
 
+  /// Download / Open official MITC Agreement PDF via native Download Manager / PDF Viewer
   Future<void> downloadAgreementPdf() async {
     final profile = mitcProfile.value;
     if (profile == null) {
@@ -317,90 +317,67 @@ class MitcController extends GetxController {
       isDownloadingPdf.value = true;
       downloadProgress.value = 0.0;
 
-      // 1. Fetch official download metadata from backend API
-      final res = await _mitcRequest.getAgreementDownloadInfo();
-      String? downloadUrl = res.data?['download_url']?.toString() ??
-          res.data?['signed_download_url']?.toString();
-      String fileName = res.data?['file_name']?.toString() ??
-          'MITC_Agreement_${profile.fullName.replaceAll(' ', '_')}_${profile.id ?? 1}.pdf';
+      // 1. Fetch fresh signed download URL from backend API
+      String? targetUrl;
+      try {
+        final res = await _mitcRequest.getAgreementDownloadInfo();
+        targetUrl = res.data?['download_url']?.toString() ??
+            res.data?['signed_download_url']?.toString();
+      } catch (_) {}
 
-      if (downloadUrl == null || downloadUrl.isEmpty) {
-        downloadUrl = profile.securePdfUrl;
+      // Fallback to normalized profile download url
+      if (targetUrl == null || targetUrl.isEmpty) {
+        targetUrl = profile.secureDownloadUrl.isNotEmpty
+            ? profile.secureDownloadUrl
+            : profile.securePdfUrl;
       }
 
-      final returnedPreviewUrl = res.data?['preview_url']?.toString() ??
-          res.data?['signed_preview_url']?.toString();
-
-      // 2. Resolve destination path on device
-      Directory? targetDir;
-      if (Platform.isAndroid) {
-        final publicDownload = Directory('/storage/emulated/0/Download');
-        if (await publicDownload.exists()) {
-          targetDir = publicDownload;
-        }
+      if (targetUrl.isEmpty) {
+        _showError('Unavailable', 'Download link is currently unavailable.');
+        return;
       }
-      targetDir ??= Directory.systemTemp;
 
-      final savePath = '${targetDir.path}/$fileName';
+      // 2. Always copy link to clipboard for user convenience
+      await Clipboard.setData(ClipboardData(text: targetUrl));
 
-      // 3. Download the PDF file using Dio with authorization
-      final dio = Dio();
-      final token = LocalStorage.getToken();
-      final options = Options(
-        headers: {
-          if (!downloadUrl.contains('api/admin') &&
-              token != null &&
-              token.isNotEmpty)
-            'Authorization': 'Bearer $token',
-        },
-        responseType: ResponseType.bytes,
-      );
+      // 3. Delegate to Android / iOS native download manager & browser (which downloads the complete PDF)
+      final uri = Uri.parse(targetUrl);
+      bool launched = false;
 
-      final response = await dio.get(
-        downloadUrl,
-        options: options,
-        onReceiveProgress: (received, total) {
-          if (total > 0) {
-            downloadProgress.value = received / total;
-          }
-        },
-      );
+      if (await canLaunchUrl(uri)) {
+        launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+      }
 
-      final file = File(savePath);
-      await file.writeAsBytes(response.data as List<int>);
-
-      // 4. Also copy download URL to clipboard for user convenience
-      Clipboard.setData(ClipboardData(text: downloadUrl));
+      if (!launched) {
+        launched = await launchUrl(uri, mode: LaunchMode.platformDefault);
+      }
 
       Get.snackbar(
-        'Agreement Downloaded!',
-        'Saved to ${targetDir.path.contains('Download') ? 'Downloads' : 'Device Storage'}: $fileName',
+        'Downloading Agreement PDF',
+        'Opening in download manager / PDF viewer...',
         snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: const Color(0xFF10B981),
+        backgroundColor: const Color(0xFF059669),
         colorText: Colors.white,
         margin: const EdgeInsets.all(16),
         borderRadius: 12,
         duration: const Duration(seconds: 4),
-        icon: const Icon(Icons.download_done_rounded, color: Colors.white, size: 28),
+        icon: const Icon(Icons.download_rounded, color: Colors.white, size: 28),
       );
-
-      // Automatically preview agreement as soon as download completes
-      Future.delayed(const Duration(milliseconds: 350), () {
-        showAgreementPreview(previewUrlOverride: returnedPreviewUrl);
-      });
     } catch (e) {
-      // Fallback: copy direct URL to clipboard so user can open in browser
-      Clipboard.setData(ClipboardData(text: profile.securePdfUrl));
+      final fallbackUrl = profile.secureDownloadUrl.isNotEmpty
+          ? profile.secureDownloadUrl
+          : profile.securePdfUrl;
+      Clipboard.setData(ClipboardData(text: fallbackUrl));
       Get.snackbar(
-        'Direct Link Copied',
-        'Download link copied to clipboard. You can paste it into your browser to download.',
+        'Download Link Copied',
+        'Direct link copied to clipboard. Open in browser to download your agreement.',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.white,
         colorText: AppColors.textPrimary,
         margin: const EdgeInsets.all(16),
         borderRadius: 12,
         duration: const Duration(seconds: 4),
-        icon: Icon(Icons.link_rounded, color: AppColors.primary),
+        icon: const Icon(Icons.link_rounded, color: AppColors.primary),
       );
     } finally {
       isDownloadingPdf.value = false;
@@ -419,9 +396,6 @@ class MitcController extends GetxController {
       return;
     }
 
-    final ctx = context ?? Get.context;
-    if (ctx == null) return;
-
     String? targetPreviewUrl = previewUrlOverride ?? profile.previewUrl;
 
     if (targetPreviewUrl == null || targetPreviewUrl.isEmpty) {
@@ -439,6 +413,10 @@ class MitcController extends GetxController {
       final sep = targetPreviewUrl.contains('?') ? '&' : '?';
       targetPreviewUrl = '$targetPreviewUrl${sep}preview=1';
     }
+
+    if (context != null && !context.mounted) return;
+    final ctx = context ?? Get.context;
+    if (ctx == null) return;
 
     MitcAgreementPreviewModal.show(
       ctx,
@@ -473,4 +451,3 @@ class MitcController extends GetxController {
     super.onClose();
   }
 }
-

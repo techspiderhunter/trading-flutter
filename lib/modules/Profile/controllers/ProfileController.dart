@@ -264,7 +264,7 @@ class ProfileController extends GetxController {
           child: DeskSheetContent(
               title: 'Sign Out',
               subtitle:
-                  'Are you sure you want to sign out from your Moneyara account?',
+                  'Are you sure you want to sign out from your NM Research Partner account?',
               children: [
                 DeskButton(
                     label: 'Sign Out',

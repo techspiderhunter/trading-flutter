@@ -1,4 +1,3 @@
-import '../../../widgets/DeskUi.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../themes/colors.dart';
@@ -10,9 +9,9 @@ import 'widgets/KycInitialLockCard.dart';
 import 'widgets/KycUnderReviewCard.dart';
 import '../../Notification/views/NotificationView.dart';
 import 'widgets/ActiveMessagesFeed.dart';
+import '../../../widgets/DeskUi.dart';
 
-/// Highly Optimized, Responsive Dashboard View for Trading App
-/// Fixed card overflow issues & guaranteed Profile navigation to Settings.
+/// Highly Optimized, Responsive Dashboard View matching the exact original design
 class DashboardView extends StatelessWidget {
   const DashboardView({super.key});
 
@@ -27,49 +26,116 @@ class DashboardView extends StatelessWidget {
         : Get.put(MainNavController());
 
     return Scaffold(
-      backgroundColor: AppColors.scaffoldBackground,
-      // 1. Sleek, Modern App Header
-      appBar: DeskAppBar(group: 'Dashboard', dashboard: true, actions: [
-        Obx(() {
-          final unread = dashboardController.unreadNotificationsCount.value;
-          return Container(
+      backgroundColor: const Color(0xFFF8FAFC),
+      // 1. Sleek, Modern App Header matching screenshot exactly
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(68),
+        child: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          toolbarHeight: 68,
+          automaticallyImplyLeading: false,
+          titleSpacing: 20,
+          title: Row(
+            children: [
+              Image.asset(
+                'assets/system/logo_icon.png',
+                width: 42,
+                height: 42,
+                fit: BoxFit.contain,
+              ),
+              const SizedBox(width: 12),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  Text(
+                    'NM RESEARCH PARTNER',
+                    style: TextStyle(
+                      fontFamily: 'DeskSans',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xFF0D253A),
+                      letterSpacing: 0.2,
+                    ),
+                  ),
+                  SizedBox(height: 1),
+                  Text(
+                    'PRIVATE LIMITED · DASHBOARD',
+                    style: TextStyle(
+                      fontFamily: 'DeskSans',
+                      fontSize: 8.5,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFFC59B27),
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          actions: [
+            Obx(() {
+              final unread = dashboardController.unreadNotificationsCount.value;
+              return Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEFF2F8),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    IconButton(
+                      icon: const Icon(
+                        Icons.notifications_none_rounded,
+                        size: 22,
+                        color: Color(0xFF0F1E36),
+                      ),
+                      tooltip: 'Notifications & Alerts',
+                      onPressed: () => NotificationView.open(context),
+                    ),
+                    if (unread > 0)
+                      Positioned(
+                        top: 8,
+                        right: 9,
+                        child: Container(
+                          width: 7,
+                          height: 7,
+                          decoration: const BoxDecoration(
+                            color: Color(0xFFFF4B4B),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              );
+            }),
+            const SizedBox(width: 10),
+            Container(
               width: 44,
               height: 44,
-              margin: const EdgeInsets.symmetric(vertical: 12),
               decoration: BoxDecoration(
-                  color: const Color(0xFFF1F3FA),
-                  borderRadius: BorderRadius.circular(15)),
-              child: Stack(alignment: Alignment.center, children: [
-                IconButton(
-                    icon: const Icon(Icons.notifications_none_rounded,
-                        size: 22, color: AppColors.textHeading),
-                    tooltip: 'Notifications & Alerts',
-                    onPressed: () => NotificationView.open(context)),
-                if (unread > 0)
-                  Positioned(
-                      top: 6,
-                      right: 7,
-                      child: Container(
-                          width: 6,
-                          height: 6,
-                          decoration: const BoxDecoration(
-                              color: Color(0xFFD75C7C),
-                              shape: BoxShape.circle))),
-              ]));
-        }),
-        const SizedBox(width: 9),
-        Container(
-            width: 44,
-            height: 44,
-            margin: const EdgeInsets.symmetric(vertical: 12),
-            decoration: BoxDecoration(
-                color: AppColors.primaryLight,
-                borderRadius: BorderRadius.circular(15)),
-            child: IconButton(
-                icon: const Icon(Icons.settings_outlined, size: 23),
+                color: const Color(0xFFEFF2F8),
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: IconButton(
+                icon: const Icon(
+                  Icons.settings_outlined,
+                  size: 22,
+                  color: Color(0xFF0F1E36),
+                ),
                 tooltip: 'Setting',
-                onPressed: () => Get.toNamed(SettingRoutes.setting))),
-      ]),
+                onPressed: () => Get.toNamed(SettingRoutes.setting),
+              ),
+            ),
+            const SizedBox(width: 20),
+          ],
+        ),
+      ),
 
       // 2. Responsive Body with Refresh Indicator
       body: SafeArea(
@@ -78,11 +144,11 @@ class DashboardView extends StatelessWidget {
             await dashboardController.syncDashboard();
             await mainNavController.syncUserAndKyc();
           },
-          color: AppColors.primary,
+          color: const Color(0xFF6366F1),
           child: LayoutBuilder(
             builder: (context, constraints) {
               final isWide = constraints.maxWidth > 700;
-              final hPadding = isWide ? 32.0 : 24.0;
+              final hPadding = isWide ? 32.0 : 20.0;
 
               return SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(
@@ -94,17 +160,17 @@ class DashboardView extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: hPadding,
-                        vertical: 22,
+                        vertical: 18,
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          // Optimized, Non-Breaking Welcome Header Card
+                          // 1. Exact Pastel Gradient Welcome Banner Card
                           _buildOptimizedHeaderCard(dashboardController),
 
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 18),
 
-                          // Dynamic KYC Status Cards / Messages Feed
+                          // 2. Dynamic KYC Status Cards / Messages Feed
                           Obx(() {
                             final isLoading =
                                 dashboardController.isLoading.value;
@@ -123,12 +189,12 @@ class DashboardView extends StatelessWidget {
                                 alignment: Alignment.center,
                                 child: const CircularProgressIndicator(
                                   strokeWidth: 2.5,
-                                  color: AppColors.primary,
+                                  color: Color(0xFF6366F1),
                                 ),
                               );
                             }
 
-                            // 2. Verified State -> Shows Real Messages Feed
+                            // 2. Verified State -> Shows Real Messages Feed with Section Heading
                             final bool isVerifiedState =
                                 (kyc != null && kyc.isVerified) ||
                                     status == 'verified' ||
@@ -162,29 +228,13 @@ class DashboardView extends StatelessWidget {
 
                             if (isPendingState) {
                               return KycUnderReviewCard(
-                                  referenceId:
-                                      dashboardController.referenceId.value);
+                                referenceId:
+                                    dashboardController.referenceId.value,
+                              );
                             }
 
                             // 5. Default / Fallback: Lock Card with "Start KYC" button
                             return const KycInitialLockCard();
-                          }),
-                          Obx(() {
-                            if (dashboardController.isExpired.value) {
-                              return const SizedBox.shrink();
-                            }
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                const SizedBox(height: 18),
-                                const DeskSection('Research Desk'),
-                                Text('Official communications · Secure access',
-                                    style: deskText.copyWith(
-                                        fontSize: 11,
-                                        color: AppColors.textSecondary)),
-                                const SizedBox(height: 24),
-                              ],
-                            );
                           }),
                         ],
                       ),
@@ -199,18 +249,135 @@ class DashboardView extends StatelessWidget {
     );
   }
 
-  /// Optimized, Non-Breaking Welcome Banner Card
-  /// Organizes title & status vertically to prevent any overflow on small screens.
+  /// Exact Gradient Welcome Banner Card with 3D Graphic
   Widget _buildOptimizedHeaderCard(DashboardController dashboardController) {
     return Obx(() {
-      final name = dashboardController.clientName.value.isNotEmpty &&
-              dashboardController.clientName.value != 'Client'
-          ? dashboardController.clientName.value
+      final rawName = dashboardController.clientName.value.trim();
+      final name = (rawName.isNotEmpty && rawName != 'Client')
+          ? rawName
           : 'Trader';
-      return DeskHero(
-          title: 'Welcome back, $name.',
-          subtitle: 'Your market research & regulatory portal.');
+      final displayName = name.endsWith('.') ? name : '$name.';
+
+      return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(22),
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFFEFF5FF),
+              Color(0xFFF5EFFF),
+              Color(0xFFDFE9FF),
+            ],
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF6366F1).withValues(alpha: 0.06),
+              blurRadius: 16,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(22),
+          child: Stack(
+            children: [
+              // Right side 3D ascending chart & arrow illustration
+              Positioned(
+                right: 0,
+                top: 0,
+                bottom: 0,
+                child: Image.asset(
+                  'assets/placeholders/dashboard_chart_graphic.png',
+                  fit: BoxFit.contain,
+                  alignment: Alignment.centerRight,
+                ),
+              ),
+
+              // Left side text greeting & description
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 22, 120, 22),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Text('👋', style: TextStyle(fontSize: 15)),
+                        SizedBox(width: 6),
+                        Text(
+                          'Welcome back,',
+                          style: TextStyle(
+                            fontFamily: 'DeskSans',
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFF475569),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      displayName,
+                      style: const TextStyle(
+                        fontFamily: 'DeskSans',
+                        fontSize: 22,
+                        fontWeight: FontWeight.w800,
+                        color: Color(0xFF0F1E36),
+                        letterSpacing: -0.3,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Your market research & regulatory portal.',
+                      style: TextStyle(
+                        fontFamily: 'DeskSans',
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.w400,
+                        color: Color(0xFF64748B),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
     });
+  }
+
+  /// Section Header: Purple pill + "Messages & Advisories"
+  Widget _buildSectionHeader() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Row(
+        children: [
+          Container(
+            width: 4,
+            height: 19,
+            decoration: BoxDecoration(
+              color: const Color(0xFF818CF8),
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          const SizedBox(width: 10),
+          const Text(
+            'Messages & Advisories',
+            style: TextStyle(
+              fontFamily: 'DeskSans',
+              fontSize: 19,
+              fontWeight: FontWeight.w800,
+              color: Color(0xFF0F1E36),
+              letterSpacing: -0.2,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildVerifiedActiveCard(String clientName) {
@@ -218,28 +385,18 @@ class DashboardView extends StatelessWidget {
         ? Get.find<DashboardController>()
         : Get.put(DashboardController());
 
-    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-      Obx(() {
-        if (dash.isExpired.value) {
-          return const SizedBox.shrink();
-        }
-        return const Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // DeskNote(
-            //     title: 'Verified',
-            //     description:
-            //         'Your identity is verified. Your research feed is ready.',
-            //     color: AppColors.success,
-            //     icon: Icons.check_rounded),
-            SizedBox(height: 18),
-            DeskSection('Messages & Advisories'),
-            SizedBox(height: 8),
-          ],
-        );
-      }),
-      ActiveMessagesFeed(clientName: clientName),
-    ]);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Obx(() {
+          if (dash.isExpired.value) {
+            return const SizedBox.shrink();
+          }
+          return _buildSectionHeader();
+        }),
+        ActiveMessagesFeed(clientName: clientName),
+      ],
+    );
   }
 
   Widget _buildRejectedCard(String? reason) {
@@ -247,16 +404,21 @@ class DashboardView extends StatelessWidget {
         ? reason
         : 'Identity proofs were incomplete or unreadable.';
 
-    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-      DeskNote(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        DeskNote(
           title: 'Action Needed',
           description: displayReason,
           color: AppColors.error,
-          icon: Icons.priority_high_rounded),
-      const SizedBox(height: 18),
-      DeskButton(
+          icon: Icons.priority_high_rounded,
+        ),
+        const SizedBox(height: 18),
+        DeskButton(
           label: 'Re-submit KYC Documents',
-          onPressed: () => Get.toNamed(KycRoutes.kycIndex)),
-    ]);
+          onPressed: () => Get.toNamed(KycRoutes.kycIndex),
+        ),
+      ],
+    );
   }
 }

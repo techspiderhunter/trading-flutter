@@ -121,7 +121,7 @@ class MessageAttachmentViewerModal extends StatelessWidget {
                                       strokeWidth: 2.5,
                                       valueColor:
                                           const AlwaysStoppedAnimation<Color>(
-                                        Color(0xFF5342C3),
+                                        AppColors.primary,
                                       ),
                                     ),
                                     const SizedBox(height: 14),

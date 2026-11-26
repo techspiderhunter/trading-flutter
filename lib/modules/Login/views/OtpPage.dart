@@ -1,4 +1,5 @@
 import '../../../widgets/DeskUi.dart';
+import '../../../themes/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -13,7 +14,7 @@ class OtpPage extends StatefulWidget {
 }
 
 class _OtpPageState extends State<OtpPage> {
-  static const Color primaryBlue = Color(0xFF6554D9);
+  static const Color primaryBlue = AppColors.primary;
   static const Color deepNavy = Color(0xFF192542);
 
   late final OtpController controller;

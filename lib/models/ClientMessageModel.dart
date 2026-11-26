@@ -112,7 +112,7 @@ class ClientMessageModel {
           ? json['id']
           : int.tryParse(json['id']?.toString() ?? '0') ?? 0,
       groupId: json['group_id']?.toString(),
-      sender: json['sender']?.toString() ?? 'Moneyara Research',
+      sender: json['sender']?.toString() ?? 'NM Research Partner',
       subject: json['subject']?.toString() ?? 'Market Advisory Bulletin',
       preview: rawPreview,
       message: rawMessage,
@@ -146,7 +146,7 @@ class ClientMessageModel {
           ? map['id']
           : int.tryParse(map['id']?.toString() ?? '0') ?? 0,
       groupId: map['group_id']?.toString(),
-      sender: map['sender']?.toString() ?? 'Moneyara Research',
+      sender: map['sender']?.toString() ?? 'NM Research Partner',
       subject: map['subject']?.toString() ?? 'Market Advisory Bulletin',
       preview: map['preview']?.toString(),
       message: map['message']?.toString() ?? '',

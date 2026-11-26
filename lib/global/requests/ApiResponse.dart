@@ -4,6 +4,8 @@ class ApiResponse<T> {
   final T? data;
   final Map<String, dynamic>? errors;
   final int? statusCode;
+  final dynamic rawBody;
+  final Map<String, dynamic>? rawJson;
 
   ApiResponse({
     required this.success,
@@ -11,6 +13,8 @@ class ApiResponse<T> {
     this.data,
     this.errors,
     this.statusCode,
+    this.rawBody,
+    this.rawJson,
   });
 
   /// Extracts the first human-readable validation error message

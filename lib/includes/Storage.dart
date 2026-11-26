@@ -13,6 +13,7 @@ class LocalStorage {
   static const String mitcDataKey = 'mitc_data';
   static const String customBaseUrlKey = 'custom_base_url';
   static const String notificationDeviceIdKey = 'notification_device_id';
+  static const String savedOtpKey = 'saved_otp';
 
   static late SharedPreferences _prefs;
 
@@ -39,6 +40,12 @@ class LocalStorage {
     final token = getToken();
     return token != null && token.trim().isNotEmpty;
   }
+
+  static String? getSavedOtp() => read(savedOtpKey);
+
+  static Future<bool> saveOtp(String otp) => write(savedOtpKey, otp);
+
+  static Future<bool> clearSavedOtp() => remove(savedOtpKey);
 
   static Future<void> clearAuth() async {
     await remove(tokenKey);

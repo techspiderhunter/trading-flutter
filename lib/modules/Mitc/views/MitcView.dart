@@ -453,7 +453,7 @@ class MitcView extends StatelessWidget {
                         const SizedBox(width: 10),
                         const Expanded(
                           child: Text(
-                            'I accept the Moneyara SEBI regulatory compliance policies & conditions.',
+                            'I accept the NM Research Partner SEBI regulatory compliance policies & conditions.',
                             style: TextStyle(
                                 fontFamily: 'DeskSans',
                                 fontSize: 12,

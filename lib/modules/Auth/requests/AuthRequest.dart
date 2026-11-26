@@ -43,12 +43,19 @@ class AuthRequest {
         final data =
             json is Map ? Map<String, dynamic>.from(json) : <String, dynamic>{};
 
-        final requiresOtp = data['requires_otp'] == true;
-        if (!requiresOtp && data['token'] != null) {
+        if (data['token'] != null && data['token'].toString().isNotEmpty) {
           final token = data['token'].toString();
           LocalStorage.saveToken(token);
-          final user = UserModel.fromJson(data);
-          LocalStorage.write(LocalStorage.userProfileKey, user.toJsonString());
+          try {
+            final user = UserModel.fromJson(data);
+            LocalStorage.write(LocalStorage.userProfileKey, user.toJsonString());
+          } catch (_) {}
+        }
+
+        // Save OTP to LocalStorage if present in response
+        final foundOtp = extractOtpFromData(data);
+        if (foundOtp.isNotEmpty) {
+          LocalStorage.saveOtp(foundOtp);
         }
         return data;
       },
@@ -66,7 +73,11 @@ class AuthRequest {
             json is Map ? Map<String, dynamic>.from(json) : <String, dynamic>{};
         final user = UserModel.fromJson(data);
 
-        final token = data['token']?.toString();
+        final rawToken = data['token'] ??
+            data['access_token'] ??
+            data['plainTextToken'] ??
+            (data['user'] is Map ? data['user']['token'] : null);
+        final token = rawToken?.toString();
         if (token != null && token.isNotEmpty) {
           LocalStorage.saveToken(token);
         }
@@ -78,13 +89,60 @@ class AuthRequest {
   }
 
   /// Resend OTP: POST /api/client/resend-otp
-  Future<ApiResponse<bool>> resendOtp(String email) async {
-    final response = await _network.post<bool>(
+  Future<ApiResponse<Map<String, dynamic>>> resendOtp(String email) async {
+    final response = await _network.post<Map<String, dynamic>>(
       '/api/client/resend-otp',
       data: {'email': email.trim().toLowerCase()},
-      fromJson: (_) => true,
+      fromJson: (json) {
+        final data =
+            json is Map ? Map<String, dynamic>.from(json) : <String, dynamic>{};
+        final foundOtp = extractOtpFromData(data);
+        if (foundOtp.isNotEmpty) {
+          LocalStorage.saveOtp(foundOtp);
+        }
+        return data;
+      },
     );
     return response;
+  }
+
+  /// Recursively extracts OTP from any map, list, or primitive
+  static String extractOtpFromData(dynamic value) {
+    if (value is Map) {
+      for (final key in [
+        'otp',
+        'code',
+        'otp_code',
+        'otpcode',
+        'verification_code',
+        'verify_code',
+        'pin'
+      ]) {
+        if (value.containsKey(key) && value[key] != null) {
+          final digits = value[key].toString().replaceAll(RegExp(r'\D'), '');
+          if (digits.length >= 4 && digits.length <= 6) return digits;
+        }
+      }
+      if (value['data'] != null) {
+        final nested = extractOtpFromData(value['data']);
+        if (nested.isNotEmpty) return nested;
+      }
+      for (final v in value.values) {
+        if (v is Map || v is List) {
+          final nested = extractOtpFromData(v);
+          if (nested.isNotEmpty) return nested;
+        }
+      }
+    } else if (value is List) {
+      for (final item in value) {
+        final nested = extractOtpFromData(item);
+        if (nested.isNotEmpty) return nested;
+      }
+    } else if (value is String || value is num) {
+      final digits = value.toString().replaceAll(RegExp(r'\D'), '');
+      if (digits.length >= 4 && digits.length <= 6) return digits;
+    }
+    return '';
   }
 
   /// Send Password Reset Link Email: POST /api/forgot-password

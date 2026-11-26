@@ -93,10 +93,13 @@ dev_dependencies:
 flutter_launcher_icons:
   android: "launcher"
   ios: true
-  image_path: "assets/system/logo.png"
-  adaptive_icon_background: "#051532"
-  adaptive_icon_foreground: "assets/system/logo.png"
-
+  remove_alpha_ios: true
+  image_path: "assets/system/launcher-icon.png"
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/system/launcher-icon.png"
+  web:
+    generate: true
+    image_path: "assets/system/launcher-icon.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -154,4 +157,3 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
-

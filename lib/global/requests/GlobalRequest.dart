@@ -45,7 +45,7 @@ class GlobalRequest {
     );
   }
 
-  static String get defaultBaseUrl => 'https://moneyararesearch.in/';
+  static String get defaultBaseUrl => 'https://moneyvia.techspiderhunter.com/';
 
   static String get currentBaseUrl {
     final custom = LocalStorage.read(LocalStorage.customBaseUrlKey);
@@ -186,14 +186,27 @@ class GlobalRequest {
   ) {
     final body = response.data;
     if (body is Map) {
-      final message = body['message']?.toString() ?? 'Operation completed successfully.';
-      final rawData = body['data'] ?? body;
+      final mapBody = Map<String, dynamic>.from(body);
+      final message = mapBody['message']?.toString() ?? 'Operation completed successfully.';
+      final rawData = mapBody['data'] ?? mapBody;
+
+      // Merge root-level attributes (like otp, code, token) into rawData if rawData is a Map
+      dynamic combinedData = rawData;
+      if (rawData is Map) {
+        final merged = Map<String, dynamic>.from(rawData);
+        mapBody.forEach((key, val) {
+          if (key != 'data' && !merged.containsKey(key)) {
+            merged[key] = val;
+          }
+        });
+        combinedData = merged;
+      }
 
       T? parsedData;
       if (fromJson != null) {
-        parsedData = fromJson(rawData);
-      } else if (rawData is T) {
-        parsedData = rawData;
+        parsedData = fromJson(combinedData);
+      } else if (combinedData is T) {
+        parsedData = combinedData;
       }
 
       return ApiResponse<T>(
@@ -201,6 +214,8 @@ class GlobalRequest {
         message: message,
         data: parsedData,
         statusCode: response.statusCode,
+        rawBody: body,
+        rawJson: mapBody,
       );
     }
 
@@ -209,6 +224,8 @@ class GlobalRequest {
       message: 'Success',
       data: fromJson != null ? fromJson(body) : (body is T ? body : null),
       statusCode: response.statusCode,
+      rawBody: body,
+      rawJson: null,
     );
   }
 
@@ -248,6 +265,8 @@ class GlobalRequest {
           message: message,
           errors: errors,
           statusCode: response.statusCode,
+          rawBody: response.data,
+          rawJson: Map<String, dynamic>.from(data),
         );
       }
     }

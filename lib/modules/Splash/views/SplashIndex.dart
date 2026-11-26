@@ -65,37 +65,26 @@ class _SplashIndexState extends State<SplashIndex>
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Center(
-                                              child: Container(
-                                                  width: 100,
-                                                  height: 100,
-                                                  alignment: Alignment.center,
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                          shape: BoxShape
-                                                              .circle,
-                                                          color: AppColors
-                                                              .primary),
-                                                  child: Text(
-                                                      'T',
-                                                      style: deskText.copyWith(
-                                                          fontSize: 48,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          color:
-                                                              Colors.white)))),
-                                          const SizedBox(height: 30),
+                                              child: Image.asset(
+                                                'assets/system/logo.png',
+                                                width: 260,
+                                                fit: BoxFit.contain,
+                                              )),
+                                          const SizedBox(height: 24),
                                           Text('Research, with clarity.',
                                               textAlign: TextAlign.center,
                                               style: deskText.copyWith(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.w600)),
-                                          const SizedBox(height: 8),
-                                          Text('TRADING · RESEARCH DESK',
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: AppColors.textHeading)),
+                                          const SizedBox(height: 6),
+                                          Text('NM RESEARCH PARTNER PRIVATE LIMITED',
                                               textAlign: TextAlign.center,
                                               style: deskText.copyWith(
-                                                  fontSize: 12,
-                                                  color:
-                                                      AppColors.textSecondary)),
+                                                  fontSize: 11,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: const Color(0xFFC59B27),
+                                                  letterSpacing: 0.8)),
                                           const SizedBox(height: 40),
                                           const SizedBox(
                                               width: 180,

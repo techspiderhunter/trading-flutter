@@ -64,7 +64,7 @@ class ApiService {
     return _authRequest.verifyOtp(VerifyOtpParams(email: email, otp: otp));
   }
 
-  Future<ApiResponse<bool>> resendOtp({required String email}) {
+  Future<ApiResponse<Map<String, dynamic>>> resendOtp({required String email}) {
     return _authRequest.resendOtp(email);
   }
 

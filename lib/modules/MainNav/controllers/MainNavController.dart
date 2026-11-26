@@ -183,9 +183,9 @@ class MainNavController extends GetxController {
       0,
       SmsItem(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
-        sender: 'VM-MNYARA',
+        sender: 'VM-NMRP',
         message:
-            'Dear ${clientDisplayName}, your KYC documents have been submitted to Moneyara Research Desk. Tracking ID: #${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}',
+            'Dear ${clientDisplayName}, your KYC documents have been submitted to NM Research Partner Desk. Tracking ID: #${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}',
         time: 'Just now',
         status: 'Delivered',
       ),
@@ -245,7 +245,7 @@ class MainNavController extends GetxController {
       ),
       NotificationItem(
         id: '5',
-        title: 'Welcome to Moneyara Research Desk',
+        title: 'Welcome to NM Research Partner Desk',
         message:
             'Client Account initialized with compliance clearance gateway.',
         time: 'Today',
@@ -263,17 +263,17 @@ class MainNavController extends GetxController {
     smsList.assignAll([
       SmsItem(
         id: '1',
-        sender: 'VM-MNYARA',
+        sender: 'VM-NMRP',
         message:
-            'Moneyara: Welcome to Moneyara Research Desk. Complete your SEBI regulatory KYC to unlock equity advisory channels.',
+            'NM Research Partner: Welcome to NM Research Partner Desk. Complete your SEBI regulatory KYC to unlock equity advisory channels.',
         time: '10 mins ago',
         status: 'Delivered',
       ),
       SmsItem(
         id: '2',
-        sender: 'VM-MNYARA',
+        sender: 'VM-NMRP',
         message:
-            'Moneyara: Your one-time verification code is 4829. Valid for 10 minutes. Do not share your OTP with anyone.',
+            'NM Research Partner: Your one-time verification code is 4829. Valid for 10 minutes. Do not share your OTP with anyone.',
         time: '35 mins ago',
         status: 'Delivered',
       ),

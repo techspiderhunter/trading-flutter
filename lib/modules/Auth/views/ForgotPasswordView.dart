@@ -48,6 +48,16 @@ class ForgotPasswordView extends StatelessWidget {
                             : controller.sendForgotPassword),
                   ]
                 : [
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 4, bottom: 18),
+                        child: Image.asset(
+                          'assets/system/logo.png',
+                          height: 56,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
                     const DeskHero(
                         title: 'Let’s get you back.',
                         subtitle:

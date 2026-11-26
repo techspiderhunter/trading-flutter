@@ -85,35 +85,48 @@ class MitcModel {
     return 'MV-MITC-PENDING';
   }
 
-  String get secureSignatureUrl {
-    if (signatureUrl != null && signatureUrl!.isNotEmpty) {
-      return signatureUrl!;
+  /// Robust URL normalizer resolving baseUrl, relative paths, localhost fallbacks & auth tokens
+  static String _normalizeUrl(String? rawUrl, String defaultEndpointPath) {
+    String base = GlobalRequest.currentBaseUrl.trim();
+    if (base.endsWith('/')) {
+      base = base.substring(0, base.length - 1);
     }
-    final token = LocalStorage.getToken() ?? '';
-    final base = GlobalRequest.currentBaseUrl;
-    return '$base/api/client/mitc/document/signature?token=$token';
+
+    String url = (rawUrl ?? '').trim();
+    if (url.isEmpty || url.toLowerCase() == 'null') {
+      url = '$base$defaultEndpointPath';
+    } else if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      final path = url.startsWith('/') ? url : '/$url';
+      url = '$base$path';
+    } else if (url.contains('127.0.0.1:8000') ||
+        url.contains('localhost:8000') ||
+        url.contains('10.0.2.2:8000')) {
+      final uri = Uri.tryParse(url);
+      if (uri != null) {
+        final queryStr = uri.hasQuery ? '?${uri.query}' : '';
+        url = '$base${uri.path}$queryStr';
+      }
+    }
+
+    final token = LocalStorage.getToken();
+    if (token != null && token.isNotEmpty && !url.contains('token=')) {
+      final sep = url.contains('?') ? '&' : '?';
+      url = '$url${sep}token=$token';
+    }
+    return url;
   }
 
-  String get securePdfUrl {
-    if (agreementPdfUrl != null && agreementPdfUrl!.isNotEmpty) {
-      return agreementPdfUrl!;
-    }
-    if (agreementUrl != null && agreementUrl!.isNotEmpty) {
-      return agreementUrl!;
-    }
-    final token = LocalStorage.getToken() ?? '';
-    final base = GlobalRequest.currentBaseUrl;
-    return '$base/api/client/mitc/download-agreement?download=1&token=$token';
-  }
+  String get secureSignatureUrl =>
+      _normalizeUrl(signatureUrl, '/api/client/mitc/document/signature');
 
-  String get securePreviewUrl {
-    if (previewUrl != null && previewUrl!.isNotEmpty) {
-      return previewUrl!;
-    }
-    final token = LocalStorage.getToken() ?? '';
-    final base = GlobalRequest.currentBaseUrl;
-    return '$base/api/client/mitc/download-agreement?preview=1&token=$token';
-  }
+  String get secureDownloadUrl =>
+      _normalizeUrl(downloadUrl, '/api/client/mitc/download-agreement?download=1');
+
+  String get securePdfUrl =>
+      _normalizeUrl(agreementPdfUrl ?? downloadUrl, '/api/client/mitc/download-agreement?download=1');
+
+  String get securePreviewUrl =>
+      _normalizeUrl(previewUrl, '/api/client/mitc/download-agreement?preview=1');
 
   factory MitcModel.fromJson(Map<String, dynamic> json) {
     // If backend returns outer wrapper with 'profile' key

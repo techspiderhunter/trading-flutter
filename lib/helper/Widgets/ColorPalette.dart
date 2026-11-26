@@ -19,7 +19,7 @@ const Color kcDarkest = Color(0xFF191C1C);
 
 /// Theme colors
 // const Color kcPrimary = Color(0xffFF5850);
-const Color kcPrimary = Color(0xff2B2926);
+const Color kcPrimary = Color(0xFF022358);
 const Color kcSecondary = Color(0xFF3f3c39);
 const Color kcAccent = Color(0xffdddd2e);
 const Color kcDanger = Color(0xFFEB3349);

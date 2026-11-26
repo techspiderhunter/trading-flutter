@@ -60,42 +60,38 @@ class DeskAppBar extends StatelessWidget implements PreferredSizeWidget {
         leadingWidth: 72,
         leading: Padding(
             padding:
-                const EdgeInsets.only(left: 24, top: 16, bottom: 16, right: 12),
-            child: Material(
-                color: AppColors.textHeading,
-                borderRadius: BorderRadius.circular(12),
-                child: InkWell(
+                const EdgeInsets.only(left: 20, top: 13, bottom: 13, right: 8),
+            child: dashboard
+                ? Image.asset('assets/system/logo_icon.png',
+                    fit: BoxFit.contain)
+                : Material(
+                    color: AppColors.textHeading,
                     borderRadius: BorderRadius.circular(12),
-                    onTap: dashboard
-                        ? null
-                        : onBack ?? () => Navigator.maybePop(context),
-                    child: Center(
-                        child: dashboard
-                            ? const Text('T',
-                                style: TextStyle(
-                                    fontFamily: 'DeskSans',
-                                    fontSize: 19,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white))
-                            : const Icon(Icons.arrow_back_rounded,
+                    child: InkWell(
+                        borderRadius: BorderRadius.circular(12),
+                        onTap: onBack ?? () => Navigator.maybePop(context),
+                        child: const Center(
+                            child: Icon(Icons.arrow_back_rounded,
                                 color: Colors.white, size: 19))))),
         title: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('TRADING',
+              const Text('NM RESEARCH PARTNER',
                   style: TextStyle(
                       fontFamily: 'DeskSans',
-                      fontSize: 12,
+                      fontSize: 13,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.textHeading)),
-              const SizedBox(height: 2),
-              Text(group.toUpperCase(),
+                      color: AppColors.textHeading,
+                      letterSpacing: 0.2)),
+              const SizedBox(height: 1),
+              Text('PRIVATE LIMITED · ${group.toUpperCase()}',
                   style: const TextStyle(
                       fontFamily: 'DeskSans',
-                      fontSize: 8,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.textSecondary)),
+                      fontSize: 8.5,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xFFC59B27),
+                      letterSpacing: 0.5)),
             ]),
         actions: [
           if (actions == null)
@@ -673,3 +669,112 @@ class DeskHero extends StatelessWidget {
         ],
       );
 }
+
+class DeskCard extends StatelessWidget {
+  final Widget child;
+  final EdgeInsetsGeometry padding;
+  final EdgeInsetsGeometry? margin;
+  final Color? color;
+  final double borderRadius;
+  final bool showShadow;
+  final Border? border;
+
+  const DeskCard({
+    super.key,
+    required this.child,
+    this.padding = const EdgeInsets.all(22),
+    this.margin,
+    this.color = Colors.white,
+    this.borderRadius = 22,
+    this.showShadow = true,
+    this.border,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: margin,
+      padding: padding,
+      decoration: BoxDecoration(
+        color: color ?? Colors.white,
+        borderRadius: BorderRadius.circular(borderRadius),
+        border: border ?? Border.all(color: AppColors.borderLight, width: 1.2),
+        boxShadow: showShadow ? AppColors.cardShadow : null,
+      ),
+      child: child,
+    );
+  }
+}
+
+class DeskCardHeader extends StatelessWidget {
+  final String title;
+  final String? subtitle;
+  final IconData? icon;
+  final Color? iconColor;
+  final Color? iconBgColor;
+  final Widget? trailing;
+
+  const DeskCardHeader({
+    super.key,
+    required this.title,
+    this.subtitle,
+    this.icon,
+    this.iconColor,
+    this.iconBgColor,
+    this.trailing,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        if (icon != null) ...[
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: iconBgColor ?? AppColors.primaryLight,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(
+              icon,
+              size: 20,
+              color: iconColor ?? AppColors.primary,
+            ),
+          ),
+          const SizedBox(width: 14),
+        ],
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: deskText.copyWith(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textHeading,
+                  letterSpacing: -0.2,
+                ),
+              ),
+              if (subtitle != null && subtitle!.isNotEmpty) ...[
+                const SizedBox(height: 3),
+                Text(
+                  subtitle!,
+                  style: deskText.copyWith(
+                    fontSize: 12,
+                    color: AppColors.textSecondary,
+                    height: 1.4,
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+        if (trailing != null) trailing!,
+      ],
+    );
+  }
+}
+

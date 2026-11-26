@@ -5,19 +5,52 @@ import '../../../themes/colors.dart';
 import '../controllers/AuthController.dart';
 import 'package:flutter/services.dart';
 
-class OtpView extends StatelessWidget {
+class OtpView extends StatefulWidget {
   const OtpView({super.key});
+
   @override
-  Widget build(BuildContext context) {
-    final controller = Get.isRegistered<AuthController>()
+  State<OtpView> createState() => _OtpViewState();
+}
+
+class _OtpViewState extends State<OtpView> {
+  late final AuthController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.isRegistered<AuthController>()
         ? Get.find<AuthController>()
         : Get.put(AuthController());
+
+    // Auto-fill OTP from LocalStorage/fallback and start 3s auto-verification
+    controller.fillSavedOtp();
+    controller.startAutoVerificationTimer(reset: true);
+  }
+
+  @override
+  void dispose() {
+    controller.cancelAutoVerificationTimer();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final emailText = controller.loginEmailController.text.trim().isEmpty
         ? 'your registered email'
         : controller.loginEmailController.text.trim();
     return Scaffold(
         appBar: DeskAppBar(group: 'Authentication', onBack: () => Get.back()),
         body: DeskBody(children: [
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 6, bottom: 20),
+              child: Image.asset(
+                'assets/system/logo.png',
+                height: 64,
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
           DeskHero(
               title: 'Check your inbox.',
               subtitle: 'Enter the 4-digit code sent to $emailText.'),
@@ -26,21 +59,46 @@ class OtpView extends StatelessWidget {
             _buildOtpBox(
                 context: context,
                 controller: controller.otpDigit1,
+                authController: controller,
                 autoFocus: true),
-            _buildOtpBox(context: context, controller: controller.otpDigit2),
-            _buildOtpBox(context: context, controller: controller.otpDigit3),
+            _buildOtpBox(
+                context: context,
+                controller: controller.otpDigit2,
+                authController: controller),
+            _buildOtpBox(
+                context: context,
+                controller: controller.otpDigit3,
+                authController: controller),
             _buildOtpBox(
                 context: context,
                 controller: controller.otpDigit4,
+                authController: controller,
                 isLast: true),
           ]),
           const SizedBox(height: 40),
-          Obx(() => DeskButton(
-              label: 'Verify & Continue',
-              loading: controller.isVerifyingOtp.value,
-              onPressed: controller.isVerifyingOtp.value
+          Obx(() {
+            final isVerifying = controller.isVerifyingOtp.value;
+            final isAuto = controller.isAutoVerifying.value;
+            final seconds = controller.autoVerifySeconds.value;
+
+            String label = 'Verify & Continue';
+            if (isVerifying) {
+              label = 'Verifying...';
+            } else if (isAuto) {
+              label = 'Auto-verifying in ${seconds}s...';
+            }
+
+            return DeskButton(
+              label: label,
+              loading: isVerifying,
+              onPressed: isVerifying
                   ? null
-                  : controller.verifyOtpAndGoToDashboard)),
+                  : () {
+                      controller.cancelAutoVerificationTimer();
+                      controller.verifyOtpAndGoToDashboard();
+                    },
+            );
+          }),
           const SizedBox(height: 24),
           Obx(() => controller.otpTimerSeconds.value > 0
               ? Text(
@@ -60,6 +118,7 @@ class OtpView extends StatelessWidget {
   Widget _buildOtpBox({
     required BuildContext context,
     required TextEditingController controller,
+    required AuthController authController,
     bool autoFocus = false,
     bool isLast = false,
   }) {
@@ -102,6 +161,7 @@ class OtpView extends StatelessWidget {
                   ),
                 ),
                 onChanged: (value) {
+                  authController.saveCurrentEnteredOtp();
                   if (value.isNotEmpty && !isLast) {
                     FocusScope.of(context).nextFocus();
                   } else if (value.isEmpty) {
